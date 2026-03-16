@@ -7,15 +7,19 @@
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
-  <div class="pulsar-ticker">
-    <div class="pulsar-ticker-track">
-      {%- for member in members -%}
-        <span class="pulsar-ticker-item">{{ member }}</span>
-      {%- endfor -%}
+  <div class="pulsar-marquee">
+    <div class="pulsar-marquee__inner">
+      <div class="pulsar-marquee__group">
+        {%- for member in members -%}
+          <span class="pulsar-marquee__item">{{ member }}</span>
+        {%- endfor -%}
+      </div>
 
-      {%- for member in members -%}
-        <span class="pulsar-ticker-item">{{ member }}</span>
-      {%- endfor -%}
+      <div class="pulsar-marquee__group" aria-hidden="true">
+        {%- for member in members -%}
+          <span class="pulsar-marquee__item">{{ member }}</span>
+        {%- endfor -%}
+      </div>
     </div>
   </div>
 </section>
@@ -38,24 +42,26 @@
     color: #999;
   }
 
-  .pulsar-ticker {
-    width: 100%;
+  .pulsar-marquee {
     overflow: hidden;
-    position: relative;
+    width: 100%;
   }
 
-  .pulsar-ticker-track {
+  .pulsar-marquee__inner {
     display: flex;
     width: max-content;
-    white-space: nowrap;
-    animation: pulsarMarquee 45s linear infinite;
+    animation: pulsar-scroll 35s linear infinite;
+    will-change: transform;
   }
 
-  .pulsar-ticker:hover .pulsar-ticker-track {
-    animation-play-state: paused;
+  .pulsar-marquee__group {
+    display: flex;
+    flex-shrink: 0;
+    min-width: max-content;
+    align-items: center;
   }
 
-  .pulsar-ticker-item {
+  .pulsar-marquee__item {
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
@@ -63,45 +69,47 @@
     line-height: 1;
     text-transform: uppercase;
     color: #d0d0d0;
-    padding-right: 48px;
+    padding: 0 24px;
+    white-space: nowrap;
   }
 
-  .pulsar-ticker-item::after {
+  .pulsar-marquee__item::after {
     content: "•";
-    margin-left: 48px;
+    margin-left: 24px;
     color: #666;
   }
 
-  @keyframes pulsarMarquee {
-    0% {
+  .pulsar-marquee:hover .pulsar-marquee__inner {
+    animation-play-state: paused;
+  }
+
+  @keyframes pulsar-scroll {
+    from {
       transform: translateX(0);
     }
-    100% {
+    to {
       transform: translateX(-50%);
     }
   }
 
   @media screen and (max-width: 767px) {
-    .pulsar-ticker-item {
+    .pulsar-marquee__item {
       font-size: 20px;
-      padding-right: 30px;
+      padding: 0 16px;
     }
 
-    .pulsar-ticker-item::after {
-      margin-left: 30px;
+    .pulsar-marquee__item::after {
+      margin-left: 16px;
     }
 
-    .pulsar-ticker-track {
-      animation-duration: 30s;
+    .pulsar-marquee__inner {
+      animation-duration: 22s;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pulsar-ticker-track {
+    .pulsar-marquee__inner {
       animation: none;
-      flex-wrap: wrap;
-      white-space: normal;
-      justify-content: center;
     }
   }
 </style>
