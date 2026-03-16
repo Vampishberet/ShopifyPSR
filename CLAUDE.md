@@ -341,7 +341,8 @@ Add the following to `layout/theme.liquid` (extend, don't replace):
 - `sections/pulsar-twitter-feed.liquid` — Twitter/X timeline embed
 - `sections/pulsar-partners.liquid` — Partner logos row
 - `sections/pulsar-cta.liquid` — Final call-to-action
-- Modify `templates/index.json` — Wire all homepage sections in order
+- **IMPORTANT**: Create ALL 9 section files above FIRST before proceeding to the next step.
+- *After* section files exist, modify `templates/index.json` to wire all homepage sections in order.
 
 **Verify:** Full homepage scrolls with all sections, animations trigger on scroll, stats count up, ribbon scrolls, merch shows real Shopify products.
 

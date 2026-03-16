@@ -1,51 +1,11 @@
 {
   "sections": {
-    "pulsar-hero": {
-      "type": "pulsar-hero",
-      "settings": {}
-    },
-    "pulsar-brand-statement": {
-      "type": "pulsar-brand-statement",
-      "settings": {}
-    },
-    "pulsar-stats": {
-      "type": "pulsar-stats-counter",
-      "settings": {}
-    },
-    "pulsar-ribbon": {
-      "type": "pulsar-member-ribbon",
-      "settings": {}
-    },
-    "pulsar-merch": {
-      "type": "pulsar-featured-merch",
-      "settings": {}
-    },
-    "pulsar-videos": {
-      "type": "pulsar-video-showcase",
-      "settings": {}
-    },
-    "pulsar-twitter": {
-      "type": "pulsar-twitter-feed",
-      "settings": {}
-    },
-    "pulsar-partners": {
-      "type": "pulsar-partners",
-      "settings": {}
-    },
-    "pulsar-cta": {
-      "type": "pulsar-cta",
+    "main": {
+      "type": "main-page",
       "settings": {}
     }
   },
   "order": [
-    "pulsar-hero",
-    "pulsar-brand-statement",
-    "pulsar-stats",
-    "pulsar-ribbon",
-    "pulsar-merch",
-    "pulsar-videos",
-    "pulsar-twitter",
-    "pulsar-partners",
-    "pulsar-cta"
+    "main"
   ]
 }
