@@ -1,23 +1,23 @@
 {%- liquid
-  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
+  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnolia,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
 -%}
 
-<section class="pulsar-ticker-section">
+<section class="pulsar-ticker-section" id="pulsar-ticker-{{ section.id }}">
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
-  <div class="pulsar-marquee">
-    <div class="pulsar-marquee__inner">
-      <div class="pulsar-marquee__group">
+  <div class="pulsar-ticker-viewport">
+    <div class="pulsar-ticker-track">
+      <div class="pulsar-ticker-group">
         {%- for member in members -%}
-          <span class="pulsar-marquee__item">{{ member }}</span>
+          <span class="pulsar-ticker-item">{{ member }}</span>
         {%- endfor -%}
       </div>
 
-      <div class="pulsar-marquee__group" aria-hidden="true">
+      <div class="pulsar-ticker-group" aria-hidden="true">
         {%- for member in members -%}
-          <span class="pulsar-marquee__item">{{ member }}</span>
+          <span class="pulsar-ticker-item">{{ member }}</span>
         {%- endfor -%}
       </div>
     </div>
@@ -25,7 +25,7 @@
 </section>
 
 <style>
-  .pulsar-ticker-section {
+  #pulsar-ticker-{{ section.id }} {
     background: #000;
     border-top: 1px solid #222;
     border-bottom: 1px solid #222;
@@ -33,7 +33,7 @@
     overflow: hidden;
   }
 
-  .pulsar-ticker-heading {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-heading {
     margin: 0 0 12px;
     text-align: center;
     font-size: 12px;
@@ -42,77 +42,105 @@
     color: #999;
   }
 
-  .pulsar-marquee {
-    overflow: hidden;
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
     width: 100%;
+    overflow: hidden;
+    position: relative;
   }
 
-  .pulsar-marquee__inner {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
     display: flex;
     width: max-content;
-    animation: pulsar-scroll 35s linear infinite;
     will-change: transform;
+    transform: translate3d(0, 0, 0);
   }
 
-  .pulsar-marquee__group {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-group {
     display: flex;
     flex-shrink: 0;
     min-width: max-content;
     align-items: center;
   }
 
-  .pulsar-marquee__item {
-    flex: 0 0 auto;
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
     display: inline-flex;
     align-items: center;
+    flex: 0 0 auto;
+    white-space: nowrap;
     font-size: 28px;
     line-height: 1;
     text-transform: uppercase;
     color: #d0d0d0;
     padding: 0 24px;
-    white-space: nowrap;
   }
 
-  .pulsar-marquee__item::after {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
     content: "•";
     margin-left: 24px;
     color: #666;
   }
 
-  .pulsar-marquee:hover .pulsar-marquee__inner {
-    animation-play-state: paused;
-  }
-
-  @keyframes pulsar-scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
   @media screen and (max-width: 767px) {
-    .pulsar-marquee__item {
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
       font-size: 20px;
       padding: 0 16px;
     }
 
-    .pulsar-marquee__item::after {
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
       margin-left: 16px;
-    }
-
-    .pulsar-marquee__inner {
-      animation-duration: 22s;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .pulsar-marquee__inner {
-      animation: none;
     }
   }
 </style>
+
+<script>
+  (function() {
+    const section = document.getElementById('pulsar-ticker-{{ section.id }}');
+    if (!section) return;
+
+    const track = section.querySelector('.pulsar-ticker-track');
+    const firstGroup = section.querySelector('.pulsar-ticker-group');
+    if (!track || !firstGroup) return;
+
+    let x = 0;
+    let speed = 0.7; // increase for faster movement
+    let groupWidth = firstGroup.offsetWidth;
+    let paused = false;
+    let rafId = null;
+
+    function measure() {
+      groupWidth = firstGroup.offsetWidth;
+    }
+
+    function animate() {
+      if (!paused) {
+        x -= speed;
+
+        if (Math.abs(x) >= groupWidth) {
+          x = 0;
+        }
+
+        track.style.transform = `translate3d(${x}px, 0, 0)`;
+      }
+
+      rafId = requestAnimationFrame(animate);
+    }
+
+    section.addEventListener('mouseenter', function() {
+      paused = true;
+    });
+
+    section.addEventListener('mouseleave', function() {
+      paused = false;
+    });
+
+    window.addEventListener('resize', measure);
+    document.addEventListener('shopify:section:load', measure);
+    document.addEventListener('shopify:section:reorder', measure);
+
+    measure();
+    animate();
+  })();
+</script>
 
 {% schema %}
 {
