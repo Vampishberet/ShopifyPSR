@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "pulsar-partners-page": {
+      "type": "pulsar-partners-page",
+      "settings": {
+        "heading": "OUR PARTNERS.",
+        "subtext": "We partner with brands that align with our players, our community, and our values. Every partnership is built on mutual growth and real results.",
+        "tipsy_desc": "Premium gaming audio partner providing our competitive players with the edge they need to perform at the highest level.",
+        "obsbot_desc": "AI-powered camera technology supporting our content creators with next-generation streaming and recording solutions.",
+        "pitch_heading": "BECOME A PARTNER.",
+        "pitch_text": "Partner with an organisation that delivers. We offer authentic integration across 60+ active creators and competitors, multi-title exposure, and a leadership team that operates with intent on every commitment.",
+        "pitch_cta_label": "GET IN TOUCH",
+        "partnership_email": "pulsarclanggs@gmail.com"
+      }
+    }
+  },
+  "order": [
+    "pulsar-partners-page"
+  ]
+}

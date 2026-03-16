@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "pulsar-esports-hero": {
+      "type": "pulsar-esports-hero",
+      "settings": {}
+    },
+    "pulsar-esports-titles": {
+      "type": "pulsar-esports-titles",
+      "settings": {}
+    }
+  },
+  "order": ["pulsar-esports-hero", "pulsar-esports-titles"]
+}

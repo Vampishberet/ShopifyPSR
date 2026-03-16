@@ -1,0 +1,440 @@
+<section class="pulsar-careers" data-pulsar-section>
+
+  {%- comment -%}── HERO ──{%- endcomment -%}
+  <div class="pulsar-careers__hero">
+    <div class="pulsar-careers__hero-bg" aria-hidden="true">
+      <div class="pulsar-careers__hero-grid"></div>
+      <div class="pulsar-careers__hero-vignette"></div>
+    </div>
+    <div class="pulsar-careers__hero-content">
+      <p class="pulsar-careers__overline" data-pulsar-careers="overline">CAREERS</p>
+      <h1 class="pulsar-careers__heading" data-pulsar-careers="heading">
+        {{ section.settings.heading | default: 'JOIN THE TEAM.' }}
+      </h1>
+      <p class="pulsar-careers__subtext" data-pulsar-careers="subtext">
+        {{ section.settings.subtext | default: 'We are always looking for dedicated players, creators, and operators who share our vision. If you have what it takes, we want to hear from you.' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="pulsar-careers__body">
+
+    {%- comment -%}── OPEN ROLES ──{%- endcomment -%}
+    <div class="pulsar-careers__inner">
+      <div class="pulsar-careers__roles-header pulsar-reveal">
+        <span class="pulsar-careers__section-label">OPEN POSITIONS</span>
+        <span class="pulsar-careers__section-line" aria-hidden="true"></span>
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="pulsar-careers__roles">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'role' -%}
+              <article class="pulsar-careers__role pulsar-reveal" {{ block.shopify_attributes }}>
+                <div class="pulsar-careers__role-meta">
+                  {%- if block.settings.type != blank -%}
+                    <span class="pulsar-careers__role-type">{{ block.settings.type }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.game != blank -%}
+                    <span class="pulsar-careers__role-game">{{ block.settings.game }}</span>
+                  {%- endif -%}
+                </div>
+                <h3 class="pulsar-careers__role-title">{{ block.settings.title | default: 'Open Role' }}</h3>
+                {%- if block.settings.description != blank -%}
+                  <p class="pulsar-careers__role-desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+                {%- if block.settings.apply_url != blank -%}
+                  <a
+                    class="pulsar-btn pulsar-btn--ghost pulsar-careers__role-cta"
+                    href="{{ block.settings.apply_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >APPLY NOW</a>
+                {%- elsif section.settings.default_apply_url != blank -%}
+                  <a
+                    class="pulsar-btn pulsar-btn--ghost pulsar-careers__role-cta"
+                    href="{{ section.settings.default_apply_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >APPLY NOW</a>
+                {%- endif -%}
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="pulsar-careers__empty pulsar-reveal">
+          <p class="pulsar-careers__empty-text">
+            {{ section.settings.empty_text | default: 'No open positions right now. Check back soon or reach out directly.' }}
+          </p>
+          {%- if section.settings.default_apply_url != blank -%}
+            <a
+              class="pulsar-btn pulsar-btn--ghost"
+              href="{{ section.settings.default_apply_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >REGISTER INTEREST</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}── BOTTOM CTA ──{%- endcomment -%}
+      <div class="pulsar-careers__cta pulsar-reveal">
+        <p class="pulsar-careers__cta-text">{{ section.settings.cta_text | default: "Don't see your role? We hire on merit. Send us your portfolio." }}</p>
+        <a
+          class="pulsar-btn pulsar-btn--primary"
+          href="mailto:{{ section.settings.contact_email | default: 'pulsarclanggs@gmail.com' }}"
+        >GET IN TOUCH</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* ── Hero ── */
+.pulsar-careers__hero {
+  position: relative;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--pulsar-dark1);
+}
+
+.pulsar-careers__hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.pulsar-careers__hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  transform: perspective(700px) rotateX(28deg) scaleY(2.2);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}
+
+.pulsar-careers__hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, var(--pulsar-dark1) 72%),
+    linear-gradient(to top, var(--pulsar-dark1) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--pulsar-dark1) 0%, transparent 35%);
+}
+
+.pulsar-careers__hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-careers__overline {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+  opacity: 0;
+}
+
+.pulsar-careers__heading {
+  font: 900 clamp(3rem, 9vw, 8rem)/0.92 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+  opacity: 0;
+}
+
+.pulsar-careers__subtext {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 520px;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+/* ── Body ── */
+.pulsar-careers__body {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-careers__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+/* ── Roles header ── */
+.pulsar-careers__roles-header {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-md);
+  margin-bottom: var(--pulsar-space-xl);
+}
+
+.pulsar-careers__section-label {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  white-space: nowrap;
+}
+
+.pulsar-careers__section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--pulsar-dark3);
+}
+
+/* ── Role cards ── */
+.pulsar-careers__roles {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: var(--pulsar-space-xxl);
+}
+
+.pulsar-careers__role {
+  padding: var(--pulsar-space-xl) 0;
+  border-bottom: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-careers__roles .pulsar-careers__role:first-child {
+  border-top: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-careers__role-meta {
+  display: flex;
+  gap: var(--pulsar-space-sm);
+  margin-bottom: var(--pulsar-space-sm);
+  flex-wrap: wrap;
+}
+
+.pulsar-careers__role-type,
+.pulsar-careers__role-game {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-careers__role-title {
+  font: 900 clamp(1.5rem, 3vw, 2rem)/1.1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-careers__role-desc {
+  font: 400 0.9375rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-lg);
+  max-width: 640px;
+}
+
+/* ── Empty state ── */
+.pulsar-careers__empty {
+  padding: var(--pulsar-space-xxl) 0;
+  text-align: center;
+  margin-bottom: var(--pulsar-space-xxl);
+}
+
+.pulsar-careers__empty-text {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-xl);
+}
+
+/* ── Bottom CTA ── */
+.pulsar-careers__cta {
+  padding-top: var(--pulsar-space-xl);
+  border-top: 1px solid var(--pulsar-dark3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pulsar-space-lg);
+  flex-wrap: wrap;
+}
+
+.pulsar-careers__cta-text {
+  font: 400 1rem/1.6 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ── Buttons ── */
+.pulsar-btn {
+  display: inline-block;
+  font: 700 0.8125rem/1 var(--font-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.pulsar-btn--primary {
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+}
+
+.pulsar-btn--primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(255,255,255,0.15);
+}
+
+.pulsar-btn--ghost {
+  background: transparent;
+  color: var(--pulsar-white);
+  border: 1px solid var(--pulsar-gray1);
+}
+
+.pulsar-btn--ghost:hover {
+  border-color: var(--pulsar-white);
+  background: rgba(255,255,255,0.05);
+}
+
+.pulsar-btn:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsar-careers__overline,
+  .pulsar-careers__heading,
+  .pulsar-careers__subtext { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .pulsar-careers__hero { min-height: 55vh; }
+  .pulsar-careers__cta { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script>
+(function () {
+  var els = [
+    document.querySelector('[data-pulsar-careers="overline"]'),
+    document.querySelector('[data-pulsar-careers="heading"]'),
+    document.querySelector('[data-pulsar-careers="subtext"]')
+  ].filter(Boolean);
+
+  if (!els.length) return;
+
+  function animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+      return;
+    }
+    if (window.gsap) {
+      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
+    } else {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animate);
+  } else {
+    animate();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Careers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Page heading",
+      "default": "JOIN THE TEAM."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Hero subtext",
+      "default": "We are always looking for dedicated players, creators, and operators who share our vision. If you have what it takes, we want to hear from you."
+    },
+    {
+      "type": "url",
+      "id": "default_apply_url",
+      "label": "Default application URL (Google Form or similar)"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "default": "pulsarclanggs@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state message",
+      "default": "No open positions right now. Check back soon or reach out directly."
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Bottom CTA description",
+      "default": "Don't see your role? We hire on merit. Send us your portfolio."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "role",
+      "name": "Open Role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Role title",
+          "default": "Competitive Player"
+        },
+        {
+          "type": "text",
+          "id": "type",
+          "label": "Type (e.g. Volunteer, Full-time)"
+        },
+        {
+          "type": "text",
+          "id": "game",
+          "label": "Game (e.g. Fortnite)"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "apply_url",
+          "label": "Apply URL (overrides default)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Careers" }
+  ]
+}
+{% endschema %}

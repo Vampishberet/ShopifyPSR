@@ -1,0 +1,462 @@
+<section class="pulsar-contact" data-pulsar-section>
+
+  {%- comment -%}── HERO ──{%- endcomment -%}
+  <div class="pulsar-contact__hero">
+    <div class="pulsar-contact__hero-bg" aria-hidden="true">
+      <div class="pulsar-contact__hero-grid"></div>
+      <div class="pulsar-contact__hero-vignette"></div>
+    </div>
+    <div class="pulsar-contact__hero-content">
+      <p class="pulsar-contact__overline" data-pulsar-contact="overline">CONTACT</p>
+      <h1 class="pulsar-contact__heading" data-pulsar-contact="heading">
+        {{ section.settings.heading | default: 'GET IN TOUCH.' }}
+      </h1>
+    </div>
+  </div>
+
+  {%- comment -%}── CONTACT BODY ──{%- endcomment -%}
+  <div class="pulsar-contact__body">
+    <div class="pulsar-contact__inner">
+      <div class="pulsar-contact__grid">
+
+        {%- comment -%}Left: info column{%- endcomment -%}
+        <div class="pulsar-contact__info pulsar-reveal">
+          <h2 class="pulsar-contact__info-heading">{{ section.settings.info_heading | default: "LET'S TALK." }}</h2>
+          <p class="pulsar-contact__info-text">{{ section.settings.info_text | default: 'Whether you want to partner with us, join the team, or just have something to say — we read everything.' }}</p>
+
+          <div class="pulsar-contact__channels">
+            <a class="pulsar-contact__channel" href="mailto:{{ section.settings.email | default: 'pulsarclanggs@gmail.com' }}">
+              <span class="pulsar-contact__channel-label">EMAIL</span>
+              <span class="pulsar-contact__channel-value">{{ section.settings.email | default: 'pulsarclanggs@gmail.com' }}</span>
+            </a>
+            <a class="pulsar-contact__channel" href="https://x.com/PulsarLLC" target="_blank" rel="noopener noreferrer">
+              <span class="pulsar-contact__channel-label">TWITTER / X</span>
+              <span class="pulsar-contact__channel-value">@PulsarLLC</span>
+            </a>
+            <a class="pulsar-contact__channel" href="https://discord.gg/TeamPulsar" target="_blank" rel="noopener noreferrer">
+              <span class="pulsar-contact__channel-label">DISCORD</span>
+              <span class="pulsar-contact__channel-value">discord.gg/TeamPulsar</span>
+            </a>
+          </div>
+
+          {%- if section.settings.partnership_note != blank -%}
+            <div class="pulsar-contact__partnership-note">
+              <p class="pulsar-contact__partnership-label">PARTNERSHIP ENQUIRIES</p>
+              <p class="pulsar-contact__partnership-text">{{ section.settings.partnership_note }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%}Right: form column{%- endcomment -%}
+        <div class="pulsar-contact__form-col pulsar-reveal">
+          {%- form 'contact', class: 'pulsar-contact__form' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="pulsar-contact__success" role="alert">
+                <p>{{ section.settings.success_message | default: "Message sent. We'll be in touch soon." }}</p>
+              </div>
+            {%- else -%}
+              {%- if form.errors -%}
+                <div class="pulsar-contact__errors" role="alert">
+                  {{ form.errors | default_errors }}
+                </div>
+              {%- endif -%}
+
+              <div class="pulsar-contact__field">
+                <label class="pulsar-contact__label" for="contact-name">NAME</label>
+                <input
+                  class="pulsar-contact__input"
+                  type="text"
+                  id="contact-name"
+                  name="contact[name]"
+                  autocomplete="name"
+                  required
+                >
+              </div>
+
+              <div class="pulsar-contact__field">
+                <label class="pulsar-contact__label" for="contact-email">EMAIL</label>
+                <input
+                  class="pulsar-contact__input"
+                  type="email"
+                  id="contact-email"
+                  name="contact[email]"
+                  autocomplete="email"
+                  required
+                >
+              </div>
+
+              <div class="pulsar-contact__field">
+                <label class="pulsar-contact__label" for="contact-subject">SUBJECT</label>
+                <input
+                  class="pulsar-contact__input"
+                  type="text"
+                  id="contact-subject"
+                  name="contact[subject]"
+                >
+              </div>
+
+              <div class="pulsar-contact__field">
+                <label class="pulsar-contact__label" for="contact-message">MESSAGE</label>
+                <textarea
+                  class="pulsar-contact__textarea"
+                  id="contact-message"
+                  name="contact[body]"
+                  rows="6"
+                  required
+                ></textarea>
+              </div>
+
+              <button class="pulsar-btn pulsar-btn--primary pulsar-contact__submit" type="submit">
+                SEND MESSAGE
+              </button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<style>
+/* ── Hero ── */
+.pulsar-contact__hero {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--pulsar-dark1);
+}
+
+.pulsar-contact__hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.pulsar-contact__hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  transform: perspective(700px) rotateX(28deg) scaleY(2.2);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}
+
+.pulsar-contact__hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, var(--pulsar-dark1) 72%),
+    linear-gradient(to top, var(--pulsar-dark1) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--pulsar-dark1) 0%, transparent 35%);
+}
+
+.pulsar-contact__hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-contact__overline {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+  opacity: 0;
+}
+
+.pulsar-contact__heading {
+  font: 900 clamp(3rem, 9vw, 8rem)/0.92 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0;
+  opacity: 0;
+}
+
+/* ── Body ── */
+.pulsar-contact__body {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-contact__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-contact__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: var(--pulsar-space-xxl);
+  align-items: start;
+}
+
+/* ── Info column ── */
+.pulsar-contact__info-heading {
+  font: 900 clamp(2rem, 4vw, 3.5rem)/0.95 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+}
+
+.pulsar-contact__info-text {
+  font: 400 1rem/1.75 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-xl);
+}
+
+.pulsar-contact__channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: var(--pulsar-space-xl);
+}
+
+.pulsar-contact__channel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--pulsar-space-md) 0;
+  border-bottom: 1px solid var(--pulsar-dark3);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.pulsar-contact__channels .pulsar-contact__channel:first-child {
+  border-top: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-contact__channel:hover { opacity: 0.7; }
+.pulsar-contact__channel:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 2px; }
+
+.pulsar-contact__channel-label {
+  font: 500 0.625rem/1 var(--font-body);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray1);
+}
+
+.pulsar-contact__channel-value {
+  font: 400 0.9375rem/1.4 var(--font-body);
+  color: var(--pulsar-gray3);
+}
+
+.pulsar-contact__partnership-note {
+  padding: var(--pulsar-space-lg);
+  background: var(--pulsar-dark3);
+  border-left: 2px solid var(--pulsar-gray1);
+}
+
+.pulsar-contact__partnership-label {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-sm);
+}
+
+.pulsar-contact__partnership-text {
+  font: 400 0.9375rem/1.65 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0;
+}
+
+/* ── Form ── */
+.pulsar-contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pulsar-space-lg);
+}
+
+.pulsar-contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pulsar-contact__label {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+}
+
+.pulsar-contact__input,
+.pulsar-contact__textarea {
+  background: var(--pulsar-dark3);
+  border: 1px solid var(--pulsar-dark3);
+  color: var(--pulsar-white);
+  font: 400 0.9375rem/1.5 var(--font-body);
+  padding: 0.875rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.pulsar-contact__input:focus,
+.pulsar-contact__textarea:focus {
+  border-color: var(--pulsar-gray2);
+}
+
+.pulsar-contact__textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.pulsar-contact__input::placeholder,
+.pulsar-contact__textarea::placeholder {
+  color: var(--pulsar-gray1);
+}
+
+.pulsar-contact__submit {
+  align-self: flex-start;
+  margin-top: var(--pulsar-space-sm);
+}
+
+.pulsar-contact__success {
+  padding: var(--pulsar-space-xl);
+  border: 1px solid var(--pulsar-gray1);
+  text-align: center;
+}
+
+.pulsar-contact__success p {
+  font: 400 1rem/1.6 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0;
+}
+
+.pulsar-contact__errors {
+  padding: var(--pulsar-space-md);
+  border: 1px solid var(--pulsar-gray1);
+  color: var(--pulsar-gray3);
+  font: 400 0.875rem/1.6 var(--font-body);
+}
+
+/* ── Buttons ── */
+.pulsar-btn {
+  display: inline-block;
+  font: 700 0.8125rem/1 var(--font-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.pulsar-btn--primary {
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+  border: none;
+}
+
+.pulsar-btn--primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(255,255,255,0.15);
+}
+
+.pulsar-btn:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1199px) {
+  .pulsar-contact__grid { grid-template-columns: 1fr 1.2fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsar-contact__overline,
+  .pulsar-contact__heading { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .pulsar-contact__hero { min-height: 40vh; }
+  .pulsar-contact__grid { grid-template-columns: 1fr; gap: var(--pulsar-space-xl); }
+}
+</style>
+
+<script>
+(function () {
+  var els = [
+    document.querySelector('[data-pulsar-contact="overline"]'),
+    document.querySelector('[data-pulsar-contact="heading"]')
+  ].filter(Boolean);
+  if (!els.length) return;
+  function animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+      return;
+    }
+    if (window.gsap) {
+      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
+    } else {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animate);
+  } else {
+    animate();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "GET IN TOUCH."
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Left column heading",
+      "default": "LET'S TALK."
+    },
+    {
+      "type": "textarea",
+      "id": "info_text",
+      "label": "Left column body",
+      "default": "Whether you want to partner with us, join the team, or just have something to say — we read everything."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Contact email",
+      "default": "pulsarclanggs@gmail.com"
+    },
+    {
+      "type": "textarea",
+      "id": "partnership_note",
+      "label": "Partnership note (optional)"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Form success message",
+      "default": "Message sent. We'll be in touch soon."
+    }
+  ],
+  "presets": [
+    { "name": "Contact Page" }
+  ]
+}
+{% endschema %}

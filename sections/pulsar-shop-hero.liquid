@@ -1,0 +1,160 @@
+<section class="pulsar-shop-hero">
+  <div class="pulsar-shop-hero__bg" aria-hidden="true"></div>
+  <div class="pulsar-shop-hero__inner">
+    <p class="pulsar-shop-hero__overline pulsar-reveal">{{ section.settings.overline | default: 'New Drop' }}</p>
+    <h1 class="pulsar-shop-hero__heading pulsar-heading-reveal">
+      {%- if section.settings.heading != blank -%}
+        {{ section.settings.heading }}
+      {%- else -%}
+        THE<br>DROP
+      {%- endif -%}
+    </h1>
+    <p class="pulsar-shop-hero__subtext pulsar-reveal">
+      {{ section.settings.subtext | default: 'Premium esports apparel. Limited runs. Wear the name.' }}
+    </p>
+    {%- if section.settings.show_scroll_indicator -%}
+      <div class="pulsar-shop-hero__scroll" aria-hidden="true">
+        <span class="pulsar-shop-hero__scroll-label">Scroll</span>
+        <div class="pulsar-shop-hero__scroll-line"></div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-shop-hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--pulsar-black);
+    border-bottom: 1px solid var(--pulsar-dark3);
+  }
+
+  /* Grid texture background */
+  .pulsar-shop-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .pulsar-shop-hero__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: var(--pulsar-space-xxl) var(--pulsar-space-lg) var(--pulsar-space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-md);
+    max-width: 900px;
+  }
+
+  .pulsar-shop-hero__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+
+  .pulsar-shop-hero__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(5rem, 14vw, 11rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .pulsar-shop-hero__subtext {
+    font-family: var(--font-secondary);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    margin: 0;
+    max-width: 500px;
+  }
+
+  /* Scroll indicator */
+  .pulsar-shop-hero__scroll {
+    position: absolute;
+    bottom: var(--pulsar-space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-xs);
+  }
+  .pulsar-shop-hero__scroll-label {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+  }
+  .pulsar-shop-hero__scroll-line {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(to bottom, var(--pulsar-gray1), transparent);
+    animation: pulsar-scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-shop-hero { min-height: 45vh; }
+    .pulsar-shop-hero__inner { padding: var(--pulsar-space-xl) var(--pulsar-space-md) var(--pulsar-space-lg); }
+    .pulsar-shop-hero__heading { font-size: clamp(4rem, 18vw, 6rem); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Shop Hero",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "New Drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE DROP"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Premium esports apparel. Limited runs. Wear the name."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Shop Hero",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,36 @@
+{% comment %}
+  Pulsar Preloader Snippet
+  - Displays on initial page load (skipped after first visit via sessionStorage)
+  - Video: 3d animation for preloader.mp4 (547KB)
+  - Progress bar animates 0 → 100% via pulsar-animations.js
+  - Exit: GSAP slide-up transition revealing hero underneath
+{% endcomment %}
+
+<div id="pulsar-preloader" role="status" aria-label="Loading Team Pulsar" aria-live="polite">
+  <p class="pulsar-preloader__label" aria-hidden="true">0%</p>
+
+  <video
+    class="pulsar-preloader__video"
+    src="{{ '3d animation for preloader.mp4' | asset_url }}"
+    autoplay
+    muted
+    loop
+    playsinline
+    aria-hidden="true"
+  ></video>
+
+  <div class="pulsar-preloader__progress-track" aria-hidden="true">
+    <div class="pulsar-preloader__progress-fill"></div>
+  </div>
+</div>
+
+<script>
+  // Immediately hide preloader if already seen this session
+  // Runs synchronously so there's no flash
+  (function () {
+    if (sessionStorage.getItem('pulsarPreloaderSeen')) {
+      var el = document.getElementById('pulsar-preloader');
+      if (el) el.style.display = 'none';
+    }
+  })();
+</script>

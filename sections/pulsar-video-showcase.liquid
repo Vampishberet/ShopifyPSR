@@ -1,0 +1,206 @@
+<section class="pulsar-videos">
+  <div class="pulsar-videos__inner">
+    <div class="pulsar-videos__header">
+      <p class="pulsar-videos__overline pulsar-reveal">{{ section.settings.overline | default: 'Content' }}</p>
+      <h2 class="pulsar-videos__heading pulsar-heading-reveal">{{ section.settings.heading | default: 'WATCH' }}</h2>
+    </div>
+
+    <div class="pulsar-videos__grid pulsar-stagger-group">
+      {%- assign video_1_url = section.settings.video_1_url | default: 'https://www.youtube.com/embed/MoZfg__UPRo' -%}
+      {%- assign video_2_url = section.settings.video_2_url | default: 'https://www.youtube.com/embed/3Po08NzKqlc' -%}
+
+      <!-- Fortnite montage -->
+      <div class="pulsar-videos__item pulsar-stagger-item">
+        <div class="pulsar-videos__embed-wrap">
+          <iframe
+            src="{{ video_1_url }}?rel=0&modestbranding=1"
+            title="{{ section.settings.video_1_title | default: 'Pulsar Fortnite Montage' }}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="pulsar-videos__item-meta">
+          <span class="pulsar-videos__item-tag">{{ section.settings.video_1_tag | default: 'Fortnite' }}</span>
+          <p class="pulsar-videos__item-title">{{ section.settings.video_1_title | default: 'Pulsar Fortnite Montage' }}</p>
+        </div>
+      </div>
+
+      <!-- Valorant montage -->
+      <div class="pulsar-videos__item pulsar-stagger-item">
+        <div class="pulsar-videos__embed-wrap">
+          <iframe
+            src="{{ video_2_url }}?rel=0&modestbranding=1"
+            title="{{ section.settings.video_2_title | default: 'Pulsar Valorant Montage' }}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="pulsar-videos__item-meta">
+          <span class="pulsar-videos__item-tag">{{ section.settings.video_2_tag | default: 'Valorant' }}</span>
+          <p class="pulsar-videos__item-title">{{ section.settings.video_2_title | default: 'Pulsar Valorant Montage' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-videos {
+    background-color: var(--pulsar-dark2);
+    padding: var(--pulsar-space-xxl) 0;
+  }
+  .pulsar-videos__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-xl);
+  }
+  .pulsar-videos__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-sm);
+  }
+  .pulsar-videos__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .pulsar-videos__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--pulsar-space-lg);
+  }
+  .pulsar-videos__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-md);
+  }
+  .pulsar-videos__embed-wrap {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    background-color: var(--pulsar-black);
+    border: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-videos__embed-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .pulsar-videos__item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-xs);
+  }
+  .pulsar-videos__item-tag {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+  }
+  .pulsar-videos__item-title {
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-videos { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-videos__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+    .pulsar-videos__grid { grid-template-columns: 1fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Video Showcase",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WATCH"
+    },
+    {
+      "type": "header",
+      "content": "Video 1"
+    },
+    {
+      "type": "text",
+      "id": "video_1_url",
+      "label": "YouTube embed URL",
+      "default": "https://www.youtube.com/embed/MoZfg__UPRo"
+    },
+    {
+      "type": "text",
+      "id": "video_1_title",
+      "label": "Video title",
+      "default": "Pulsar Fortnite Montage"
+    },
+    {
+      "type": "text",
+      "id": "video_1_tag",
+      "label": "Game tag",
+      "default": "Fortnite"
+    },
+    {
+      "type": "header",
+      "content": "Video 2"
+    },
+    {
+      "type": "text",
+      "id": "video_2_url",
+      "label": "YouTube embed URL",
+      "default": "https://www.youtube.com/embed/3Po08NzKqlc"
+    },
+    {
+      "type": "text",
+      "id": "video_2_title",
+      "label": "Video title",
+      "default": "Pulsar Valorant Montage"
+    },
+    {
+      "type": "text",
+      "id": "video_2_tag",
+      "label": "Game tag",
+      "default": "Valorant"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Video Showcase",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,311 @@
+<section class="pulsar-about-founders" data-pulsar-section>
+  <div class="pulsar-about-founders__inner">
+
+    <div class="pulsar-about-founders__label pulsar-reveal">
+      <span class="pulsar-about-founders__label-text">LEADERSHIP</span>
+      <span class="pulsar-about-founders__label-line" aria-hidden="true"></span>
+    </div>
+
+    <div class="pulsar-about-founders__header">
+      <h2 class="pulsar-about-founders__heading pulsar-reveal">
+        {{ section.settings.heading | default: 'FROM THE OWNERS' }}
+      </h2>
+      {%- if section.settings.intro != blank -%}
+        <p class="pulsar-about-founders__intro pulsar-reveal">{{ section.settings.intro }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="pulsar-about-founders__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'member' -%}
+            <article class="pulsar-about-founders__card pulsar-reveal" {{ block.shopify_attributes }}>
+              <div class="pulsar-about-founders__card-image-wrap">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    class="pulsar-about-founders__card-image"
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.name }}"
+                    width="600"
+                    height="600"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="pulsar-about-founders__card-placeholder" aria-hidden="true">
+                    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40" aria-hidden="true">
+                      <circle cx="30" cy="22" r="10" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 52c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="pulsar-about-founders__card-body">
+                <p class="pulsar-about-founders__card-role">{{ block.settings.role | default: 'Owner' }}</p>
+                <h3 class="pulsar-about-founders__card-name">{{ block.settings.name | default: 'Team Member' }}</h3>
+                {%- if block.settings.bio != blank -%}
+                  <p class="pulsar-about-founders__card-bio">{{ block.settings.bio }}</p>
+                {%- endif -%}
+                {%- if block.settings.twitter != blank -%}
+                  <a
+                    class="pulsar-about-founders__card-link"
+                    href="{{ block.settings.twitter }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="{{ block.settings.name }} on X / Twitter"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="16" height="16" aria-hidden="true">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.735-8.835L1.254 2.25H8.08l4.261 5.635 5.903-5.635Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
+                    </svg>
+                    <span>@{{ block.settings.twitter | remove: 'https://x.com/' | remove: 'https://twitter.com/' | remove: '@' }}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- comment -%} Default placeholder state when no blocks added {%- endcomment -%}
+      <div class="pulsar-about-founders__placeholder pulsar-reveal">
+        <p class="pulsar-about-founders__placeholder-text">
+          {{ section.settings.placeholder_text | default: 'Leadership profiles coming soon.' }}
+        </p>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+.pulsar-about-founders {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-about-founders__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-about-founders__label {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-md);
+  margin-bottom: var(--pulsar-space-lg);
+}
+
+.pulsar-about-founders__label-text {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  white-space: nowrap;
+}
+
+.pulsar-about-founders__label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--pulsar-dark3);
+}
+
+.pulsar-about-founders__header {
+  margin-bottom: var(--pulsar-space-xl);
+}
+
+.pulsar-about-founders__heading {
+  font: 900 clamp(2.5rem, 6vw, 5rem)/0.95 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-about-founders__intro {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 560px;
+  margin: 0;
+}
+
+/* Cards grid — 2 per row, up to 4 */
+.pulsar-about-founders__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--pulsar-space-lg);
+}
+
+/* Individual card */
+.pulsar-about-founders__card {
+  background: var(--pulsar-dark3);
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.pulsar-about-founders__card:hover {
+  border-color: var(--pulsar-gray1);
+  transform: translateY(-4px);
+}
+
+.pulsar-about-founders__card-image-wrap {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--pulsar-dark2);
+}
+
+.pulsar-about-founders__card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.pulsar-about-founders__card:hover .pulsar-about-founders__card-image {
+  transform: scale(1.04);
+}
+
+.pulsar-about-founders__card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pulsar-gray1);
+}
+
+.pulsar-about-founders__card-body {
+  padding: var(--pulsar-space-lg);
+}
+
+.pulsar-about-founders__card-role {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-xs);
+}
+
+.pulsar-about-founders__card-name {
+  font: 700 1.375rem/1.1 var(--font-accent);
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pulsar-about-founders__card-bio {
+  font: 400 0.9375rem/1.65 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-sm);
+}
+
+.pulsar-about-founders__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font: 500 0.8125rem/1 var(--font-body);
+  color: var(--pulsar-gray2);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.pulsar-about-founders__card-link:hover,
+.pulsar-about-founders__card-link:focus-visible {
+  color: var(--pulsar-white);
+}
+
+.pulsar-about-founders__card-link:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Placeholder */
+.pulsar-about-founders__placeholder {
+  padding: var(--pulsar-space-xl);
+  border: 1px solid var(--pulsar-dark3);
+  text-align: center;
+}
+
+.pulsar-about-founders__placeholder-text {
+  font: 400 1rem/1.6 var(--font-body);
+  color: var(--pulsar-gray2);
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .pulsar-about-founders__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pulsar-about-founders__grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "About Founders",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FROM THE OWNERS"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro paragraph (optional)"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Placeholder text (shown when no members added)",
+      "default": "Leadership profiles coming soon."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Owner Name"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title",
+          "default": "Owner"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Short bio (optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo (optional)"
+        },
+        {
+          "type": "text",
+          "id": "twitter",
+          "label": "Twitter / X handle or URL (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "About Founders" }
+  ]
+}
+{% endschema %}

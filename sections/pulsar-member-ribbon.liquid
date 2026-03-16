@@ -1,0 +1,129 @@
+{%- liquid
+  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
+-%}
+
+<section class="pulsar-ticker-section" aria-label="Team members">
+  {%- if section.settings.heading != blank -%}
+    <p class="pulsar-ticker-section__label pulsar-reveal">{{ section.settings.heading }}</p>
+  {%- endif -%}
+
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker">
+      {%- for member in members -%}
+        <span class="ticker__item">{{ member }}</span>
+      {%- endfor -%}
+      {%- comment -%}Duplicate for seamless loop{%- endcomment -%}
+      {%- for member in members -%}
+        <span class="ticker__item">{{ member }}</span>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pulsar-ticker-section {
+    background-color: var(--pulsar-black);
+    border-top: 1px solid var(--pulsar-dark3);
+    border-bottom: 1px solid var(--pulsar-dark3);
+    padding: var(--pulsar-space-lg) 0;
+    overflow: hidden;
+  }
+
+  .pulsar-ticker-section__label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-md);
+    text-align: center;
+  }
+
+  @keyframes pulsar-ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    height: 4rem;
+  }
+
+  .ticker {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    height: 4rem;
+    white-space: nowrap;
+    animation: pulsar-ticker 60s linear infinite;
+    will-change: transform;
+  }
+
+  .ticker:hover {
+    animation-play-state: paused;
+  }
+
+  .ticker__item {
+    display: inline-block;
+    padding: 0 2rem;
+    font-family: var(--font-secondary);
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    transition: color 0.2s ease;
+    cursor: default;
+  }
+
+  .ticker__item:hover {
+    color: var(--pulsar-white);
+  }
+
+  .ticker__item::after {
+    content: ' ·';
+    color: var(--pulsar-gray1);
+    margin-left: 2rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker {
+      animation: none !important;
+      flex-wrap: wrap;
+      width: auto;
+      height: auto;
+      padding: var(--pulsar-space-md) var(--pulsar-space-lg);
+      justify-content: center;
+      gap: var(--pulsar-space-sm);
+    }
+    .ticker-wrap { height: auto; overflow: visible; }
+    .ticker__item:nth-child(n + 67) { display: none; }
+  }
+
+  @media (max-width: 767px) {
+    .ticker__item { font-size: 1.5rem; padding: 0 1.2rem; }
+    .ticker { animation-duration: 45s; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Pulsar Member Ribbon",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section label (optional)",
+      "default": "Our people"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Member Ribbon",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

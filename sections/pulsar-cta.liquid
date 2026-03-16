@@ -1,0 +1,175 @@
+<section class="pulsar-cta" data-pulsar-section="cta">
+  <div class="pulsar-cta__inner">
+    <p class="pulsar-cta__overline pulsar-reveal">{{ section.settings.overline | default: 'Ready?' }}</p>
+    <h2 class="pulsar-cta__heading pulsar-heading-reveal">
+      {%- if section.settings.heading != blank -%}
+        {{ section.settings.heading }}
+      {%- else -%}
+        THIS IS<br>YOUR ORG.
+      {%- endif -%}
+    </h2>
+    <p class="pulsar-cta__body pulsar-reveal">
+      {{ section.settings.body | default: 'Join the movement. Wear the name. Compete at the highest level.' }}
+    </p>
+    <div class="pulsar-cta__actions pulsar-reveal">
+      <a
+        href="{{ section.settings.primary_url | default: '/collections/all' }}"
+        class="pulsar-btn pulsar-btn--primary"
+      >{{ section.settings.primary_label | default: 'Shop Now' }}</a>
+      <a
+        href="{{ section.settings.secondary_url | default: '/pages/careers' }}"
+        class="pulsar-btn pulsar-btn--ghost"
+      >{{ section.settings.secondary_label | default: 'Join Us' }}</a>
+    </div>
+    <p class="pulsar-cta__tagline pulsar-reveal">Excellence. Community. Intent.</p>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-cta {
+    background-color: var(--pulsar-black);
+    padding: calc(var(--pulsar-space-xxl) * 1.5) 0;
+    text-align: center;
+    border-top: 1px solid var(--pulsar-dark3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle radial glow behind content */
+  .pulsar-cta::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(200, 200, 204, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .pulsar-cta__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-lg);
+  }
+  .pulsar-cta__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+  .pulsar-cta__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+  .pulsar-cta__body {
+    font-family: var(--font-secondary);
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    margin: 0;
+  }
+  .pulsar-cta__actions {
+    display: flex;
+    gap: var(--pulsar-space-md);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pulsar-cta__tagline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: var(--pulsar-space-md) 0 0;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-cta { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-cta__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-md); }
+    .pulsar-cta__heading { font-size: clamp(3rem, 14vw, 5rem); }
+    .pulsar-cta__actions { flex-direction: column; width: 100%; max-width: 300px; }
+    .pulsar-cta__actions .pulsar-btn { text-align: center; justify-content: center; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar CTA",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Ready?"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THIS IS\nYOUR ORG."
+    },
+    {
+      "type": "text",
+      "id": "body",
+      "label": "Body",
+      "default": "Join the movement. Wear the name. Compete at the highest level."
+    },
+    {
+      "type": "header",
+      "content": "Primary CTA"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "primary_url",
+      "label": "URL"
+    },
+    {
+      "type": "header",
+      "content": "Secondary CTA"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Button label",
+      "default": "Join Us"
+    },
+    {
+      "type": "url",
+      "id": "secondary_url",
+      "label": "URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar CTA",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

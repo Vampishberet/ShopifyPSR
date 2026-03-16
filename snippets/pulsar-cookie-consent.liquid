@@ -1,0 +1,67 @@
+{% comment %}
+  Pulsar Cookie Consent Snippet
+  - GDPR/CCPA compliant banner
+  - Dark themed, fixed to bottom of screen
+  - Accept/Decline persisted in localStorage
+  - CSS in pulsar-enhancements.css
+{% endcomment %}
+
+<div id="pulsar-cookie-consent" role="dialog" aria-label="Cookie preferences" aria-modal="false">
+  <p class="pulsar-cookie__text">
+    We use cookies to improve your experience and analyse site traffic.
+    By clicking Accept, you agree to our
+    <a href="{{ shop.url }}/policies/privacy-policy">Privacy Policy</a>.
+  </p>
+  <div class="pulsar-cookie__actions">
+    <button
+      class="pulsar-cookie__btn pulsar-cookie__btn--decline"
+      id="pulsar-cookie-decline"
+      type="button"
+      aria-label="Decline cookies"
+    >Decline</button>
+    <button
+      class="pulsar-cookie__btn pulsar-cookie__btn--accept"
+      id="pulsar-cookie-accept"
+      type="button"
+      aria-label="Accept cookies"
+    >Accept</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'pulsar_cookie_consent';
+    var banner      = document.getElementById('pulsar-cookie-consent');
+
+    function hideBanner() {
+      if (banner) {
+        banner.classList.add('is-hidden');
+        // Remove from DOM after transition so it doesn't block interaction
+        setTimeout(function () {
+          if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+        }, 500);
+      }
+    }
+
+    // Already decided — hide immediately
+    if (localStorage.getItem(STORAGE_KEY)) {
+      if (banner) banner.style.display = 'none';
+      return;
+    }
+
+    // Show banner
+    if (banner) banner.classList.remove('is-hidden');
+
+    document.getElementById('pulsar-cookie-accept') &&
+      document.getElementById('pulsar-cookie-accept').addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'accepted');
+        hideBanner();
+      });
+
+    document.getElementById('pulsar-cookie-decline') &&
+      document.getElementById('pulsar-cookie-decline').addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'declined');
+        hideBanner();
+      });
+  })();
+</script>

@@ -1,0 +1,152 @@
+<section class="pulsar-stats">
+  <div class="pulsar-stats__inner">
+    {%- if section.settings.label != blank -%}
+      <p class="pulsar-stats__section-label pulsar-reveal">{{ section.settings.label }}</p>
+    {%- endif -%}
+    <div class="pulsar-stats__grid">
+      <div class="pulsar-stats__item pulsar-reveal">
+        <div class="pulsar-stats__number">
+          <span
+            data-pulsar-counter="2"
+            data-pulsar-suffix="M+"
+            data-pulsar-duration="2"
+          >2M+</span>
+        </div>
+        <p class="pulsar-stats__label">Combined Reach</p>
+      </div>
+      <div class="pulsar-stats__divider" aria-hidden="true"></div>
+      <div class="pulsar-stats__item pulsar-reveal">
+        <div class="pulsar-stats__number">
+          <span
+            data-pulsar-counter="125"
+            data-pulsar-prefix="$"
+            data-pulsar-suffix="K+"
+            data-pulsar-duration="2"
+          >$125K+</span>
+        </div>
+        <p class="pulsar-stats__label">Prize Earnings</p>
+      </div>
+      <div class="pulsar-stats__divider" aria-hidden="true"></div>
+      <div class="pulsar-stats__item pulsar-reveal">
+        <div class="pulsar-stats__number">
+          <span
+            data-pulsar-counter="60"
+            data-pulsar-suffix="+"
+            data-pulsar-duration="1.8"
+          >60+</span>
+        </div>
+        <p class="pulsar-stats__label">Members</p>
+      </div>
+      <div class="pulsar-stats__divider" aria-hidden="true"></div>
+      <div class="pulsar-stats__item pulsar-reveal">
+        <div class="pulsar-stats__number">
+          <span
+            data-pulsar-counter="5"
+            data-pulsar-suffix="+"
+            data-pulsar-duration="1.5"
+          >5+</span>
+        </div>
+        <p class="pulsar-stats__label">Years Active</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-stats {
+    background-color: var(--pulsar-dark2);
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+    border-bottom: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-stats__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-xl);
+  }
+  .pulsar-stats__section-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+  .pulsar-stats__grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+  }
+  .pulsar-stats__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-sm);
+    padding: 0 var(--pulsar-space-lg);
+  }
+  .pulsar-stats__number {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--pulsar-white);
+    text-transform: uppercase;
+  }
+  .pulsar-stats__label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    margin: 0;
+    text-align: center;
+  }
+  .pulsar-stats__divider {
+    width: 1px;
+    height: 80px;
+    background: var(--pulsar-dark3);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-stats { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-stats__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+    .pulsar-stats__grid {
+      flex-wrap: wrap;
+      gap: var(--pulsar-space-lg);
+    }
+    .pulsar-stats__item { min-width: calc(50% - var(--pulsar-space-lg)); padding: 0; }
+    .pulsar-stats__divider { display: none; }
+    .pulsar-stats__number { font-size: clamp(2.5rem, 10vw, 4rem); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Stats Counter",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section overline",
+      "default": "By the numbers"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Stats Counter",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

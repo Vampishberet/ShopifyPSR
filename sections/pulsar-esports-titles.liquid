@@ -1,0 +1,477 @@
+<section class="pulsar-esports-titles">
+  <div class="pulsar-esports-titles__inner">
+
+    <!-- Tab selector -->
+    <div class="pulsar-esports-titles__tabs" role="tablist" aria-label="Esports titles">
+      <button
+        class="pulsar-esports-titles__tab is-active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="panel-fortnite"
+        id="tab-fortnite"
+        data-tab="fortnite"
+        type="button"
+      >
+        <span class="pulsar-esports-titles__tab-label">Fortnite</span>
+        <span class="pulsar-esports-titles__tab-count">10</span>
+      </button>
+      <button
+        class="pulsar-esports-titles__tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-valorant"
+        id="tab-valorant"
+        data-tab="valorant"
+        type="button"
+      >
+        <span class="pulsar-esports-titles__tab-label">Valorant</span>
+        <span class="pulsar-esports-titles__tab-count">13</span>
+      </button>
+      <button
+        class="pulsar-esports-titles__tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-apex"
+        id="tab-apex"
+        data-tab="apex"
+        type="button"
+      >
+        <span class="pulsar-esports-titles__tab-label">Apex Legends</span>
+        <span class="pulsar-esports-titles__tab-count">3</span>
+      </button>
+      <div class="pulsar-esports-titles__tab-indicator" aria-hidden="true"></div>
+    </div>
+
+    <!-- Panels -->
+    <div class="pulsar-esports-titles__panels">
+
+      <!-- ==================== FORTNITE ==================== -->
+      <div
+        class="pulsar-esports-titles__panel is-active"
+        id="panel-fortnite"
+        role="tabpanel"
+        aria-labelledby="tab-fortnite"
+        data-panel="fortnite"
+      >
+        <div class="pulsar-esports-titles__panel-header">
+          <div class="pulsar-esports-titles__panel-meta">
+            <p class="pulsar-esports-titles__panel-game">Fortnite</p>
+            <h2 class="pulsar-esports-titles__panel-heading">PSR<br>FORTNITE</h2>
+          </div>
+          <div class="pulsar-esports-titles__panel-video">
+            <div class="pulsar-esports-titles__embed-wrap">
+              <iframe
+                src="https://www.youtube.com/embed/MoZfg__UPRo?rel=0&modestbranding=1"
+                title="PSR Fortnite Montage"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="pulsar-esports-titles__roster pulsar-stagger-group">
+          {%- assign fn_players = 'Chimp,Gary,Light,Zire,Tuhronto,Channce,Vero,Ryiax,CeceNuggets,GazingNicole' | split: ',' -%}
+          {%- for player in fn_players -%}
+            <div class="pulsar-player-card pulsar-stagger-item">
+              <div class="pulsar-player-card__inner">
+                <span class="pulsar-player-card__game">Fortnite</span>
+                <p class="pulsar-player-card__name">PSR {{ player }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <!-- ==================== VALORANT ==================== -->
+      <div
+        class="pulsar-esports-titles__panel"
+        id="panel-valorant"
+        role="tabpanel"
+        aria-labelledby="tab-valorant"
+        data-panel="valorant"
+        hidden
+      >
+        <div class="pulsar-esports-titles__panel-header">
+          <div class="pulsar-esports-titles__panel-meta">
+            <p class="pulsar-esports-titles__panel-game">Valorant</p>
+            <h2 class="pulsar-esports-titles__panel-heading">PSR<br>VALORANT</h2>
+          </div>
+          <div class="pulsar-esports-titles__panel-video">
+            <div class="pulsar-esports-titles__embed-wrap">
+              <iframe
+                src="https://www.youtube.com/embed/3Po08NzKqlc?rel=0&modestbranding=1"
+                title="PSR Valorant Montage"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main roster -->
+        <div class="pulsar-esports-titles__roster-section">
+          <p class="pulsar-esports-titles__roster-label">Main Roster</p>
+          <div class="pulsar-esports-titles__roster pulsar-stagger-group">
+            {%- assign val_players = 'Mikey,Moe,Psych,Indra,Klamran,Dag,Ian' | split: ',' -%}
+            {%- for player in val_players -%}
+              <div class="pulsar-player-card pulsar-stagger-item">
+                <div class="pulsar-player-card__inner">
+                  <span class="pulsar-player-card__game">Valorant</span>
+                  <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <!-- GC sub-section -->
+        <div class="pulsar-esports-titles__roster-section pulsar-esports-titles__roster-section--gc">
+          <div class="pulsar-esports-titles__gc-header">
+            <p class="pulsar-esports-titles__roster-label">Game Changers</p>
+            <span class="pulsar-esports-titles__gc-badge">GC</span>
+          </div>
+          <div class="pulsar-esports-titles__roster pulsar-stagger-group">
+            {%- assign gc_players = 'Cafe,Jid,Mei,Rina,Staryu,Vienna' | split: ',' -%}
+            {%- for player in gc_players -%}
+              <div class="pulsar-player-card pulsar-player-card--gc pulsar-stagger-item">
+                <div class="pulsar-player-card__inner">
+                  <span class="pulsar-player-card__game">Valorant GC</span>
+                  <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== APEX LEGENDS ==================== -->
+      <div
+        class="pulsar-esports-titles__panel"
+        id="panel-apex"
+        role="tabpanel"
+        aria-labelledby="tab-apex"
+        data-panel="apex"
+        hidden
+      >
+        <div class="pulsar-esports-titles__panel-header pulsar-esports-titles__panel-header--no-video">
+          <div class="pulsar-esports-titles__panel-meta">
+            <p class="pulsar-esports-titles__panel-game">Apex Legends</p>
+            <h2 class="pulsar-esports-titles__panel-heading">PSR<br>APEX</h2>
+          </div>
+        </div>
+
+        <div class="pulsar-esports-titles__roster pulsar-stagger-group">
+          {%- assign apex_players = 'Acsidius,zGato,iGOMA' | split: ',' -%}
+          {%- for player in apex_players -%}
+            <div class="pulsar-player-card pulsar-stagger-item">
+              <div class="pulsar-player-card__inner">
+                <span class="pulsar-player-card__game">Apex Legends</span>
+                <p class="pulsar-player-card__name">PSR {{ player }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div><!-- /.pulsar-esports-titles__panels -->
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-esports-titles {
+    background-color: var(--pulsar-dark1);
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-esports-titles__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-xl);
+  }
+
+  /* === TABS === */
+  .pulsar-esports-titles__tabs {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    border-bottom: 1px solid var(--pulsar-dark3);
+    position: relative;
+  }
+  .pulsar-esports-titles__tab {
+    background: none;
+    border: none;
+    padding: var(--pulsar-space-md) var(--pulsar-space-lg) var(--pulsar-space-md) 0;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: var(--pulsar-space-xs);
+    position: relative;
+    transition: opacity 0.2s ease;
+  }
+  .pulsar-esports-titles__tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--pulsar-white);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--pulsar-ease-out);
+  }
+  .pulsar-esports-titles__tab.is-active::after { transform: scaleX(1); }
+  .pulsar-esports-titles__tab-label {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 3vw, 2.25rem);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    transition: color 0.2s ease;
+  }
+  .pulsar-esports-titles__tab.is-active .pulsar-esports-titles__tab-label,
+  .pulsar-esports-titles__tab:hover .pulsar-esports-titles__tab-label {
+    color: var(--pulsar-white);
+  }
+  .pulsar-esports-titles__tab-count {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--pulsar-gray1);
+    transition: color 0.2s ease;
+    padding-bottom: 2px;
+  }
+  .pulsar-esports-titles__tab.is-active .pulsar-esports-titles__tab-count { color: var(--pulsar-gray2); }
+
+  /* === PANELS === */
+  .pulsar-esports-titles__panels { position: relative; }
+  .pulsar-esports-titles__panel { display: none; }
+  .pulsar-esports-titles__panel.is-active { display: block; }
+  .pulsar-esports-titles__panel[hidden] { display: none !important; }
+
+  /* Panel header — 2-col: meta + video */
+  .pulsar-esports-titles__panel-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--pulsar-space-xl);
+    align-items: start;
+    margin-bottom: var(--pulsar-space-xl);
+  }
+  .pulsar-esports-titles__panel-header--no-video {
+    grid-template-columns: 1fr;
+  }
+  .pulsar-esports-titles__panel-game {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-sm);
+  }
+  .pulsar-esports-titles__panel-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  /* YouTube embed */
+  .pulsar-esports-titles__embed-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background-color: var(--pulsar-black);
+    border: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-esports-titles__embed-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* === ROSTER GRID === */
+  .pulsar-esports-titles__roster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+    background-color: var(--pulsar-dark3);
+    border: 1px solid var(--pulsar-dark3);
+  }
+
+  /* Roster sub-sections (Valorant) */
+  .pulsar-esports-titles__roster-section { margin-bottom: var(--pulsar-space-xl); }
+  .pulsar-esports-titles__roster-section:last-child { margin-bottom: 0; }
+  .pulsar-esports-titles__roster-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-md);
+  }
+  .pulsar-esports-titles__roster-section--gc { padding-top: var(--pulsar-space-xl); border-top: 1px solid var(--pulsar-dark3); }
+  .pulsar-esports-titles__gc-header {
+    display: flex;
+    align-items: center;
+    gap: var(--pulsar-space-sm);
+    margin-bottom: var(--pulsar-space-md);
+  }
+  .pulsar-esports-titles__gc-badge {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    background: var(--pulsar-dark3);
+    color: var(--pulsar-gray2);
+    border: 1px solid var(--pulsar-gray1);
+    padding: 0.2em 0.5em;
+  }
+
+  /* === PLAYER CARD === */
+  .pulsar-player-card {
+    background-color: var(--pulsar-dark2);
+    transition: background-color 0.2s ease;
+  }
+  .pulsar-player-card:hover { background-color: var(--pulsar-dark3); }
+  .pulsar-player-card__inner {
+    padding: var(--pulsar-space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-xs);
+    min-height: 100px;
+    justify-content: flex-end;
+  }
+  .pulsar-player-card__game {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+  }
+  .pulsar-player-card__name {
+    font-family: var(--font-secondary);
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+    line-height: 1.1;
+  }
+  .pulsar-player-card__role {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+  }
+  .pulsar-player-card__social {
+    display: inline-flex;
+    color: var(--pulsar-gray1);
+    transition: color 0.2s ease;
+    margin-top: var(--pulsar-space-xs);
+  }
+  .pulsar-player-card__social:hover { color: var(--pulsar-white); }
+  .pulsar-player-card--gc .pulsar-player-card__inner { border-left: 2px solid var(--pulsar-gray1); }
+
+  @media (max-width: 767px) {
+    .pulsar-esports-titles { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-esports-titles__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+    .pulsar-esports-titles__tabs { gap: 0; overflow-x: auto; }
+    .pulsar-esports-titles__tab { padding: var(--pulsar-space-sm) var(--pulsar-space-md) var(--pulsar-space-sm) 0; white-space: nowrap; }
+    .pulsar-esports-titles__panel-header { grid-template-columns: 1fr; }
+    .pulsar-esports-titles__panel-video { order: -1; }
+    .pulsar-esports-titles__roster { grid-template-columns: repeat(2, 1fr); }
+  }
+{% endstylesheet %}
+
+<script>
+  (function() {
+    var tabs = document.querySelectorAll('.pulsar-esports-titles__tab');
+    var panels = document.querySelectorAll('.pulsar-esports-titles__panel');
+
+    if (!tabs.length) return;
+
+    function switchTab(targetTab) {
+      var targetId = targetTab.dataset.tab;
+      var currentPanel = document.querySelector('.pulsar-esports-titles__panel.is-active');
+      var nextPanel = document.getElementById('panel-' + targetId);
+
+      if (!nextPanel || currentPanel === nextPanel) return;
+
+      // Update tab states
+      tabs.forEach(function(t) {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      targetTab.classList.add('is-active');
+      targetTab.setAttribute('aria-selected', 'true');
+
+      // GSAP crossfade if available, otherwise instant swap
+      if (window.gsap) {
+        gsap.to(currentPanel, {
+          opacity: 0,
+          y: -10,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: function() {
+            currentPanel.classList.remove('is-active');
+            currentPanel.hidden = true;
+            nextPanel.hidden = false;
+            nextPanel.classList.add('is-active');
+            gsap.fromTo(nextPanel,
+              { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+            );
+          }
+        });
+      } else {
+        currentPanel.classList.remove('is-active');
+        currentPanel.hidden = true;
+        nextPanel.hidden = false;
+        nextPanel.classList.add('is-active');
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { switchTab(this); });
+    });
+
+    // Keyboard navigation
+    tabs.forEach(function(tab, i) {
+      tab.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') { tabs[(i + 1) % tabs.length].focus(); }
+        if (e.key === 'ArrowLeft') { tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Pulsar Esports Titles",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Pulsar Esports Titles",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

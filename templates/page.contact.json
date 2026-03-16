@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "pulsar-contact": {
+      "type": "pulsar-contact",
+      "settings": {
+        "heading": "GET IN TOUCH.",
+        "info_heading": "LET'S TALK.",
+        "info_text": "Whether you want to partner with us, join the team, or just have something to say — we read everything.",
+        "email": "pulsarclanggs@gmail.com",
+        "success_message": "Message sent. We'll be in touch soon."
+      }
+    }
+  },
+  "order": [
+    "pulsar-contact"
+  ]
+}

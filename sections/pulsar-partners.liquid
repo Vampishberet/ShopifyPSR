@@ -1,0 +1,220 @@
+<section class="pulsar-partners">
+  <div class="pulsar-partners__inner">
+    <div class="pulsar-partners__header">
+      <p class="pulsar-partners__overline pulsar-reveal">{{ section.settings.overline | default: 'Trusted by' }}</p>
+      <h2 class="pulsar-partners__heading pulsar-heading-reveal">{{ section.settings.heading | default: 'OUR PARTNERS' }}</h2>
+    </div>
+
+    <div class="pulsar-partners__logos pulsar-stagger-group">
+      <!-- Tipsy Audio -->
+      <a
+        href="{{ section.settings.partner_1_url | default: '#' }}"
+        class="pulsar-partners__logo-link pulsar-stagger-item"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Tipsy Audio — Pulsar partner"
+      >
+        <img
+          src="{{ 'TIPSYlogo.png' | asset_url }}"
+          alt="Tipsy Audio"
+          class="pulsar-partners__logo"
+          width="200"
+          height="60"
+          loading="lazy"
+        >
+      </a>
+
+      <!-- OBSBOT -->
+      <a
+        href="{{ section.settings.partner_2_url | default: '#' }}"
+        class="pulsar-partners__logo-link pulsar-stagger-item"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="OBSBOT — Pulsar partner"
+      >
+        <img
+          src="{{ 'OBSBOTBALCK.png' | asset_url }}"
+          alt="OBSBOT"
+          class="pulsar-partners__logo pulsar-partners__logo--invert"
+          width="200"
+          height="60"
+          loading="lazy"
+        >
+      </a>
+    </div>
+
+    {%- if section.settings.show_cta -%}
+      <div class="pulsar-partners__cta pulsar-reveal">
+        <p class="pulsar-partners__cta-text">{{ section.settings.cta_text | default: 'Interested in partnering with Team Pulsar?' }}</p>
+        <a
+          href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+          class="pulsar-btn pulsar-btn--ghost"
+        >{{ section.settings.cta_label | default: 'Become a Partner' }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-partners {
+    background-color: var(--pulsar-dark2);
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+    border-bottom: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-partners__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-xl);
+    text-align: center;
+  }
+  .pulsar-partners__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-sm);
+  }
+  .pulsar-partners__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .pulsar-partners__logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pulsar-space-xxl);
+    flex-wrap: wrap;
+  }
+  .pulsar-partners__logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.55;
+    transition: opacity 0.3s ease, transform 0.3s var(--pulsar-ease-out);
+  }
+  .pulsar-partners__logo-link:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+  .pulsar-partners__logo-link:focus-visible {
+    outline: 2px solid var(--pulsar-white);
+    outline-offset: 4px;
+  }
+  .pulsar-partners__logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: none;
+  }
+  .pulsar-partners__logo--invert { filter: invert(1); }
+
+  /* CTA */
+  .pulsar-partners__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-md);
+    padding-top: var(--pulsar-space-lg);
+    border-top: 1px solid var(--pulsar-dark3);
+    width: 100%;
+  }
+  .pulsar-partners__cta-text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--pulsar-gray2);
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-partners { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-partners__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+    .pulsar-partners__logos { gap: var(--pulsar-space-xl); }
+    .pulsar-partners__logo { height: 36px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Partners",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Trusted by"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OUR PARTNERS"
+    },
+    {
+      "type": "header",
+      "content": "Partner 1 — Tipsy Audio"
+    },
+    {
+      "type": "url",
+      "id": "partner_1_url",
+      "label": "Partner URL"
+    },
+    {
+      "type": "header",
+      "content": "Partner 2 — OBSBOT"
+    },
+    {
+      "type": "url",
+      "id": "partner_2_url",
+      "label": "Partner URL"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show partner CTA",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Interested in partnering with Team Pulsar?"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "Become a Partner"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Partners",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

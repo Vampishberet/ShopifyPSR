@@ -1,0 +1,504 @@
+{% doc %}
+  @prompt
+    Create a full-width Shopify homepage section with a black background and a responsive two-column layout. The left column should stack a small text element, a large heading element, a smaller supporting text element, and a button element with spacing between each. The right column should contain a vertical divider aligned to the left and a rich text container aligned to the right of the divider. The section should have generous padding, a centered max-width container, desktop-first layout that collapses to a single column on mobile, and no decorative corner elements or extra visual effects.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-hero-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-hero-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 {{ block.settings.horizontal_padding }}px;
+  }
+
+  .ai-hero-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.column_gap }}px;
+    align-items: {{ block.settings.vertical_alignment }};
+  }
+
+  .ai-hero-left-column-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.element_spacing }}px;
+  }
+
+  .ai-hero-small-text-{{ ai_gen_id }} {
+    color: {{ block.settings.small_text_color }};
+    font-size: {{ block.settings.small_text_size }}px;
+    margin: 0;
+  }
+
+  .ai-hero-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .ai-hero-supporting-text-{{ ai_gen_id }} {
+    color: {{ block.settings.supporting_text_color }};
+    font-size: {{ block.settings.supporting_text_size }}px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ai-hero-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_text_size }}px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+
+  .ai-hero-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_background }};
+    color: {{ block.settings.button_hover_text_color }};
+  }
+
+  .ai-hero-right-column-{{ ai_gen_id }} {
+    display: flex;
+    align-items: {{ block.settings.vertical_alignment }};
+    gap: {{ block.settings.divider_spacing }}px;
+  }
+
+  .ai-hero-divider-{{ ai_gen_id }} {
+    width: {{ block.settings.divider_width }}px;
+    height: {{ block.settings.divider_height }}px;
+    background-color: {{ block.settings.divider_color }};
+    flex-shrink: 0;
+  }
+
+  .ai-hero-richtext-{{ ai_gen_id }} {
+    color: {{ block.settings.richtext_color }};
+    font-size: {{ block.settings.richtext_size }}px;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .ai-hero-richtext-{{ ai_gen_id }} p {
+    margin: 0 0 1em;
+  }
+
+  .ai-hero-richtext-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-hero-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.mobile_gap }}px;
+    }
+
+    .ai-hero-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.6 }}px;
+    }
+
+    .ai-hero-divider-{{ ai_gen_id }} {
+      width: 100%;
+      height: {{ block.settings.divider_width }}px;
+    }
+
+    .ai-hero-right-column-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-hero-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-container-{{ ai_gen_id }}">
+    <div class="ai-hero-grid-{{ ai_gen_id }}">
+      <div class="ai-hero-left-column-{{ ai_gen_id }}">
+        {% if block.settings.small_text != blank %}
+          <div class="ai-hero-small-text-{{ ai_gen_id }}">
+            {{ block.settings.small_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h1 class="ai-hero-heading-{{ ai_gen_id }}">
+            {{ block.settings.heading }}
+          </h1>
+        {% endif %}
+
+        {% if block.settings.supporting_text != blank %}
+          <div class="ai-hero-supporting-text-{{ ai_gen_id }}">
+            {{ block.settings.supporting_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.button_text != blank %}
+          <a
+            href="{{ block.settings.button_link }}"
+            class="ai-hero-button-{{ ai_gen_id }}"
+          >
+            {{ block.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="ai-hero-right-column-{{ ai_gen_id }}">
+        <div class="ai-hero-divider-{{ ai_gen_id }}"></div>
+        <div class="ai-hero-richtext-{{ ai_gen_id }}">
+          {{ block.settings.richtext_content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero section",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "element_spacing",
+      "label": "Element spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
+      "min": 20,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Small text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "small_text",
+      "label": "Text",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "range",
+      "id": "small_text_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "small_text_color",
+      "label": "Color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Text",
+      "default": "Discover amazing products"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Font size",
+      "min": 24,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Supporting text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "supporting_text",
+      "label": "Text",
+      "default": "Shop our latest collection and find the perfect items for you"
+    },
+    {
+      "type": "range",
+      "id": "supporting_text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "supporting_text_color",
+      "label": "Color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Padding vertical",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 16,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#452bca"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#452bca"
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "range",
+      "id": "divider_width",
+      "label": "Width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "divider_height",
+      "label": "Height",
+      "min": 50,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "divider_spacing",
+      "label": "Spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Rich text"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext_content",
+      "label": "Content",
+      "default": "<p>Add your rich text content here. You can include multiple paragraphs and format your text as needed.</p>"
+    },
+    {
+      "type": "range",
+      "id": "richtext_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "richtext_color",
+      "label": "Color",
+      "default": "#cccccc"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero section"
+    }
+  ]
+}
+{% endschema %}

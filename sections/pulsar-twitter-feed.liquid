@@ -1,0 +1,134 @@
+<section class="pulsar-twitter">
+  <div class="pulsar-twitter__inner">
+    <div class="pulsar-twitter__header">
+      <p class="pulsar-twitter__overline pulsar-reveal">{{ section.settings.overline | default: 'Latest' }}</p>
+      <h2 class="pulsar-twitter__heading pulsar-heading-reveal">
+        {{ section.settings.heading | default: 'FOLLOW THE ACTION' }}
+      </h2>
+      <p class="pulsar-twitter__handle pulsar-reveal">
+        <a href="https://x.com/PulsarLLC" target="_blank" rel="noopener noreferrer">@PulsarLLC</a>
+      </p>
+    </div>
+
+    <div class="pulsar-twitter__embed-wrap pulsar-reveal">
+      <a
+        class="twitter-timeline"
+        data-theme="dark"
+        data-chrome="nofooter noborders transparent"
+        data-tweet-limit="{{ section.settings.tweet_limit | default: 3 }}"
+        data-width="100%"
+        href="https://twitter.com/{{ section.settings.twitter_handle | default: 'PulsarLLC' }}"
+      >Tweets by @{{ section.settings.twitter_handle | default: 'PulsarLLC' }}</a>
+    </div>
+  </div>
+</section>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+{% stylesheet %}
+  .pulsar-twitter {
+    background-color: var(--pulsar-black);
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-twitter__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-xl);
+    align-items: center;
+    text-align: center;
+  }
+  .pulsar-twitter__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-xs);
+  }
+  .pulsar-twitter__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+  .pulsar-twitter__handle {
+    margin: 0;
+  }
+  .pulsar-twitter__handle a {
+    font-family: var(--font-secondary);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    transition: color 0.2s ease;
+  }
+  .pulsar-twitter__handle a:hover { color: var(--pulsar-white); }
+
+  .pulsar-twitter__embed-wrap {
+    width: 100%;
+    max-width: 600px;
+    background-color: var(--pulsar-dark2);
+    border: 1px solid var(--pulsar-dark3);
+    border-radius: 0;
+    overflow: hidden;
+    min-height: 300px;
+  }
+  /* Override Twitter widget background */
+  .pulsar-twitter__embed-wrap .twitter-timeline { color-scheme: dark; }
+
+  @media (max-width: 767px) {
+    .pulsar-twitter { padding: var(--pulsar-space-xl) 0; }
+    .pulsar-twitter__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Twitter Feed",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Latest"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FOLLOW THE ACTION"
+    },
+    {
+      "type": "text",
+      "id": "twitter_handle",
+      "label": "Twitter/X handle (without @)",
+      "default": "PulsarLLC"
+    },
+    {
+      "type": "range",
+      "id": "tweet_limit",
+      "label": "Tweets to show",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Twitter Feed",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

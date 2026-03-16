@@ -1,0 +1,59 @@
+/* ============================================
+   PULSAR PRELOADER v1.0
+   Loads in <head> for instant display before main CSS
+   ============================================ */
+
+#pulsar-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  /* Preloader must be visible immediately — no transition on entry */
+}
+
+#pulsar-preloader.is-exiting {
+  /* GSAP will handle the exit animation (yPercent: -100) */
+  pointer-events: none;
+}
+
+.pulsar-preloader__video {
+  width: min(260px, 55vw);
+  height: auto;
+  display: block;
+  /* No border-radius — keep it clean */
+}
+
+.pulsar-preloader__progress-track {
+  width: min(360px, 72vw);
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.pulsar-preloader__progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: #ffffff;
+  /* JS drives width directly — no CSS transition here */
+}
+
+.pulsar-preloader__label {
+  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  text-align: center;
+  /* Renders above progress track */
+  order: -1;
+  margin-bottom: -1rem;
+}

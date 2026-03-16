@@ -1,0 +1,50 @@
+{%- comment -%}
+  pulsar-og-meta.liquid
+  Open Graph + Twitter Card meta tags for Team Pulsar.
+{%- endcomment -%}
+
+{%- liquid
+  assign og_title       = page_title | default: shop.name
+  assign og_description = page_description | default: shop.description | default: 'Team Pulsar — Multi-title esports organisation. 2M+ combined reach. $125K+ prize earnings. 60+ members. Fortnite, Valorant, Apex Legends.'
+  assign og_url         = canonical_url | default: request.origin
+
+  if product
+    assign og_title       = product.title | append: ' — Team Pulsar'
+    assign og_description = product.description | strip_html | truncatewords: 40
+    assign og_image       = product.featured_image | image_url: width: 1200
+  elsif collection
+    assign og_title       = collection.title | append: ' — Team Pulsar'
+    assign og_description = collection.description | strip_html | truncatewords: 40
+    assign og_image       = collection.image | image_url: width: 1200
+  elsif article
+    assign og_title       = article.title | append: ' — Team Pulsar'
+    assign og_description = article.excerpt | default: article.content | strip_html | truncatewords: 40
+    assign og_image       = article.image | image_url: width: 1200
+  elsif page
+    assign og_title       = page.title | append: ' — Team Pulsar'
+    assign og_description = page.content | strip_html | truncatewords: 40
+  endif
+
+  unless og_image
+    assign og_image = 'TIPSYlogo.png' | asset_url
+  endunless
+-%}
+
+<!-- Open Graph -->
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="Team Pulsar">
+<meta property="og:title"       content="{{ og_title | escape }}">
+<meta property="og:description" content="{{ og_description | escape }}">
+<meta property="og:url"         content="{{ og_url }}">
+<meta property="og:image"       content="{{ og_image }}">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"   content="{{ og_title | escape }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@PulsarLLC">
+<meta name="twitter:creator"     content="@PulsarLLC">
+<meta name="twitter:title"       content="{{ og_title | escape }}">
+<meta name="twitter:description" content="{{ og_description | escape }}">
+<meta name="twitter:image"       content="{{ og_image }}">

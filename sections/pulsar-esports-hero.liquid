@@ -1,0 +1,157 @@
+<section class="pulsar-esports-hero">
+  <div class="pulsar-esports-hero__bg" aria-hidden="true">
+    <div class="pulsar-esports-hero__grid"></div>
+    <div class="pulsar-esports-hero__vignette"></div>
+  </div>
+  <div class="pulsar-esports-hero__inner">
+    <p class="pulsar-esports-hero__overline pulsar-reveal">
+      {{ section.settings.overline | default: 'Est. 2020 · North America' }}
+    </p>
+    <h1 class="pulsar-esports-hero__heading pulsar-heading-reveal">
+      {%- if section.settings.heading != blank -%}
+        {{ section.settings.heading }}
+      {%- else -%}
+        COMPETE<br>AT THE<br>HIGHEST<br>LEVEL
+      {%- endif -%}
+    </h1>
+    <div class="pulsar-esports-hero__games pulsar-reveal">
+      <span class="pulsar-esports-hero__game-tag">Fortnite</span>
+      <span class="pulsar-esports-hero__game-divider" aria-hidden="true">·</span>
+      <span class="pulsar-esports-hero__game-tag">Valorant</span>
+      <span class="pulsar-esports-hero__game-divider" aria-hidden="true">·</span>
+      <span class="pulsar-esports-hero__game-tag">Apex Legends</span>
+    </div>
+  </div>
+  <div class="pulsar-esports-hero__scroll" aria-hidden="true">
+    <div class="pulsar-esports-hero__scroll-line"></div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-esports-hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--pulsar-black);
+    border-bottom: 1px solid var(--pulsar-dark3);
+  }
+
+  /* Background grid */
+  .pulsar-esports-hero__bg { position: absolute; inset: 0; }
+  .pulsar-esports-hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(600px) rotateX(12deg) scale(1.2);
+    transform-origin: bottom center;
+  }
+  .pulsar-esports-hero__vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 90% 70% at 50% 100%, transparent 40%, var(--pulsar-black) 100%);
+  }
+
+  .pulsar-esports-hero__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: var(--pulsar-space-xxl) var(--pulsar-space-lg) var(--pulsar-space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-lg);
+  }
+
+  .pulsar-esports-hero__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+
+  .pulsar-esports-hero__heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(4.5rem, 14vw, 12rem);
+    line-height: 0.86;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .pulsar-esports-hero__games {
+    display: flex;
+    align-items: center;
+    gap: var(--pulsar-space-md);
+  }
+  .pulsar-esports-hero__game-tag {
+    font-family: var(--font-secondary);
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+  }
+  .pulsar-esports-hero__game-divider {
+    color: var(--pulsar-gray1);
+    font-size: 0.6rem;
+  }
+
+  /* Scroll indicator */
+  .pulsar-esports-hero__scroll {
+    position: absolute;
+    bottom: var(--pulsar-space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  .pulsar-esports-hero__scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--pulsar-gray1), transparent);
+    animation: pulsar-scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-esports-hero { min-height: 55vh; }
+    .pulsar-esports-hero__inner { padding: var(--pulsar-space-xl) var(--pulsar-space-md) var(--pulsar-space-lg); gap: var(--pulsar-space-md); }
+    .pulsar-esports-hero__heading { font-size: clamp(3.5rem, 16vw, 5.5rem); }
+    .pulsar-esports-hero__games { gap: var(--pulsar-space-sm); flex-wrap: wrap; justify-content: center; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Esports Hero",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Est. 2020 · North America"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "COMPETE AT THE HIGHEST LEVEL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Esports Hero",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

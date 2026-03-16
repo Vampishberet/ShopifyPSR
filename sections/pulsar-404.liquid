@@ -1,0 +1,227 @@
+<section class="pulsar-404" aria-label="Page not found">
+
+  <div class="pulsar-404__bg" aria-hidden="true">
+    <div class="pulsar-404__grid"></div>
+    <div class="pulsar-404__vignette"></div>
+  </div>
+
+  <div class="pulsar-404__content">
+    <div class="pulsar-404__code" aria-hidden="true">404</div>
+
+    <h1 class="pulsar-404__heading" data-pulsar-404="heading">
+      LOST IN THE VOID.
+    </h1>
+
+    <p class="pulsar-404__subtext" data-pulsar-404="subtext">
+      {{ section.settings.subtext | default: "The page you're looking for doesn't exist. You may have followed a broken link, or the page has been removed." }}
+    </p>
+
+    <nav class="pulsar-404__nav" aria-label="Recovery navigation" data-pulsar-404="nav">
+      <a class="pulsar-btn pulsar-btn--primary" href="{{ routes.root_url }}">
+        {{ section.settings.cta_home | default: 'BACK TO HOME' }}
+      </a>
+      <a class="pulsar-btn pulsar-btn--ghost" href="{{ routes.collections_url }}/all">
+        {{ section.settings.cta_shop | default: 'SHOP MERCH' }}
+      </a>
+      <a class="pulsar-btn pulsar-btn--ghost" href="/pages/esports">
+        {{ section.settings.cta_esports | default: 'ESPORTS' }}
+      </a>
+    </nav>
+  </div>
+
+</section>
+
+<style>
+.pulsar-404 {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--pulsar-dark1);
+}
+
+.pulsar-404__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.pulsar-404__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  transform: perspective(700px) rotateX(28deg) scaleY(2.2);
+  transform-origin: center bottom;
+  opacity: 0.45;
+}
+
+.pulsar-404__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, var(--pulsar-dark1) 70%),
+    linear-gradient(to top, var(--pulsar-dark1) 0%, transparent 50%),
+    linear-gradient(to bottom, var(--pulsar-dark1) 0%, transparent 30%);
+}
+
+.pulsar-404__content {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-404__code {
+  font: 900 clamp(8rem, 20vw, 18rem)/1 var(--font-display);
+  letter-spacing: -0.04em;
+  color: var(--pulsar-dark3);
+  margin: 0 0 -0.1em;
+  line-height: 0.85;
+  user-select: none;
+}
+
+.pulsar-404__heading {
+  font: 900 clamp(2.5rem, 7vw, 6rem)/0.92 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+  opacity: 0;
+}
+
+.pulsar-404__subtext {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 500px;
+  margin: 0 auto var(--pulsar-space-xl);
+  opacity: 0;
+}
+
+.pulsar-404__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pulsar-space-md);
+  flex-wrap: wrap;
+  opacity: 0;
+}
+
+/* Buttons */
+.pulsar-btn {
+  display: inline-block;
+  font: 700 0.8125rem/1 var(--font-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.pulsar-btn--primary {
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+}
+
+.pulsar-btn--primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(255,255,255,0.15);
+}
+
+.pulsar-btn--ghost {
+  background: transparent;
+  color: var(--pulsar-white);
+  border: 1px solid var(--pulsar-gray1);
+}
+
+.pulsar-btn--ghost:hover {
+  border-color: var(--pulsar-white);
+  background: rgba(255,255,255,0.05);
+}
+
+.pulsar-btn:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsar-404__heading,
+  .pulsar-404__subtext,
+  .pulsar-404__nav { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .pulsar-404__nav { flex-direction: column; align-items: center; }
+  .pulsar-404__nav .pulsar-btn { width: 200px; text-align: center; }
+}
+</style>
+
+<script>
+(function () {
+  var heading = document.querySelector('[data-pulsar-404="heading"]');
+  var subtext = document.querySelector('[data-pulsar-404="subtext"]');
+  var nav     = document.querySelector('[data-pulsar-404="nav"]');
+  var els = [heading, subtext, nav].filter(Boolean);
+
+  if (!els.length) return;
+
+  function animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+      return;
+    }
+    if (window.gsap) {
+      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.3 });
+    } else {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animate);
+  } else {
+    animate();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Description",
+      "default": "The page you're looking for doesn't exist. You may have followed a broken link, or the page has been removed."
+    },
+    {
+      "type": "text",
+      "id": "cta_home",
+      "label": "Home button label",
+      "default": "BACK TO HOME"
+    },
+    {
+      "type": "text",
+      "id": "cta_shop",
+      "label": "Shop button label",
+      "default": "SHOP MERCH"
+    },
+    {
+      "type": "text",
+      "id": "cta_esports",
+      "label": "Esports button label",
+      "default": "ESPORTS"
+    }
+  ],
+  "presets": [
+    { "name": "404 Page" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,199 @@
+<section class="pulsar-about-hero" aria-label="About Team Pulsar">
+  <div class="pulsar-about-hero__bg" aria-hidden="true">
+    <div class="pulsar-about-hero__grid"></div>
+    <div class="pulsar-about-hero__vignette"></div>
+  </div>
+
+  <div class="pulsar-about-hero__content">
+    <p class="pulsar-about-hero__overline" data-pulsar-about-hero="overline">
+      {{ section.settings.overline | default: 'EST. APRIL 6, 2020 · NORTH AMERICA' }}
+    </p>
+    <h1 class="pulsar-about-hero__heading" data-pulsar-about-hero="heading">
+      {{ section.settings.heading | default: 'MORE THAN AN ORG.' }}
+    </h1>
+    <p class="pulsar-about-hero__subtext" data-pulsar-about-hero="subtext">
+      {{ section.settings.subtext | default: 'We are a community. A competitive powerhouse. A family. Five years of intent, trust, and relentless pursuit of excellence.' }}
+    </p>
+  </div>
+
+  <div class="pulsar-about-hero__scroll" aria-hidden="true">
+    <span class="pulsar-about-hero__scroll-label">SCROLL</span>
+    <div class="pulsar-about-hero__scroll-line"></div>
+  </div>
+</section>
+
+<style>
+.pulsar-about-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--pulsar-dark1);
+}
+
+.pulsar-about-hero__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.pulsar-about-hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  transform: perspective(700px) rotateX(28deg) scaleY(2.2);
+  transform-origin: center bottom;
+  opacity: 0.45;
+}
+
+.pulsar-about-hero__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, var(--pulsar-dark1) 72%),
+    linear-gradient(to top, var(--pulsar-dark1) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--pulsar-dark1) 0%, transparent 35%);
+}
+
+.pulsar-about-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-about-hero__overline {
+  font: 500 0.75rem/1.4 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+  opacity: 0;
+}
+
+.pulsar-about-hero__heading {
+  font: 900 clamp(3.5rem, 10vw, 9rem)/0.92 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+  opacity: 0;
+}
+
+.pulsar-about-hero__subtext {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 540px;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+.pulsar-about-hero__scroll {
+  position: absolute;
+  bottom: var(--pulsar-space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.pulsar-about-hero__scroll-label {
+  font: 500 0.625rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  color: var(--pulsar-gray1);
+}
+
+.pulsar-about-hero__scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--pulsar-gray1), transparent);
+  animation: pulsar-about-scroll 1.8s ease-in-out infinite;
+}
+
+@keyframes pulsar-about-scroll {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsar-about-hero__scroll-line { animation: none; opacity: 0.4; }
+  .pulsar-about-hero__overline,
+  .pulsar-about-hero__heading,
+  .pulsar-about-hero__subtext { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .pulsar-about-hero { min-height: 70vh; }
+  .pulsar-about-hero__subtext { font-size: 1rem; }
+}
+</style>
+
+<script>
+(function () {
+  var els = [
+    document.querySelector('[data-pulsar-about-hero="overline"]'),
+    document.querySelector('[data-pulsar-about-hero="heading"]'),
+    document.querySelector('[data-pulsar-about-hero="subtext"]')
+  ].filter(Boolean);
+
+  if (!els.length) return;
+
+  function animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+      return;
+    }
+    if (window.gsap) {
+      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
+    } else {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animate);
+  } else {
+    animate();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "About Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "EST. APRIL 6, 2020 · NORTH AMERICA"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "MORE THAN AN ORG."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "We are a community. A competitive powerhouse. A family. Five years of intent, trust, and relentless pursuit of excellence."
+    }
+  ],
+  "presets": [
+    { "name": "About Hero" }
+  ]
+}
+{% endschema %}

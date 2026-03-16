@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Pulsar — Brand Positioning Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #000000;
+    --dark-1: #0A0A0C;
+    --dark-2: #111114;
+    --dark-3: #1C1C21;
+    --gray-1: #505055;
+    --gray-2: #8A8A8F;
+    --gray-3: #C8C8CC;
+    --light-1: #E8E8EC;
+    --white: #FFFFFF;
+    --accent: #C8C8CC;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark-1);
+    color: var(--light-1);
+    line-height: 1.7;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 50px 60px;
+    background: var(--dark-1);
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gray-2), var(--white), var(--gray-2));
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    font-size: 11px;
+    color: var(--gray-2);
+    letter-spacing: 2px;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 60px;
+    font-size: 9px;
+    color: var(--gray-1);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 297mm;
+    background: linear-gradient(175deg, var(--black) 0%, var(--dark-1) 40%, var(--dark-2) 100%);
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,200,204,0.04) 0%, transparent 70%);
+  }
+
+  .cover-badge {
+    font-size: 11px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gray-2);
+    margin-bottom: 40px;
+  }
+
+  .cover h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    letter-spacing: 8px;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .cover h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 12px;
+    color: var(--gray-2);
+    font-weight: 400;
+    margin-bottom: 60px;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gray-2);
+    margin: 0 auto 30px;
+  }
+
+  .cover-meta {
+    font-size: 11px;
+    color: var(--gray-1);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 2.2;
+  }
+
+  /* SECTION HEADERS */
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--dark-3);
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 4px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gray-2);
+    margin-bottom: 35px;
+  }
+
+  .section-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--gray-2);
+    margin-bottom: 30px;
+  }
+
+  /* CONTENT */
+  p { font-size: 13px; color: var(--gray-3); margin-bottom: 16px; }
+  
+  .lead { font-size: 15px; color: var(--light-1); font-weight: 300; line-height: 1.9; margin-bottom: 25px; }
+  
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin: 30px 0 12px;
+  }
+
+  .highlight-box {
+    background: var(--dark-2);
+    border-left: 3px solid var(--gray-2);
+    padding: 20px 25px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .highlight-box p { margin-bottom: 0; color: var(--light-1); font-style: italic; font-size: 14px; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 25px 0;
+  }
+
+  .stat-card {
+    background: var(--dark-2);
+    border: 1px solid var(--dark-3);
+    padding: 25px 20px;
+    text-align: center;
+    border-radius: 6px;
+  }
+
+  .stat-card .number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-2);
+  }
+
+  .value-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .value-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: var(--dark-2);
+    border: 1px solid var(--dark-3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--white);
+  }
+
+  .value-content h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .value-content p { font-size: 12px; margin-bottom: 0; }
+
+  .color-palette {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid var(--dark-3);
+    display: flex;
+    align-items: flex-end;
+    padding: 4px;
+  }
+
+  .color-swatch span {
+    font-size: 7px;
+    letter-spacing: 0.5px;
+    color: var(--gray-2);
+    text-shadow: 0 0 4px rgba(0,0,0,0.8);
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 20px 0;
+  }
+
+  .competitor-card {
+    background: var(--dark-2);
+    border: 1px solid var(--dark-3);
+    padding: 18px 20px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+
+  .competitor-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .competitor-card p { font-size: 11px; margin-bottom: 0; }
+
+  .tag {
+    display: inline-block;
+    background: var(--dark-3);
+    color: var(--gray-3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 3px 2px;
+  }
+
+  ul { list-style: none; padding: 0; }
+  ul li {
+    font-size: 13px;
+    color: var(--gray-3);
+    padding: 6px 0 6px 20px;
+    position: relative;
+  }
+  ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gray-2);
+  }
+
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--dark-3);
+  }
+
+  .toc-item .toc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--light-1);
+  }
+
+  .toc-item .toc-page {
+    font-size: 12px;
+    color: var(--gray-2);
+    letter-spacing: 2px;
+  }
+
+  .positioning-statement {
+    background: linear-gradient(135deg, var(--dark-2), var(--dark-3));
+    border: 1px solid var(--gray-1);
+    padding: 35px 30px;
+    border-radius: 8px;
+    margin: 25px 0;
+    text-align: center;
+  }
+
+  .positioning-statement p {
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 300;
+    line-height: 2;
+    margin: 0;
+  }
+
+  @media print {
+    body { background: var(--dark-1); }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  @media screen {
+    .page { margin: 20px auto; box-shadow: 0 0 60px rgba(0,0,0,0.5); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER PAGE ==================== -->
+<div class="page cover">
+  <div class="cover-badge">Esports Organisation</div>
+  <h1>TEAM PULSAR</h1>
+  <h2>Brand Positioning Document</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    Confidential — Internal Use<br>
+    March 2026<br>
+    Version 1.0
+  </div>
+</div>
+
+<!-- ==================== TABLE OF CONTENTS ==================== -->
+<div class="page">
+  <div class="section-number">00</div>
+  <div class="section-title">TABLE OF CONTENTS</div>
+  <div class="section-subtitle">Document Overview</div>
+  <div class="section-divider"></div>
+
+  <div class="toc-item"><span class="toc-title">01 — Brand Overview</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-title">02 — Mission, Vision & Values</span><span class="toc-page">04</span></div>
+  <div class="toc-item"><span class="toc-title">03 — Target Audience</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-title">04 — Competitive Landscape</span><span class="toc-page">06</span></div>
+  <div class="toc-item"><span class="toc-title">05 — Unique Value Proposition</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-title">06 — Brand Positioning Statement</span><span class="toc-page">08</span></div>
+  <div class="toc-item"><span class="toc-title">07 — Brand Personality & Voice</span><span class="toc-page">09</span></div>
+  <div class="toc-item"><span class="toc-title">08 — Visual Identity System</span><span class="toc-page">10</span></div>
+  <div class="toc-item"><span class="toc-title">09 — Key Achievements & Social Proof</span><span class="toc-page">11</span></div>
+  <div class="toc-item"><span class="toc-title">10 — Partnerships & Sponsorship Strategy</span><span class="toc-page">12</span></div>
+  <div class="toc-item"><span class="toc-title">11 — Brand Evolution & Future Roadmap</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-title">12 — Key Messaging Framework</span><span class="toc-page">14</span></div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">02</div>
+</div>
+
+<!-- ==================== 01 BRAND OVERVIEW ==================== -->
+<div class="page">
+  <div class="section-number">01</div>
+  <div class="section-title">BRAND OVERVIEW</div>
+  <div class="section-subtitle">Who We Are</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar is a North American esports organisation founded on April 6th, 2020. What started as a group of high school friends with a shared dream of competing on the Fortnite main stage has evolved into a multi-title competitive powerhouse with over 60 members, 2 million followers, and $125,000+ in confirmed prize earnings.</p>
+
+  <p>Pulsar operates across three major competitive titles — <strong style="color:var(--white)">Fortnite</strong> (primary), <strong style="color:var(--white)">Apex Legends</strong>, and <strong style="color:var(--white)">Valorant</strong> — with teams performing at consistently high levels across all divisions. The organisation is documented on Liquipedia, the industry-standard esports encyclopedia, solidifying its credibility and competitive track record.</p>
+
+  <p>More than just a competitive roster, Team Pulsar is a community. It is a banner that players, content creators, and fans can rally behind — a shared identity built on trust, intent, and the relentless pursuit of excellence. Pulsar is not an org people just play for; it's an org people belong to.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">2M+</div>
+      <div class="label">Total Reach</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">$125K+</div>
+      <div class="label">Prize Earnings</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">60+</div>
+      <div class="label">Team Members</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">3</div>
+      <div class="label">Competitive Titles</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">5+</div>
+      <div class="label">Years Active</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">2</div>
+      <div class="label">Active Partners</div>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">03</div>
+</div>
+
+<!-- ==================== 02 MISSION, VISION & VALUES ==================== -->
+<div class="page">
+  <div class="section-number">02</div>
+  <div class="section-title">MISSION, VISION & VALUES</div>
+  <div class="section-subtitle">What Drives Us</div>
+  <div class="section-divider"></div>
+
+  <h3>Mission</h3>
+  <div class="highlight-box">
+    <p>To build an inclusive, high-performance esports community where people bond over gaming, entertainment, and competition — a club people are proud to represent and a part of their identity.</p>
+  </div>
+
+  <p>Team Pulsar exists to give gamers, competitors, and creators something bigger than themselves to be a part of. Like a football club, Pulsar offers a shared identity — something to root for, to contribute to, and to carry with pride. The organisation competes at the highest level while nurturing a culture where every member, from ownership to players, operates with purpose and intention.</p>
+
+  <h3>Vision</h3>
+  <div class="highlight-box">
+    <p>To become a dominant force in the esports industry within 3–5 years, expanding to 7+ competitive titles, generating consistent profitability, and commanding significant market share in social media and digital exposure across the esports landscape.</p>
+  </div>
+
+  <h3>Core Values</h3>
+  <div style="margin-top:20px">
+    <div class="value-item">
+      <div class="value-icon">E</div>
+      <div class="value-content">
+        <h4>EXCELLENCE</h4>
+        <p>We don't settle. Every player, every piece of content, every decision reflects our commitment to being the best version of ourselves. Excellence is not a destination — it's the standard.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">C</div>
+      <div class="value-content">
+        <h4>COMMUNITY</h4>
+        <p>Pulsar is more than an org — it's a family. We foster a space where people connect, grow, and share in the wins and losses together. Everyone matters. Everyone is seen.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">I</div>
+      <div class="value-content">
+        <h4>INTENT</h4>
+        <p>We don't operate on emotion — we move with purpose. Every action, from recruitment to competition, is deliberate, calculated, and aligned with our mission. Intent separates us from the noise.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">04</div>
+</div>
+
+<!-- ==================== 03 TARGET AUDIENCE ==================== -->
+<div class="page">
+  <div class="section-number">03</div>
+  <div class="section-title">TARGET AUDIENCE</div>
+  <div class="section-subtitle">Who We Serve</div>
+  <div class="section-divider"></div>
+
+  <div class="two-col">
+    <div>
+      <h3>Primary Audience</h3>
+      <div class="competitor-card">
+        <h4>ASPIRING COMPETITORS & CREATORS</h4>
+        <p>North American gamers aged <strong style="color:var(--white)">16–24</strong> who are actively looking to compete at a high level or create content — and want to be a part of something meaningful. They seek structure, recognition, and a legitimate platform to grow.</p>
+      </div>
+
+      <p style="margin-top:15px"><strong style="color:var(--white)">Demographics:</strong></p>
+      <ul>
+        <li>Age: 16–24 years old</li>
+        <li>Region: North America (US & Canada)</li>
+        <li>Gaming Profile: Competitive / semi-pro players and emerging content creators</li>
+        <li>Motivation: Growth, recognition, community belonging</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Secondary Audience</h3>
+      <div class="competitor-card">
+        <h4>ASPIRING PROS & CONTENT CREATORS</h4>
+        <p>Players and creators who want to contribute their skills to a legitimate, well-run organisation. They're drawn to Pulsar's reputation, branding, and transparent culture — they've seen us, they know we're real, and they want in.</p>
+      </div>
+
+      <p style="margin-top:15px"><strong style="color:var(--white)">Characteristics:</strong></p>
+      <ul>
+        <li>Actively seeking org opportunities</li>
+        <li>Drawn to legitimacy and trust</li>
+        <li>Value mentorship and structure</li>
+        <li>Want to grow alongside an org, not just represent one</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Platform Priority</h3>
+  <p>Our audience is most active on the following platforms, in order of engagement priority:</p>
+  <div class="stat-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="stat-card">
+      <div class="number" style="font-size:24px">Twitter / X</div>
+      <div class="label">Primary Platform</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:24px">Discord</div>
+      <div class="label">Community Hub</div>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">05</div>
+</div>
+
+<!-- ==================== 04 COMPETITIVE LANDSCAPE ==================== -->
+<div class="page">
+  <div class="section-number">04</div>
+  <div class="section-title">COMPETITIVE LANDSCAPE</div>
+  <div class="section-subtitle">Market Positioning</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Understanding where Team Pulsar sits in the competitive landscape is critical to defining our brand position. We operate in a space alongside established and emerging esports organisations, each with their own approach to talent, content, and community.</p>
+
+  <h3>Key Competitors</h3>
+
+  <div class="competitor-card">
+    <h4>BENEATH REALITY</h4>
+    <p>A rising org in the competitive Fortnite space. Competes directly with Pulsar for talent and visibility in the same market segment.</p>
+  </div>
+
+  <div class="competitor-card">
+    <h4>DIGNITAS FORTNITE</h4>
+    <p>An established, legacy esports brand with institutional backing and multi-title history. Represents the benchmark for operational excellence and brand polish in competitive gaming.</p>
+  </div>
+
+  <div class="competitor-card">
+    <h4>GEN.G</h4>
+    <p>A globally respected esports organisation with deep pockets and cross-title presence. Sets the bar for professionalism, content quality, and sponsorship integration.</p>
+  </div>
+
+  <h3>Pulsar's Competitive Edge</h3>
+  <div class="highlight-box">
+    <p>"We don't work on emotion — we have intent. From the top owners to the players, everyone is on a mission to go above and beyond."</p>
+  </div>
+
+  <p>While larger organisations may have deeper resources, Pulsar's differentiation lies in its <strong style="color:var(--white)">people-first culture</strong> and <strong style="color:var(--white)">intentional approach</strong>. The leadership is deeply embedded in the community, personally known and respected throughout the competitive scene. This creates a level of trust and authenticity that institutional orgs cannot replicate.</p>
+
+  <p><strong style="color:var(--white)">Key differentiators:</strong></p>
+  <ul>
+    <li>Leadership is visible, accessible, and well-known in the community</li>
+    <li>Zero tolerance for scams or empty promises — reputation is paramount</li>
+    <li>Every decision is intentional, not reactive or emotional</li>
+    <li>Players are supported, not just signed</li>
+    <li>Grassroots authenticity that larger orgs cannot manufacture</li>
+  </ul>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">06</div>
+</div>
+
+<!-- ==================== 05 UNIQUE VALUE PROPOSITION ==================== -->
+<div class="page">
+  <div class="section-number">05</div>
+  <div class="section-title">UNIQUE VALUE PROPOSITION</div>
+  <div class="section-subtitle">Why Pulsar</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">In a crowded esports landscape filled with organisations that overpromise and underdeliver, Team Pulsar stands apart through a simple principle: we do what we say, and we care about the people who make it happen.</p>
+
+  <h3>For Players & Creators</h3>
+  <div class="highlight-box">
+    <p>Join an organisation where your growth matters as much as your stats. Pulsar offers legitimate structure, trusted leadership, and a brand you can be proud to wear — backed by 5+ years of proven credibility in the competitive scene.</p>
+  </div>
+
+  <h3>For Sponsors & Partners</h3>
+  <div class="highlight-box">
+    <p>Partner with a fast-growing esports organisation commanding 2M+ combined reach across platforms, with deeply engaged audiences in Fortnite, Apex Legends, and Valorant — and a leadership team that delivers on every commitment.</p>
+  </div>
+
+  <h3>For Fans & Community</h3>
+  <div class="highlight-box">
+    <p>Be part of something real. Pulsar isn't just a team — it's a movement. A community where gaming, competition, and shared identity create bonds that go beyond the screen.</p>
+  </div>
+
+  <h3>What Makes Pulsar Irrefutable</h3>
+  <div class="two-col" style="margin-top: 15px;">
+    <div>
+      <ul>
+        <li><strong style="color:var(--white)">Legitimacy</strong> — Liquipedia documented, partner-backed, results-verified</li>
+        <li><strong style="color:var(--white)">Trust</strong> — Zero history of scams, broken contracts, or misrepresentation</li>
+        <li><strong style="color:var(--white)">Leadership</strong> — Founders and managers are personally recognised throughout the competitive community</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li><strong style="color:var(--white)">Scale</strong> — 2M+ reach, 60+ members, 3 active titles growing to 7+</li>
+        <li><strong style="color:var(--white)">Culture</strong> — People-first, intent-driven, excellence-oriented</li>
+        <li><strong style="color:var(--white)">Trajectory</strong> — 5 years of compound growth with clear profitability roadmap</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">07</div>
+</div>
+
+<!-- ==================== 06 BRAND POSITIONING STATEMENT ==================== -->
+<div class="page">
+  <div class="section-number">06</div>
+  <div class="section-title">BRAND POSITIONING STATEMENT</div>
+  <div class="section-subtitle">Our Position in the Market</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">A brand positioning statement defines how Team Pulsar occupies a unique place in the minds of our audience — distinct from competitors and aligned with what our community values most.</p>
+
+  <div class="positioning-statement">
+    <p>For <strong>North American gamers and aspiring esports professionals</strong> who want to compete, create, and belong to something greater than themselves, <strong>Team Pulsar</strong> is the <strong>community-driven esports organisation</strong> that combines <strong>competitive excellence with genuine, intent-driven culture</strong> — because unlike organisations that treat players as transactions, <strong>Pulsar builds careers, relationships, and legacies</strong>.</p>
+  </div>
+
+  <h3>Positioning Pillars</h3>
+  <div style="margin-top: 15px;">
+    <div class="value-item">
+      <div class="value-icon">01</div>
+      <div class="value-content">
+        <h4>AUTHENTICITY OVER HYPE</h4>
+        <p>We don't fabricate our reputation. Our credibility is earned through years of consistent execution, transparent leadership, and real results. In a space plagued by empty branding and short-lived orgs, Pulsar's longevity is the proof.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">02</div>
+      <div class="value-content">
+        <h4>PEOPLE OVER NUMBERS</h4>
+        <p>Every member matters. We don't chase follower counts blindly — we invest in the individuals who carry our banner. Players are supported, mentored, and valued as people first.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">03</div>
+      <div class="value-content">
+        <h4>INTENT OVER IMPULSE</h4>
+        <p>Every decision — from roster moves to partnerships — is deliberate. We don't react emotionally; we execute strategically. This discipline is what separates a lasting brand from a fleeting moment.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">04</div>
+      <div class="value-content">
+        <h4>IDENTITY OVER AFFILIATION</h4>
+        <p>Pulsar is not something you just play for — it's something you're a part of. Like a sports club, it becomes part of your identity. The community doesn't just support Pulsar; they are Pulsar.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">08</div>
+</div>
+
+<!-- ==================== 07 BRAND PERSONALITY & VOICE ==================== -->
+<div class="page">
+  <div class="section-number">07</div>
+  <div class="section-title">BRAND PERSONALITY & VOICE</div>
+  <div class="section-subtitle">How We Communicate</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar's brand personality is the human expression of our values. It defines how we look, sound, and feel across every touchpoint — from social media posts to sponsor decks to player communications.</p>
+
+  <h3>Brand Personality Traits</h3>
+  <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr); margin: 20px 0;">
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">SLEEK</div>
+      <div class="label">Clean & Modern</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">PROFESSIONAL</div>
+      <div class="label">Taken Seriously</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">TRUSTED</div>
+      <div class="label">Proven & Real</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">COMMUNITY</div>
+      <div class="label">People-First</div>
+    </div>
+  </div>
+
+  <h3>Tone of Voice</h3>
+  <p>Pulsar communicates with a <strong style="color:var(--white)">professional, confident, and composed</strong> tone. We are not loud for the sake of being loud. We let results, consistency, and care speak for us.</p>
+
+  <div class="two-col">
+    <div>
+      <h3 style="color:#4CAF50; font-size:16px;">✓ WE ARE</h3>
+      <ul>
+        <li>Confident but not arrogant</li>
+        <li>Professional but approachable</li>
+        <li>Direct but respectful</li>
+        <li>Clean and precise in language</li>
+        <li>Purpose-driven in every word</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:#F44336; font-size:16px;">✗ WE ARE NOT</h3>
+      <ul>
+        <li>Overly casual or meme-driven</li>
+        <li>Aggressive or confrontational</li>
+        <li>Hyperbolic or clickbait-oriented</li>
+        <li>Inconsistent across platforms</li>
+        <li>Reactive or impulsive in public responses</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Voice in Practice</h3>
+  <div class="competitor-card" style="margin-top:12px">
+    <h4>SOCIAL MEDIA</h4>
+    <p>Clean, concise, visually-led. Let the content (montages, results, announcements) carry the weight. Captions are sharp and intentional — never rambling.</p>
+  </div>
+  <div class="competitor-card">
+    <h4>PLAYER & STAFF COMMUNICATIONS</h4>
+    <p>Respectful, structured, and supportive. Every interaction should reinforce that Pulsar cares about its people and operates with integrity.</p>
+  </div>
+  <div class="competitor-card">
+    <h4>SPONSOR & PARTNER COMMUNICATIONS</h4>
+    <p>Professional, data-driven, and outcome-oriented. Lead with metrics, follow with vision, close with credibility.</p>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">09</div>
+</div>
+
+<!-- ==================== 08 VISUAL IDENTITY ==================== -->
+<div class="page">
+  <div class="section-number">08</div>
+  <div class="section-title">VISUAL IDENTITY SYSTEM</div>
+  <div class="section-subtitle">How We Look</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar's visual identity is designed to be sleek, modern, and unmistakably premium. The new brand evolution moves away from the previous purple era into a sophisticated monochromatic palette that communicates professionalism and timeless aesthetics.</p>
+
+  <h3>Brand Color Palette</h3>
+  <p>The Pulsar palette is built on a refined grayscale spectrum — from pure black to pure white. This monochromatic system ensures maximum versatility across digital, print, and merchandise applications while maintaining a sleek, high-end feel.</p>
+
+  <div class="color-palette">
+    <div class="color-swatch" style="background:#000000;"><span>#000000</span></div>
+    <div class="color-swatch" style="background:#0A0A0C;"><span>#0A0A0C</span></div>
+    <div class="color-swatch" style="background:#111114;"><span>#111114</span></div>
+    <div class="color-swatch" style="background:#1C1C21;"><span>#1C1C21</span></div>
+    <div class="color-swatch" style="background:#505055;"><span>#505055</span></div>
+    <div class="color-swatch" style="background:#8A8A8F;"><span>#8A8A8F</span></div>
+    <div class="color-swatch" style="background:#C8C8CC;"><span style="color:#1C1C21">#C8C8CC</span></div>
+    <div class="color-swatch" style="background:#E8E8EC;"><span style="color:#1C1C21">#E8E8EC</span></div>
+    <div class="color-swatch" style="background:#FFFFFF;"><span style="color:#1C1C21">#FFFFFF</span></div>
+  </div>
+
+  <div class="two-col" style="margin-top: 15px;">
+    <div>
+      <h3>Primary Usage</h3>
+      <ul>
+        <li><strong style="color:var(--white)">#000000 – #1C1C21</strong> — Backgrounds, dark surfaces</li>
+        <li><strong style="color:var(--white)">#FFFFFF – #E8E8EC</strong> — Text, headlines, CTAs</li>
+        <li><strong style="color:var(--white)">#505055 – #8A8A8F</strong> — Secondary text, borders, subtle accents</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Design Principles</h3>
+      <ul>
+        <li>Monochromatic-first approach</li>
+        <li>High contrast for readability</li>
+        <li>No purple (previous era)</li>
+        <li>Accent through typography weight, not colour</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Typography</h3>
+  <div class="two-col">
+    <div>
+      <div class="competitor-card">
+        <h4>MONUMENT EXTENDED</h4>
+        <p>Primary display typeface. Used for headlines, hero text, and bold statements. Extended width conveys strength and presence. The wide letterforms command attention.</p>
+      </div>
+    </div>
+    <div>
+      <div class="competitor-card">
+        <h4>BEBAS NEUE</h4>
+        <p>Secondary display typeface. Used for section headers, navigation, and accent typography. Condensed form provides contrast against Monument Extended while maintaining the bold, clean aesthetic.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Visual Direction</h3>
+  <p>The new Pulsar visual identity leans into <strong style="color:var(--white)">dark-mode aesthetics</strong>, clean negative space, and bold typography as the primary visual device. Photography and motion graphics should feel <strong style="color:var(--white)">cinematic, high-contrast, and editorial</strong> — never cluttered or overly saturated.</p>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">10</div>
+</div>
+
+<!-- ==================== 09 KEY ACHIEVEMENTS ==================== -->
+<div class="page">
+  <div class="section-number">09</div>
+  <div class="section-title">KEY ACHIEVEMENTS & SOCIAL PROOF</div>
+  <div class="section-subtitle">Proof of Performance</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar's credibility is built on verified results, not empty claims. Every milestone below is documented, verifiable, and contributes to the organisation's position as a serious contender in the esports space.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">2M+</div>
+      <div class="label">Combined Social Reach</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">$125K+</div>
+      <div class="label">Confirmed Earnings</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">60+</div>
+      <div class="label">Active Members</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">5+</div>
+      <div class="label">Years of Operation</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">3</div>
+      <div class="label">Competitive Titles</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">2M+</div>
+      <div class="label">Followers Across Creators</div>
+    </div>
+  </div>
+
+  <h3>Credibility Markers</h3>
+  <ul>
+    <li><strong style="color:var(--white)">Liquipedia Listed</strong> — Documented on the esports industry-standard encyclopedia with full tournament history</li>
+    <li><strong style="color:var(--white)">Multi-Title Performance</strong> — Consistently competitive across Fortnite, Apex Legends, and Valorant</li>
+    <li><strong style="color:var(--white)">Content Reach</strong> — 2M+ followers across all creators and platforms, primarily through montage content</li>
+    <li><strong style="color:var(--white)">Community Recognition</strong> — Owners and managers are personally known and respected throughout the competitive community</li>
+    <li><strong style="color:var(--white)">Track Record of Integrity</strong> — Zero incidents of scams, broken contracts, or player mistreatment</li>
+    <li><strong style="color:var(--white)">Active Partnerships</strong> — Established partnerships with Tipsy Audio and OBSBOT</li>
+  </ul>
+
+  <h3>Content Portfolio</h3>
+  <p>Pulsar's primary content output is <strong style="color:var(--white)">montages</strong> — high-quality, cinematic gameplay compilations that showcase player skill and the Pulsar brand. This content strategy drives engagement, attracts talent, and serves as a visual portfolio for sponsor and partner conversations.</p>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">11</div>
+</div>
+
+<!-- ==================== 10 PARTNERSHIPS ==================== -->
+<div class="page">
+  <div class="section-number">10</div>
+  <div class="section-title">PARTNERSHIPS & SPONSORSHIP</div>
+  <div class="section-subtitle">Strategic Alliances</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar's sponsorship strategy focuses on aligning with brands that resonate with our audience and reinforce our identity as a premium, community-driven esports organisation.</p>
+
+  <h3>Current Partners</h3>
+  <div class="two-col">
+    <div class="stat-card" style="text-align:left; padding:25px;">
+      <div class="number" style="font-size:22px; margin-bottom:10px;">TIPSY AUDIO</div>
+      <div class="label" style="text-align:left; line-height:1.8;">Audio peripherals partner aligned with the gaming lifestyle and competitive audio needs of esports athletes.</div>
+    </div>
+    <div class="stat-card" style="text-align:left; padding:25px;">
+      <div class="number" style="font-size:22px; margin-bottom:10px;">OBSBOT</div>
+      <div class="label" style="text-align:left; line-height:1.8;">Camera and streaming technology partner supporting Pulsar's content creation pipeline and creator ecosystem.</div>
+    </div>
+  </div>
+
+  <h3>Target Sponsorship Categories</h3>
+  <p>Pulsar is strategically pursuing partnerships in three core categories that align with our audience's lifestyle and interests:</p>
+
+  <div class="value-item" style="margin-top:20px;">
+    <div class="value-icon">🥤</div>
+    <div class="value-content">
+      <h4>BEVERAGES</h4>
+      <p>Energy drinks, hydration brands, and gaming-adjacent beverage companies. Natural alignment with the gaming lifestyle and high engagement potential through content integration and event activations.</p>
+    </div>
+  </div>
+
+  <div class="value-item">
+    <div class="value-icon">🎮</div>
+    <div class="value-content">
+      <h4>PERIPHERALS</h4>
+      <p>Gaming mice, keyboards, headsets, and controller accessories. Direct product relevance to competitive players, with authentic integration through player endorsements and gear showcases.</p>
+    </div>
+  </div>
+
+  <div class="value-item">
+    <div class="value-icon">👕</div>
+    <div class="value-content">
+      <h4>LIFESTYLE</h4>
+      <p>Streetwear, athleisure, and lifestyle brands that appeal to the 16–24 demographic. Reinforces Pulsar's position as a cultural brand, not just a competitive org. Merch collaboration and co-branded collections offer strong creative partnership potential.</p>
+    </div>
+  </div>
+
+  <h3>What We Offer Partners</h3>
+  <ul>
+    <li>Access to 2M+ engaged followers across key gaming demographics</li>
+    <li>Authentic integration across 60+ active content creators and competitors</li>
+    <li>Multi-title exposure (Fortnite, Apex Legends, Valorant)</li>
+    <li>Co-branded merchandise and content opportunities</li>
+    <li>Dedicated social media campaigns and product features</li>
+  </ul>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">12</div>
+</div>
+
+<!-- ==================== 11 BRAND EVOLUTION ==================== -->
+<div class="page">
+  <div class="section-number">11</div>
+  <div class="section-title">BRAND EVOLUTION & ROADMAP</div>
+  <div class="section-subtitle">Where We're Going</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">Team Pulsar is entering a new era. The brand evolution represents a complete refresh — new logo, new colours, new visual system, and a renewed commitment to establishing Pulsar as a premium name in esports.</p>
+
+  <h3>What's Changing</h3>
+  <div class="competitor-card">
+    <h4>NEW VISUAL IDENTITY</h4>
+    <p>Complete brand refresh including a new logo, monochromatic color system, and premium typography. The previous purple era is being retired in favour of a sophisticated, timeless grayscale palette.</p>
+  </div>
+  <div class="competitor-card">
+    <h4>WEBSITE LAUNCH</h4>
+    <p>A fully custom Shopify-powered website serving as the central hub for merchandise, team information, content, and community engagement.</p>
+  </div>
+  <div class="competitor-card">
+    <h4>MERCHANDISE LINE</h4>
+    <p>Official Pulsar merchandise launching alongside the brand evolution — extending the brand into physical products and lifestyle identity.</p>
+  </div>
+
+  <h3>3–5 Year Roadmap</h3>
+  <div style="margin-top: 15px;">
+    <div class="value-item">
+      <div class="value-icon">Y1</div>
+      <div class="value-content">
+        <h4>ESTABLISH THE NEW ERA</h4>
+        <p>Launch new branding, website, and merchandise. Solidify current title rosters. Grow social media to 3M+ combined reach. Secure 2–3 additional sponsors.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">Y2</div>
+      <div class="value-content">
+        <h4>EXPAND & SCALE</h4>
+        <p>Expand to 5 competitive titles. Develop structured content pipeline. Launch community programs (amateur tournaments, creator incubator). Begin generating consistent revenue.</p>
+      </div>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">Y3</div>
+      <div class="value-content">
+        <h4>DOMINATE & PROFIT</h4>
+        <p>Reach 7+ competitive titles. Achieve consistent profitability. Hold significant market share in esports social media exposure. Become a household name in competitive gaming.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">13</div>
+</div>
+
+<!-- ==================== 12 KEY MESSAGING ==================== -->
+<div class="page">
+  <div class="section-number">12</div>
+  <div class="section-title">KEY MESSAGING FRAMEWORK</div>
+  <div class="section-subtitle">What We Say & How We Say It</div>
+  <div class="section-divider"></div>
+
+  <p class="lead">The messaging framework provides ready-to-use language for consistent brand communication across all channels and audiences. Every message should reinforce Pulsar's core positioning: authenticity, intent, and community.</p>
+
+  <h3>Elevator Pitch</h3>
+  <div class="highlight-box">
+    <p>Team Pulsar is a multi-title esports organisation built on trust, community, and competitive excellence. With 2M+ followers, $125K+ in earnings, and 60+ members across Fortnite, Apex Legends, and Valorant, we're one of the fastest-growing orgs in North American esports — and we're just getting started.</p>
+  </div>
+
+  <h3>Core Messages by Audience</h3>
+
+  <div class="competitor-card" style="margin-top: 15px;">
+    <h4>TO PLAYERS & CREATORS</h4>
+    <p>"Pulsar isn't just an org — it's your team. We invest in our players, support your growth, and give you a platform built on trust and real results. When you wear the Pulsar name, you wear something that means something."</p>
+  </div>
+
+  <div class="competitor-card">
+    <h4>TO SPONSORS & PARTNERS</h4>
+    <p>"Partner with an organisation that delivers. 2M+ reach, multi-title exposure, and a deeply engaged Gen Z audience. Pulsar's leadership operates with intent and integrity — every partnership is built on mutual growth and measurable results."</p>
+  </div>
+
+  <div class="competitor-card">
+    <h4>TO FANS & COMMUNITY</h4>
+    <p>"This is your club. Pulsar is a home for gamers who want to be part of something real — compete together, grow together, win together. We're more than a team. We're a movement."</p>
+  </div>
+
+  <h3>Suggested Tagline Options</h3>
+  <p style="margin-bottom: 10px;">For consideration as the brand evolves:</p>
+  <div class="stat-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">"MOVE WITH INTENT"</div>
+      <div class="label">Reflects the core value of deliberate action</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">"BUILT DIFFERENT. BUILT TO LAST."</div>
+      <div class="label">Highlights longevity and authenticity</div>
+    </div>
+  </div>
+  <div class="stat-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">"THE NEW ERA"</div>
+      <div class="label">Signals the brand evolution moment</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="font-size:18px">"EXCELLENCE IS INTENTIONAL"</div>
+      <div class="label">Fuses two core values into one statement</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px; padding-top: 25px; border-top: 1px solid var(--dark-3); text-align: center;">
+    <p style="color: var(--gray-2); font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">End of Document</p>
+    <p style="color: var(--gray-1); font-size: 10px; letter-spacing: 2px; margin-top: 8px;">Team Pulsar — Brand Positioning Document v1.0 — March 2026</p>
+    <p style="color: var(--gray-1); font-size: 10px; letter-spacing: 2px;">Confidential — For Internal Use Only</p>
+  </div>
+
+  <div class="page-footer">Team Pulsar — Confidential</div>
+  <div class="page-number">14</div>
+</div>
+
+</body>
+</html>

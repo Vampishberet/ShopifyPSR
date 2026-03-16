@@ -1,0 +1,228 @@
+<section class="pulsar-about-story" data-pulsar-section>
+  <div class="pulsar-about-story__inner">
+
+    <div class="pulsar-about-story__label pulsar-reveal">
+      <span class="pulsar-about-story__label-text">OUR STORY</span>
+      <span class="pulsar-about-story__label-line" aria-hidden="true"></span>
+    </div>
+
+    <div class="pulsar-about-story__grid">
+      <div class="pulsar-about-story__text-col">
+        <div class="pulsar-about-story__year pulsar-reveal" aria-hidden="true">2020</div>
+        <h2 class="pulsar-about-story__heading pulsar-reveal">
+          {{ section.settings.heading | default: 'STARTED AS A DREAM.<br>BECAME SOMETHING REAL.' }}
+        </h2>
+        <p class="pulsar-about-story__body pulsar-reveal">
+          {{ section.settings.body | default: 'On April 6th, 2020, a group of high school friends with a shared vision decided to compete on the Fortnite main stage. What started as an idea grew into a multi-title competitive organisation with over 60 members, 2 million+ combined reach, and $125,000+ in confirmed prize earnings.' }}
+        </p>
+        <p class="pulsar-about-story__body pulsar-reveal">
+          {{ section.settings.body_2 | default: "More than just a competitive roster, Team Pulsar is a community. It is a banner that players, content creators, and fans can rally behind — a shared identity built on trust, intent, and the relentless pursuit of excellence. Pulsar is not an org people just play for; it's an org people belong to." }}
+        </p>
+      </div>
+
+      <div class="pulsar-about-story__aside-col">
+        <blockquote class="pulsar-about-story__quote pulsar-reveal">
+          <span class="pulsar-about-story__quote-mark" aria-hidden="true">&ldquo;</span>
+          <p class="pulsar-about-story__quote-text">
+            {{ section.settings.quote }}
+          </p>
+        </blockquote>
+
+        <div class="pulsar-about-story__milestones pulsar-reveal">
+          <div class="pulsar-about-story__milestone">
+            <span class="pulsar-about-story__milestone-year">2020</span>
+            <span class="pulsar-about-story__milestone-text">Organisation founded</span>
+          </div>
+          <div class="pulsar-about-story__milestone">
+            <span class="pulsar-about-story__milestone-year">2021</span>
+            <span class="pulsar-about-story__milestone-text">Expanded to Valorant &amp; Apex</span>
+          </div>
+          <div class="pulsar-about-story__milestone">
+            <span class="pulsar-about-story__milestone-year">2023</span>
+            <span class="pulsar-about-story__milestone-text">Reached $100K+ in prize earnings</span>
+          </div>
+          <div class="pulsar-about-story__milestone">
+            <span class="pulsar-about-story__milestone-year">2026</span>
+            <span class="pulsar-about-story__milestone-text">New era — brand relaunch</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.pulsar-about-story {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-about-story__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+/* Label row */
+.pulsar-about-story__label {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-md);
+  margin-bottom: var(--pulsar-space-xl);
+}
+
+.pulsar-about-story__label-text {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  white-space: nowrap;
+}
+
+.pulsar-about-story__label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--pulsar-dark3);
+}
+
+/* Two-column grid */
+.pulsar-about-story__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pulsar-space-xxl);
+  align-items: start;
+}
+
+/* Left column */
+.pulsar-about-story__year {
+  font: 900 clamp(5rem, 12vw, 10rem)/1 var(--font-display);
+  color: var(--pulsar-dark3);
+  letter-spacing: -0.04em;
+  margin-bottom: var(--pulsar-space-md);
+  line-height: 0.85;
+}
+
+.pulsar-about-story__heading {
+  font: 900 clamp(2rem, 4vw, 3rem)/1.05 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+}
+
+.pulsar-about-story__body {
+  font: 400 1rem/1.75 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-about-story__body:last-child { margin-bottom: 0; }
+
+/* Right column */
+.pulsar-about-story__quote {
+  position: relative;
+  margin: 0 0 var(--pulsar-space-xl);
+  padding: var(--pulsar-space-lg);
+  border-left: 2px solid var(--pulsar-gray1);
+  background: var(--pulsar-dark3);
+}
+
+.pulsar-about-story__quote-mark {
+  display: block;
+  font: 900 4rem/1 var(--font-display);
+  color: var(--pulsar-gray1);
+  margin-bottom: var(--pulsar-space-sm);
+  line-height: 0.8;
+}
+
+.pulsar-about-story__quote-text {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-light1);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Milestones */
+.pulsar-about-story__milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pulsar-about-story__milestone {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pulsar-space-md);
+  padding: var(--pulsar-space-md) 0;
+  border-bottom: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-about-story__milestone:first-child {
+  border-top: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-about-story__milestone-year {
+  font: 700 0.875rem/1 var(--font-secondary);
+  letter-spacing: 0.08em;
+  color: var(--pulsar-gray2);
+  min-width: 3.5rem;
+}
+
+.pulsar-about-story__milestone-text {
+  font: 400 0.9375rem/1.4 var(--font-body);
+  color: var(--pulsar-gray3);
+}
+
+@media (max-width: 1199px) {
+  .pulsar-about-story__grid {
+    gap: var(--pulsar-space-xl);
+  }
+}
+
+@media (max-width: 767px) {
+  .pulsar-about-story__grid {
+    grid-template-columns: 1fr;
+    gap: var(--pulsar-space-xl);
+  }
+
+  .pulsar-about-story__year {
+    font-size: 5rem;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "About Story",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "STARTED AS A DREAM. BECAME SOMETHING REAL."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body paragraph 1",
+      "default": "On April 6th, 2020, a group of high school friends with a shared vision decided to compete on the Fortnite main stage. What started as an idea grew into a multi-title competitive organisation with over 60 members, 2 million+ combined reach, and $125,000+ in confirmed prize earnings."
+    },
+    {
+      "type": "textarea",
+      "id": "body_2",
+      "label": "Body paragraph 2",
+      "default": "More than just a competitive roster, Team Pulsar is a community. It is a banner that players, content creators, and fans can rally behind — a shared identity built on trust, intent, and the relentless pursuit of excellence. Pulsar is not an org people just play for; it's an org people belong to."
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Pull quote",
+      "default": "We don't work on emotion — we have intent. From the top owners to the players, everyone is on a mission to go above and beyond."
+    }
+  ],
+  "presets": [
+    { "name": "About Story" }
+  ]
+}
+{% endschema %}

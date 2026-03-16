@@ -1,0 +1,83 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+{% comment %} Pulsar Custom Fonts — Monument Extended + Neue Haas Display {% endcomment %}
+<link
+  rel="preload"
+  as="font"
+  href="{{ 'MonumentExtended-Regular.woff2' | asset_url }}"
+  type="font/woff2"
+  crossorigin
+  fetchpriority="high"
+>
+<link
+  rel="preload"
+  as="font"
+  href="{{ 'NeueHaasDisplayBold.woff2' | asset_url }}"
+  type="font/woff2"
+  crossorigin
+  fetchpriority="low"
+>
+<style>
+  @font-face {
+    font-family: 'Monument Extended';
+    src: url("{{ 'MonumentExtended-Regular.woff2' | asset_url }}") format('woff2'),
+         url("{{ 'MonumentExtended-Regular.woff' | asset_url }}") format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Neue Haas Display';
+    src: url("{{ 'NeueHaasDisplayBold.woff2' | asset_url }}") format('woff2'),
+         url("{{ 'NeueHaasDisplayBold.woff' | asset_url }}") format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+
+{% # theme-check-disable %}
+{%- unless settings.type_body_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_body_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_subheading_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_subheading_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_heading_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_heading_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_accent_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_accent_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{% # theme-check-enable %}

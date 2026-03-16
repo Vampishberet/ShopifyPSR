@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "pulsar-404": {
+      "type": "pulsar-404",
+      "settings": {
+        "subtext": "The page you're looking for doesn't exist. You may have followed a broken link, or the page has been removed.",
+        "cta_home": "BACK TO HOME",
+        "cta_shop": "SHOP MERCH",
+        "cta_esports": "ESPORTS"
+      }
+    }
+  },
+  "order": [
+    "pulsar-404"
+  ]
+}

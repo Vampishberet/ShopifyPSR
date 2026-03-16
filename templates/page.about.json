@@ -1,0 +1,51 @@
+{
+  "sections": {
+    "pulsar-about-hero": {
+      "type": "pulsar-about-hero",
+      "settings": {
+        "overline": "EST. APRIL 6, 2020 · NORTH AMERICA",
+        "heading": "MORE THAN AN ORG.",
+        "subtext": "We are a community. A competitive powerhouse. A family. Five years of intent, trust, and relentless pursuit of excellence."
+      }
+    },
+    "pulsar-about-story": {
+      "type": "pulsar-about-story",
+      "settings": {
+        "heading": "STARTED AS A DREAM. BECAME SOMETHING REAL.",
+        "body": "On April 6th, 2020, a group of high school friends with a shared vision decided to compete on the Fortnite main stage. What started as an idea grew into a multi-title competitive organisation with over 60 members, 2 million+ combined reach, and $125,000+ in confirmed prize earnings.",
+        "body_2": "More than just a competitive roster, Team Pulsar is a community. It is a banner that players, content creators, and fans can rally behind — a shared identity built on trust, intent, and the relentless pursuit of excellence. Pulsar is not an org people just play for; it's an org people belong to.",
+        "quote": "We don't work on emotion — we have intent. From the top owners to the players, everyone is on a mission to go above and beyond."
+      }
+    },
+    "pulsar-stats": {
+      "type": "pulsar-stats-counter",
+      "settings": {}
+    },
+    "pulsar-about-values": {
+      "type": "pulsar-about-values",
+      "settings": {
+        "heading": "OUR VALUES",
+        "value_1_desc": "We don't settle. Every player, every piece of content, every decision reflects our commitment to being the best version of ourselves. Excellence is not a destination — it's the standard.",
+        "value_2_desc": "Pulsar is more than an org — it's a family. We foster a space where people connect, grow, and share in the wins and losses together. Everyone matters. Everyone is seen.",
+        "value_3_desc": "We don't operate on emotion — we move with purpose. Every action, from recruitment to competition, is deliberate, calculated, and aligned with our mission. Intent separates us from the noise.",
+        "tagline": "\"EXCELLENCE IS INTENTIONAL.\""
+      }
+    },
+    "pulsar-about-founders": {
+      "type": "pulsar-about-founders",
+      "settings": {
+        "heading": "FROM THE OWNERS",
+        "intro": "The people behind Team Pulsar. Known throughout the competitive scene, respected for their integrity, and personally invested in every member who carries the Pulsar name.",
+        "placeholder_text": "Leadership profiles coming soon."
+      },
+      "blocks": {}
+    }
+  },
+  "order": [
+    "pulsar-about-hero",
+    "pulsar-about-story",
+    "pulsar-stats",
+    "pulsar-about-values",
+    "pulsar-about-founders"
+  ]
+}

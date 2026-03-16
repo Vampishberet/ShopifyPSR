@@ -1,0 +1,127 @@
+<section class="pulsar-brand-statement">
+  <div class="pulsar-brand-statement__inner">
+    <div class="pulsar-brand-statement__left">
+      <p class="pulsar-brand-statement__overline pulsar-reveal">
+        {{ section.settings.overline | default: 'Who We Are' }}
+      </p>
+    </div>
+    <div class="pulsar-brand-statement__right">
+      <h2 class="pulsar-brand-statement__headline pulsar-heading-reveal">
+        {%- if section.settings.headline != blank -%}
+          {{ section.settings.headline }}
+        {%- else -%}
+          More than an org.<br>A movement.
+        {%- endif -%}
+      </h2>
+      <p class="pulsar-brand-statement__body pulsar-reveal">
+        {%- if section.settings.body != blank -%}
+          {{ section.settings.body }}
+        {%- else -%}
+          Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant. We're not just a team. We're the org people are proud to be part of.
+        {%- endif -%}
+      </p>
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a href="{{ section.settings.cta_url }}" class="pulsar-btn pulsar-btn--ghost pulsar-reveal">
+          {{ section.settings.cta_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pulsar-brand-statement {
+    background-color: var(--pulsar-dark1);
+    padding: var(--pulsar-space-xxl) 0;
+  }
+  .pulsar-brand-statement__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--pulsar-space-xl);
+    align-items: start;
+  }
+  .pulsar-brand-statement__overline {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+    padding-top: 0.6rem; /* Align with headline cap height */
+  }
+  .pulsar-brand-statement__headline {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0 0 var(--pulsar-space-lg);
+  }
+  .pulsar-brand-statement__body {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--pulsar-gray3);
+    margin: 0 0 var(--pulsar-space-lg);
+    max-width: 60ch;
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-brand-statement__inner {
+      grid-template-columns: 1fr;
+      gap: var(--pulsar-space-md);
+      padding: 0 var(--pulsar-space-md);
+    }
+    .pulsar-brand-statement { padding: var(--pulsar-space-xl) 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Brand Statement",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Who We Are"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline",
+      "default": "More than an org.\nA movement."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body text",
+      "default": "Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Our Story"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Brand Statement",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

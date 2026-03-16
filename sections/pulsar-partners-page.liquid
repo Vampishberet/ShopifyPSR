@@ -1,0 +1,591 @@
+<section class="pulsar-partners-pg" data-pulsar-section>
+
+  {%- comment -%}── HERO ──{%- endcomment -%}
+  <div class="pulsar-partners-pg__hero">
+    <div class="pulsar-partners-pg__hero-bg" aria-hidden="true">
+      <div class="pulsar-partners-pg__hero-grid"></div>
+      <div class="pulsar-partners-pg__hero-vignette"></div>
+    </div>
+    <div class="pulsar-partners-pg__hero-content">
+      <p class="pulsar-partners-pg__overline" data-pulsar-partners="overline">PARTNERSHIPS</p>
+      <h1 class="pulsar-partners-pg__heading" data-pulsar-partners="heading">
+        {{ section.settings.heading | default: 'OUR PARTNERS.' }}
+      </h1>
+      <p class="pulsar-partners-pg__subtext" data-pulsar-partners="subtext">
+        {{ section.settings.subtext | default: 'We partner with brands that align with our players, our community, and our values. Every partnership is built on mutual growth and real results.' }}
+      </p>
+    </div>
+  </div>
+
+  {%- comment -%}── CURRENT PARTNERS ──{%- endcomment -%}
+  <div class="pulsar-partners-pg__current">
+    <div class="pulsar-partners-pg__inner">
+      <div class="pulsar-partners-pg__section-header pulsar-reveal">
+        <span class="pulsar-partners-pg__section-label">CURRENT PARTNERS</span>
+        <span class="pulsar-partners-pg__section-line" aria-hidden="true"></span>
+      </div>
+
+      <div class="pulsar-partners-pg__cards">
+        <article class="pulsar-partners-pg__card pulsar-reveal">
+          <div class="pulsar-partners-pg__card-logo">
+            <img
+              src="{{ 'TIPSYlogo.png' | asset_url }}"
+              alt="Tipsy Audio"
+              width="200"
+              height="80"
+              loading="lazy"
+            >
+          </div>
+          <div class="pulsar-partners-pg__card-body">
+            <h2 class="pulsar-partners-pg__card-name">TIPSY AUDIO</h2>
+            <p class="pulsar-partners-pg__card-category">Audio Peripherals</p>
+            <p class="pulsar-partners-pg__card-desc">{{ section.settings.tipsy_desc | default: 'Premium gaming audio partner providing our competitive players with the edge they need to perform at the highest level.' }}</p>
+          </div>
+        </article>
+
+        <article class="pulsar-partners-pg__card pulsar-reveal">
+          <div class="pulsar-partners-pg__card-logo pulsar-partners-pg__card-logo--invert">
+            <img
+              src="{{ 'OBSBOTBALCK.png' | asset_url }}"
+              alt="OBSBOT"
+              width="200"
+              height="80"
+              loading="lazy"
+            >
+          </div>
+          <div class="pulsar-partners-pg__card-body">
+            <h2 class="pulsar-partners-pg__card-name">OBSBOT</h2>
+            <p class="pulsar-partners-pg__card-category">Camera &amp; Streaming Technology</p>
+            <p class="pulsar-partners-pg__card-desc">{{ section.settings.obsbot_desc | default: 'AI-powered camera technology supporting our content creators with next-generation streaming and recording solutions.' }}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── STATS BAR ──{%- endcomment -%}
+  <div class="pulsar-partners-pg__stats">
+    <div class="pulsar-partners-pg__inner">
+      <div class="pulsar-partners-pg__stats-grid pulsar-reveal">
+        <div class="pulsar-partners-pg__stat">
+          <span class="pulsar-partners-pg__stat-number">2M+</span>
+          <span class="pulsar-partners-pg__stat-label">COMBINED REACH</span>
+        </div>
+        <div class="pulsar-partners-pg__stat">
+          <span class="pulsar-partners-pg__stat-number">60+</span>
+          <span class="pulsar-partners-pg__stat-label">ACTIVE MEMBERS</span>
+        </div>
+        <div class="pulsar-partners-pg__stat">
+          <span class="pulsar-partners-pg__stat-number">3</span>
+          <span class="pulsar-partners-pg__stat-label">COMPETITIVE TITLES</span>
+        </div>
+        <div class="pulsar-partners-pg__stat">
+          <span class="pulsar-partners-pg__stat-number">5+</span>
+          <span class="pulsar-partners-pg__stat-label">YEARS ACTIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── BECOME A PARTNER ──{%- endcomment -%}
+  <div class="pulsar-partners-pg__pitch">
+    <div class="pulsar-partners-pg__inner">
+      <div class="pulsar-partners-pg__pitch-grid">
+        <div class="pulsar-partners-pg__pitch-left pulsar-reveal">
+          <div class="pulsar-partners-pg__section-header">
+            <span class="pulsar-partners-pg__section-label">WORK WITH US</span>
+            <span class="pulsar-partners-pg__section-line" aria-hidden="true"></span>
+          </div>
+          <h2 class="pulsar-partners-pg__pitch-heading">{{ section.settings.pitch_heading | default: 'BECOME A PARTNER.' }}</h2>
+          <p class="pulsar-partners-pg__pitch-text">{{ section.settings.pitch_text | default: 'Partner with an organisation that delivers. We offer authentic integration across 60+ active creators and competitors, multi-title exposure, and a leadership team that operates with intent on every commitment.' }}</p>
+
+          {%- if section.settings.pitch_cta_url != blank -%}
+            <a
+              class="pulsar-btn pulsar-btn--primary"
+              href="{{ section.settings.pitch_cta_url }}"
+            >{{ section.settings.pitch_cta_label | default: 'GET IN TOUCH' }}</a>
+          {%- else -%}
+            <a
+              class="pulsar-btn pulsar-btn--primary"
+              href="mailto:{{ section.settings.partnership_email | default: 'pulsarclanggs@gmail.com' }}"
+            >{{ section.settings.pitch_cta_label | default: 'GET IN TOUCH' }}</a>
+          {%- endif -%}
+        </div>
+
+        <div class="pulsar-partners-pg__pitch-right pulsar-reveal">
+          <h3 class="pulsar-partners-pg__offer-heading">WHAT WE OFFER</h3>
+          <ul class="pulsar-partners-pg__offer-list">
+            <li>Access to 2M+ engaged followers across key gaming demographics</li>
+            <li>Authentic integration across 60+ active content creators and competitors</li>
+            <li>Multi-title exposure: Fortnite, Apex Legends, and Valorant</li>
+            <li>Co-branded merchandise and content opportunities</li>
+            <li>Dedicated social media campaigns and product features</li>
+            <li>Leadership team with a proven record of delivering on commitments</li>
+          </ul>
+
+          <h3 class="pulsar-partners-pg__categories-heading">TARGET CATEGORIES</h3>
+          <div class="pulsar-partners-pg__categories">
+            <div class="pulsar-partners-pg__category">
+              <span class="pulsar-partners-pg__category-icon" aria-hidden="true">&#9679;</span>
+              <div>
+                <p class="pulsar-partners-pg__category-name">BEVERAGES</p>
+                <p class="pulsar-partners-pg__category-desc">Energy drinks, hydration, gaming-adjacent brands</p>
+              </div>
+            </div>
+            <div class="pulsar-partners-pg__category">
+              <span class="pulsar-partners-pg__category-icon" aria-hidden="true">&#9679;</span>
+              <div>
+                <p class="pulsar-partners-pg__category-name">PERIPHERALS</p>
+                <p class="pulsar-partners-pg__category-desc">Mice, keyboards, headsets, controllers</p>
+              </div>
+            </div>
+            <div class="pulsar-partners-pg__category">
+              <span class="pulsar-partners-pg__category-icon" aria-hidden="true">&#9679;</span>
+              <div>
+                <p class="pulsar-partners-pg__category-name">LIFESTYLE</p>
+                <p class="pulsar-partners-pg__category-desc">Streetwear, athleisure, lifestyle brands aged 16-24</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<style>
+/* ── Hero ── */
+.pulsar-partners-pg__hero {
+  position: relative;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--pulsar-dark1);
+}
+
+.pulsar-partners-pg__hero-bg { position: absolute; inset: 0; }
+
+.pulsar-partners-pg__hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  transform: perspective(700px) rotateX(28deg) scaleY(2.2);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}
+
+.pulsar-partners-pg__hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, var(--pulsar-dark1) 72%),
+    linear-gradient(to top, var(--pulsar-dark1) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--pulsar-dark1) 0%, transparent 35%);
+}
+
+.pulsar-partners-pg__hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-partners-pg__overline {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+  opacity: 0;
+}
+
+.pulsar-partners-pg__heading {
+  font: 900 clamp(3rem, 9vw, 8rem)/0.92 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+  opacity: 0;
+}
+
+.pulsar-partners-pg__subtext {
+  font: 400 1.125rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 560px;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+/* ── Shared ── */
+.pulsar-partners-pg__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+}
+
+.pulsar-partners-pg__section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-md);
+  margin-bottom: var(--pulsar-space-xl);
+}
+
+.pulsar-partners-pg__section-label {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  white-space: nowrap;
+}
+
+.pulsar-partners-pg__section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--pulsar-dark3);
+}
+
+/* ── Current partners ── */
+.pulsar-partners-pg__current {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-partners-pg__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pulsar-space-lg);
+}
+
+.pulsar-partners-pg__card {
+  background: var(--pulsar-dark3);
+  border: 1px solid transparent;
+  padding: var(--pulsar-space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--pulsar-space-lg);
+  transition: border-color 0.3s ease;
+}
+
+.pulsar-partners-pg__card:hover {
+  border-color: var(--pulsar-gray1);
+}
+
+.pulsar-partners-pg__card-logo {
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.pulsar-partners-pg__card-logo img {
+  max-height: 60px;
+  max-width: 180px;
+  width: auto;
+  object-fit: contain;
+}
+
+.pulsar-partners-pg__card-logo--invert img {
+  filter: invert(1);
+}
+
+.pulsar-partners-pg__card-name {
+  font: 900 1.5rem/1.1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 0.25rem;
+}
+
+.pulsar-partners-pg__card-category {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-partners-pg__card-desc {
+  font: 400 0.9375rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0;
+}
+
+/* ── Stats bar ── */
+.pulsar-partners-pg__stats {
+  background: var(--pulsar-dark1);
+  padding: var(--pulsar-space-xl) 0;
+  border-top: 1px solid var(--pulsar-dark3);
+  border-bottom: 1px solid var(--pulsar-dark3);
+}
+
+.pulsar-partners-pg__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--pulsar-space-lg);
+  text-align: center;
+}
+
+.pulsar-partners-pg__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pulsar-partners-pg__stat-number {
+  font: 900 clamp(2rem, 4vw, 3.5rem)/1 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--pulsar-white);
+}
+
+.pulsar-partners-pg__stat-label {
+  font: 500 0.7rem/1 var(--font-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+}
+
+/* ── Pitch section ── */
+.pulsar-partners-pg__pitch {
+  background: var(--pulsar-dark2);
+  padding: var(--pulsar-space-xxl) 0;
+}
+
+.pulsar-partners-pg__pitch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--pulsar-space-xxl);
+  align-items: start;
+}
+
+.pulsar-partners-pg__pitch-heading {
+  font: 900 clamp(2.5rem, 5vw, 4rem)/0.95 var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-lg);
+}
+
+.pulsar-partners-pg__pitch-text {
+  font: 400 1rem/1.75 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0 0 var(--pulsar-space-xl);
+}
+
+.pulsar-partners-pg__offer-heading,
+.pulsar-partners-pg__categories-heading {
+  font: 700 0.75rem/1 var(--font-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-partners-pg__categories-heading {
+  margin-top: var(--pulsar-space-xl);
+}
+
+.pulsar-partners-pg__offer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pulsar-partners-pg__offer-list li {
+  font: 400 0.9375rem/1.6 var(--font-body);
+  color: var(--pulsar-gray3);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--pulsar-dark3);
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.pulsar-partners-pg__offer-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--pulsar-gray1);
+  border-radius: 50%;
+}
+
+.pulsar-partners-pg__categories {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pulsar-space-md);
+}
+
+.pulsar-partners-pg__category {
+  display: flex;
+  gap: var(--pulsar-space-md);
+  align-items: flex-start;
+}
+
+.pulsar-partners-pg__category-icon {
+  font-size: 0.4rem;
+  color: var(--pulsar-gray1);
+  margin-top: 0.4rem;
+  flex-shrink: 0;
+}
+
+.pulsar-partners-pg__category-name {
+  font: 700 0.75rem/1 var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pulsar-light1);
+  margin: 0 0 0.25rem;
+}
+
+.pulsar-partners-pg__category-desc {
+  font: 400 0.875rem/1.5 var(--font-body);
+  color: var(--pulsar-gray3);
+  margin: 0;
+}
+
+/* ── Button ── */
+.pulsar-btn {
+  display: inline-block;
+  font: 700 0.8125rem/1 var(--font-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pulsar-btn--primary {
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+}
+
+.pulsar-btn--primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(255,255,255,0.15);
+}
+
+.pulsar-btn:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1199px) {
+  .pulsar-partners-pg__pitch-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsar-partners-pg__overline,
+  .pulsar-partners-pg__heading,
+  .pulsar-partners-pg__subtext { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .pulsar-partners-pg__hero { min-height: 55vh; }
+  .pulsar-partners-pg__cards { grid-template-columns: 1fr; }
+  .pulsar-partners-pg__stats-grid { grid-template-columns: 1fr 1fr; gap: var(--pulsar-space-xl); }
+  .pulsar-partners-pg__pitch-grid { grid-template-columns: 1fr; gap: var(--pulsar-space-xl); }
+}
+</style>
+
+<script>
+(function () {
+  var els = [
+    document.querySelector('[data-pulsar-partners="overline"]'),
+    document.querySelector('[data-pulsar-partners="heading"]'),
+    document.querySelector('[data-pulsar-partners="subtext"]')
+  ].filter(Boolean);
+  if (!els.length) return;
+  function animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+      return;
+    }
+    if (window.gsap) {
+      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
+    } else {
+      els.forEach(function (el) { el.style.opacity = '1'; });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animate);
+  } else {
+    animate();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Partners Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OUR PARTNERS."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Hero subtext",
+      "default": "We partner with brands that align with our players, our community, and our values. Every partnership is built on mutual growth and real results."
+    },
+    {
+      "type": "textarea",
+      "id": "tipsy_desc",
+      "label": "Tipsy Audio description",
+      "default": "Premium gaming audio partner providing our competitive players with the edge they need to perform at the highest level."
+    },
+    {
+      "type": "textarea",
+      "id": "obsbot_desc",
+      "label": "OBSBOT description",
+      "default": "AI-powered camera technology supporting our content creators with next-generation streaming and recording solutions."
+    },
+    {
+      "type": "text",
+      "id": "pitch_heading",
+      "label": "Partnership pitch heading",
+      "default": "BECOME A PARTNER."
+    },
+    {
+      "type": "textarea",
+      "id": "pitch_text",
+      "label": "Partnership pitch body",
+      "default": "Partner with an organisation that delivers. We offer authentic integration across 60+ active creators and competitors, multi-title exposure, and a leadership team that operates with intent on every commitment."
+    },
+    {
+      "type": "text",
+      "id": "pitch_cta_label",
+      "label": "CTA button label",
+      "default": "GET IN TOUCH"
+    },
+    {
+      "type": "url",
+      "id": "pitch_cta_url",
+      "label": "CTA URL (leave blank to use email)"
+    },
+    {
+      "type": "text",
+      "id": "partnership_email",
+      "label": "Partnership email",
+      "default": "pulsarclanggs@gmail.com"
+    }
+  ],
+  "presets": [
+    { "name": "Partners Page" }
+  ]
+}
+{% endschema %}

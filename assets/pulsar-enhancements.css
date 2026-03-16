@@ -1,0 +1,847 @@
+/* ============================================
+   PULSAR ENHANCEMENTS v2.0
+   Team Pulsar Visual Enhancement Layer
+   ============================================ */
+
+
+/* ============================================
+   1. CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  /* === Pulsar Color Palette === */
+  --pulsar-black:  #000000;
+  --pulsar-dark1:  #0A0A0C;
+  --pulsar-dark2:  #111114;
+  --pulsar-dark3:  #1C1C21;
+  --pulsar-gray1:  #505055;
+  --pulsar-gray2:  #8A8A8F;
+  --pulsar-gray3:  #C8C8CC;
+  --pulsar-light1: #E8E8EC;
+  --pulsar-white:  #FFFFFF;
+
+  /* Legacy aliases — backward compat with theme overrides */
+  --c-black:      var(--pulsar-black);
+  --c-dark-1:     var(--pulsar-dark1);
+  --c-dark-2:     var(--pulsar-dark2);
+  --c-dark-3:     var(--pulsar-dark3);
+  --c-silver-dim: var(--pulsar-gray1);
+  --c-silver-mid: var(--pulsar-gray2);
+  --c-silver:     var(--pulsar-gray3);
+  --c-chrome-1:   var(--pulsar-light1);
+  --c-white:      var(--pulsar-white);
+
+  /* === Gradients & Glows === */
+  --pulsar-gradient-chrome: linear-gradient(135deg, #E8E8EC 0%, #8A8A8F 40%, #C8C8CC 70%, #505055 100%);
+  --pulsar-glow-sm:  rgba(200, 200, 204, 0.06);
+  --pulsar-glow-md:  rgba(200, 200, 204, 0.12);
+  --c-glow-silver:   var(--pulsar-glow-sm);
+
+  /* === Typography (rendered by pulsar-fonts.liquid + Google Fonts) === */
+  --font-display:   'Monument Extended', 'Arial Narrow', sans-serif;
+  --font-secondary: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-accent:    'Neue Haas Display', 'Arial Black', sans-serif;
+  --font-body:      'Inter', system-ui, -apple-system, sans-serif;
+
+  /* === Spacing === */
+  --pulsar-space-xs:  0.5rem;    /*  8px */
+  --pulsar-space-sm:  1rem;      /* 16px */
+  --pulsar-space-md:  1.5rem;    /* 24px */
+  --pulsar-space-lg:  2.5rem;    /* 40px */
+  --pulsar-space-xl:  4rem;      /* 64px */
+  --pulsar-space-xxl: 7.5rem;    /* 120px */
+  --pulsar-section-gap: var(--pulsar-space-xxl);
+
+  /* === Motion === */
+  --pulsar-ease-out:  cubic-bezier(0.16, 1, 0.30, 1);
+  --pulsar-ease-in:   cubic-bezier(0.70, 0, 0.84, 0);
+  --pulsar-ease-std:  cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-out-expo:    var(--pulsar-ease-out);
+  --ease-standard:    var(--pulsar-ease-std);
+}
+
+
+/* ============================================
+   2. GLOBAL DARK THEME
+   ============================================ */
+html {
+  background-color: var(--pulsar-black);
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--pulsar-dark1);
+  color: var(--pulsar-gray3);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Override Shopify color scheme system → force dark */
+[class*="color-"],
+[class*="color-scheme"] {
+  --color-background:         var(--pulsar-dark1) !important;
+  --color-foreground:         var(--pulsar-gray3) !important;
+  --color-foreground-heading: var(--pulsar-white) !important;
+  background-color:           var(--pulsar-dark1) !important;
+}
+
+/* Section background rhythm */
+.shopify-section { background-color: var(--pulsar-dark1); }
+.shopify-section:nth-child(3n + 2) { background-color: var(--pulsar-dark2); }
+.shopify-section:nth-child(3n + 3) { background-color: var(--pulsar-black); }
+
+/* Film grain noise overlay — premium texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Chrome gradient dividers */
+hr, .section-divider {
+  border: none;
+  height: 1px;
+  background: var(--pulsar-gradient-chrome);
+  opacity: 0.18;
+  margin: 0;
+}
+
+
+
+/* ============================================
+   3. TYPOGRAPHY
+   ============================================ */
+body h1, body h2, body h3, body h4, body h5, body h6,
+.shopify-section h1, .shopify-section h2, .shopify-section h3,
+.shopify-section h4, .shopify-section h5, .shopify-section h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--pulsar-white);
+}
+
+body, body p, body li, body td {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--pulsar-gray3);
+}
+
+body a {
+  color: var(--pulsar-gray3);
+  text-decoration: none;
+  transition: color 0.25s var(--pulsar-ease-std);
+}
+body a:hover { color: var(--pulsar-white); }
+body a:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Type scale */
+.pulsar-heading-xxl {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+}
+.pulsar-heading-xl {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.0;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+}
+.pulsar-heading-lg {
+  font-family: var(--font-secondary);
+  font-weight: 400;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+}
+.pulsar-heading-md {
+  font-family: var(--font-accent);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.2;
+  color: var(--pulsar-light1);
+}
+.pulsar-body-lg {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--pulsar-gray3);
+}
+.pulsar-body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pulsar-gray2);
+}
+.pulsar-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray1);
+}
+.nav-label {
+  font-family: var(--font-secondary);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.875rem;
+  color: var(--pulsar-gray3);
+}
+.eyebrow-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.7rem;
+  color: var(--pulsar-gray2);
+}
+
+
+/* ============================================
+   4. HEADER
+   ============================================ */
+#header-group,
+.header-section,
+header-component,
+header[role="banner"] {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: transparent !important;
+  transition:
+    background-color 0.4s var(--pulsar-ease-std),
+    backdrop-filter 0.4s var(--pulsar-ease-std),
+    border-color 0.4s var(--pulsar-ease-std);
+  border-bottom: 1px solid transparent;
+}
+
+/* Glassmorphism on scroll */
+#header-group.pulsar-header--scrolled .header-section,
+#header-group.pulsar-header--scrolled header-component,
+#header-group.pulsar-header--scrolled {
+  background-color: rgba(10, 10, 12, 0.85) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: var(--pulsar-dark3);
+}
+
+/* Header nav link font */
+header-component a,
+.header-section a,
+#header-component a {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray3);
+  transition: color 0.2s var(--pulsar-ease-std);
+}
+header-component a:hover,
+.header-section a:hover { color: var(--pulsar-white); }
+
+header-component a:focus-visible,
+.header-section a:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 3px;
+}
+
+/* Logo */
+.header__heading-link,
+.header__logo-link {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--pulsar-white);
+  text-transform: uppercase;
+}
+
+/* Cart badge */
+.cart-count-bubble {
+  background-color: var(--pulsar-white);
+  color: var(--pulsar-black);
+}
+
+
+/* ============================================
+   5. BUTTONS
+   ============================================ */
+.pulsar-btn,
+.pulsar-btn--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-secondary);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pulsar-black);
+  background: var(--pulsar-white);
+  border: 1px solid var(--pulsar-white);
+  padding: 1rem 2.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.2s var(--pulsar-ease-out),
+    box-shadow 0.2s var(--pulsar-ease-out),
+    background-color 0.2s var(--pulsar-ease-std),
+    color 0.2s var(--pulsar-ease-std);
+}
+.pulsar-btn:hover,
+.pulsar-btn--primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
+}
+.pulsar-btn:focus-visible,
+.pulsar-btn--primary:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 4px;
+}
+
+.pulsar-btn--ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-secondary);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  background: transparent;
+  border: 1px solid var(--pulsar-gray1);
+  padding: 1rem 2.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    border-color 0.2s var(--pulsar-ease-std),
+    background-color 0.2s var(--pulsar-ease-std),
+    transform 0.2s var(--pulsar-ease-out);
+}
+.pulsar-btn--ghost:hover {
+  border-color: var(--pulsar-white);
+  background-color: rgba(255, 255, 255, 0.06);
+  transform: scale(1.02);
+}
+.pulsar-btn--ghost:focus-visible {
+  outline: 2px solid var(--pulsar-white);
+  outline-offset: 4px;
+}
+
+
+/* ============================================
+   6. CARDS & PRODUCT TILES
+   ============================================ */
+.card,
+.product-card-wrapper,
+.card-wrapper {
+  background-color: var(--pulsar-dark2);
+  border: 1px solid transparent;
+  transition:
+    transform 0.35s var(--pulsar-ease-out),
+    border-color 0.35s var(--pulsar-ease-std),
+    box-shadow 0.35s var(--pulsar-ease-out);
+}
+.card:hover,
+.product-card-wrapper:hover,
+.card-wrapper:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--pulsar-dark3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.card__media img,
+.product-card-wrapper img,
+.card-wrapper img {
+  transition: transform 0.5s var(--pulsar-ease-out);
+}
+.card:hover .card__media img,
+.product-card-wrapper:hover img,
+.card-wrapper:hover img {
+  transform: scale(1.04);
+}
+
+.card__heading,
+.card__information .h5,
+.product-card__title {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+}
+
+.price__regular,
+.price-item,
+.price {
+  color: var(--pulsar-gray3);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+
+/* ============================================
+   7. SCROLL REVEAL
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .pulsar-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.8s var(--pulsar-ease-out),
+      transform 0.8s var(--pulsar-ease-out);
+  }
+  .pulsar-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .pulsar-reveal:nth-child(2) { transition-delay: 0.1s; }
+  .pulsar-reveal:nth-child(3) { transition-delay: 0.2s; }
+  .pulsar-reveal:nth-child(4) { transition-delay: 0.3s; }
+  .pulsar-reveal:nth-child(5) { transition-delay: 0.4s; }
+  .pulsar-reveal:nth-child(6) { transition-delay: 0.5s; }
+}
+
+
+
+
+/* ============================================
+   9. COOKIE CONSENT
+   ============================================ */
+#pulsar-cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9990;
+  background-color: var(--pulsar-dark2);
+  border-top: 1px solid var(--pulsar-dark3);
+  padding: var(--pulsar-space-md) var(--pulsar-space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pulsar-space-md);
+  transform: translateY(0);
+  transition:
+    transform 0.4s var(--pulsar-ease-out),
+    opacity 0.4s var(--pulsar-ease-out);
+}
+#pulsar-cookie-consent.is-hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.pulsar-cookie__text {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--pulsar-gray3);
+  margin: 0;
+  max-width: 60ch;
+}
+.pulsar-cookie__text a {
+  color: var(--pulsar-light1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pulsar-cookie__actions {
+  display: flex;
+  gap: var(--pulsar-space-sm);
+  flex-shrink: 0;
+}
+.pulsar-cookie__btn {
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.625rem 1.5rem;
+  cursor: pointer;
+  border: 1px solid var(--pulsar-gray1);
+  background: transparent;
+  color: var(--pulsar-gray3);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+.pulsar-cookie__btn:hover { border-color: var(--pulsar-white); color: var(--pulsar-white); }
+.pulsar-cookie__btn:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 3px; }
+.pulsar-cookie__btn--accept {
+  background: var(--pulsar-white);
+  border-color: var(--pulsar-white);
+  color: var(--pulsar-black);
+}
+.pulsar-cookie__btn--accept:hover {
+  background: var(--pulsar-light1);
+  border-color: var(--pulsar-light1);
+  color: var(--pulsar-black);
+}
+@media (max-width: 767px) {
+  #pulsar-cookie-consent { flex-direction: column; align-items: flex-start; padding: var(--pulsar-space-md); }
+  .pulsar-cookie__actions { width: 100%; }
+  .pulsar-cookie__btn { flex: 1; text-align: center; }
+}
+
+
+/* ============================================
+   10. PULSAR FOOTER BAR
+   ============================================ */
+.pulsar-footer-bar {
+  background-color: var(--pulsar-black);
+  border-top: 1px solid var(--pulsar-dark3);
+  padding: var(--pulsar-space-xxl) 0 var(--pulsar-space-xl);
+}
+.pulsar-footer-bar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pulsar-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--pulsar-space-xl);
+}
+
+/* Top: Brand + Newsletter */
+.pulsar-footer-bar__top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pulsar-space-xl);
+  align-items: start;
+  padding-bottom: var(--pulsar-space-xl);
+  border-bottom: 1px solid var(--pulsar-dark3);
+}
+.pulsar-footer-bar__team-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin-bottom: var(--pulsar-space-sm);
+}
+.pulsar-footer-bar__tagline {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+  margin: 0;
+}
+.pulsar-footer-bar__newsletter-label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--pulsar-gray2);
+  margin: 0 0 var(--pulsar-space-sm);
+}
+.pulsar-footer-bar__newsletter-form { display: flex; flex-direction: column; gap: var(--pulsar-space-sm); }
+.pulsar-footer-bar__newsletter-row { display: flex; }
+.pulsar-footer-bar__newsletter-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--pulsar-gray1);
+  border-right: none;
+  color: var(--pulsar-white);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.875rem 1.25rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.pulsar-footer-bar__newsletter-input::placeholder { color: var(--pulsar-gray1); letter-spacing: 0.12em; font-size: 0.7rem; }
+.pulsar-footer-bar__newsletter-input:focus { border-color: var(--pulsar-gray3); }
+.pulsar-footer-bar__newsletter-btn {
+  font-family: var(--font-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+  border: 1px solid var(--pulsar-white);
+  padding: 0.875rem 1.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.pulsar-footer-bar__newsletter-btn:hover { background: var(--pulsar-light1); }
+.pulsar-footer-bar__newsletter-btn:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 3px; }
+
+/* Mid: Partners + Socials */
+.pulsar-footer-bar__mid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pulsar-space-xl);
+  padding-bottom: var(--pulsar-space-xl);
+  border-bottom: 1px solid var(--pulsar-dark3);
+}
+.pulsar-footer-bar__partners-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray1);
+  margin-bottom: var(--pulsar-space-sm);
+}
+.pulsar-footer-bar__partner-logos {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-lg);
+}
+.pulsar-footer-bar__partner-logo {
+  height: 30px;
+  width: auto;
+  opacity: 0.65;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+}
+.pulsar-footer-bar__partner-logo:hover { opacity: 1; }
+.pulsar-footer-bar__partner-logo--invert { filter: invert(1); }
+
+.pulsar-footer-bar__socials {
+  display: flex;
+  align-items: center;
+  gap: var(--pulsar-space-sm);
+}
+.pulsar-footer-bar__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--pulsar-gray2);
+  border: 1px solid var(--pulsar-dark3);
+  border-radius: 50%;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s var(--pulsar-ease-out);
+}
+.pulsar-footer-bar__social-link:hover {
+  color: var(--pulsar-white);
+  border-color: var(--pulsar-gray1);
+  background-color: var(--pulsar-dark3);
+  transform: translateY(-2px);
+}
+.pulsar-footer-bar__social-link:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 3px; }
+
+/* Bottom: Legal + Copyright */
+.pulsar-footer-bar__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pulsar-space-md);
+  flex-wrap: wrap;
+}
+.pulsar-footer-bar__legal { display: flex; align-items: center; gap: var(--pulsar-space-sm); flex-wrap: wrap; }
+.pulsar-footer-bar__legal-link {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--pulsar-gray2);
+  transition: color 0.2s ease;
+}
+.pulsar-footer-bar__legal-link:hover { color: var(--pulsar-white); }
+.pulsar-footer-bar__legal-sep { color: var(--pulsar-dark3); font-size: 0.8rem; }
+.pulsar-footer-bar__copyright {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--pulsar-gray1);
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Footer responsive */
+@media (max-width: 767px) {
+  .pulsar-footer-bar { padding: var(--pulsar-space-xl) 0 var(--pulsar-space-lg); }
+  .pulsar-footer-bar__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
+  .pulsar-footer-bar__top { grid-template-columns: 1fr; gap: var(--pulsar-space-lg); }
+  .pulsar-footer-bar__mid { flex-direction: column; align-items: flex-start; gap: var(--pulsar-space-lg); }
+  .pulsar-footer-bar__socials { flex-wrap: wrap; }
+  .pulsar-footer-bar__bottom { flex-direction: column; align-items: flex-start; gap: var(--pulsar-space-sm); }
+  .pulsar-footer-bar__copyright { white-space: normal; }
+  .pulsar-footer-bar__newsletter-row { flex-direction: column; }
+  .pulsar-footer-bar__newsletter-input { border-right: 1px solid var(--pulsar-gray1); }
+  .pulsar-footer-bar__newsletter-btn { width: 100%; }
+}
+
+
+/* ============================================
+   11. SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--pulsar-black); }
+::-webkit-scrollbar-thumb { background: var(--pulsar-dark3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--pulsar-gray1); }
+
+
+/* ============================================
+   12. ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::before { animation: none; }
+  .pulsar-reveal { opacity: 1 !important; transform: none !important; }
+  #pulsar-preloader { display: none !important; }
+}
+
+.skip-to-content-link:focus {
+  background: var(--pulsar-white);
+  color: var(--pulsar-black);
+  padding: 1rem;
+}
+
+/* ============================================
+   PHASE 3: SHOP — Product & Announcement Styles
+   ============================================ */
+
+/* Announcement bar — dark Pulsar override */
+.shopify-section--header-group announcement-bar,
+announcement-bar,
+.announcement-bar {
+  background-color: var(--pulsar-dark3) !important;
+  border-bottom: 1px solid var(--pulsar-dark3) !important;
+}
+announcement-bar p,
+announcement-bar a,
+.announcement-bar__message {
+  font-family: var(--font-body) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--pulsar-gray2) !important;
+}
+announcement-bar a:hover,
+.announcement-bar a:hover {
+  color: var(--pulsar-white) !important;
+}
+
+/* Product page — dark theme overrides */
+.shopify-section product-information,
+.shopify-section .product-information,
+[data-section-type="product-information"] {
+  background-color: var(--pulsar-dark1);
+}
+
+/* Product title on product page */
+.product-information h1,
+product-information h1 {
+  font-family: var(--font-display) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--pulsar-white) !important;
+}
+
+/* Price on product page */
+product-information .price,
+.product-information .price__regular,
+.product-information .price__sale {
+  font-family: var(--font-secondary) !important;
+  letter-spacing: 0.05em !important;
+  color: var(--pulsar-white) !important;
+}
+
+/* Variant buttons */
+product-information .swatch-button,
+product-information variant-radios label,
+product-information variant-selects label {
+  background-color: var(--pulsar-dark3) !important;
+  border-color: var(--pulsar-gray1) !important;
+  color: var(--pulsar-gray3) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.08em !important;
+}
+product-information .swatch-button:hover,
+product-information variant-radios label:hover {
+  border-color: var(--pulsar-white) !important;
+  color: var(--pulsar-white) !important;
+}
+product-information .swatch-button.selected,
+product-information variant-radios input:checked + label {
+  background-color: var(--pulsar-white) !important;
+  color: var(--pulsar-black) !important;
+  border-color: var(--pulsar-white) !important;
+}
+
+/* Add to cart button */
+product-information .button--primary,
+product-information [name="add"],
+.product-form__submit {
+  background-color: var(--pulsar-white) !important;
+  color: var(--pulsar-black) !important;
+  font-family: var(--font-secondary) !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  border-radius: 0 !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+product-information .button--primary:hover,
+.product-form__submit:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 24px rgba(255,255,255,0.12) !important;
+}
+
+/* Size guide trigger placement */
+.pulsar-size-guide-trigger-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: calc(var(--pulsar-space-xs) * -1);
+  margin-bottom: var(--pulsar-space-sm);
+}
+
+/* Collection / shop page product grid — Pulsar card treatment */
+.shopify-section .product-card,
+.shopify-section product-card {
+  background-color: var(--pulsar-dark2) !important;
+}
+.shopify-section .product-card:hover,
+.shopify-section product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5) !important;
+}
+.shopify-section .product-card__title,
+.shopify-section product-card .product-title {
+  font-family: var(--font-secondary) !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--pulsar-white) !important;
+}
+.shopify-section .product-card .price,
+.shopify-section product-card .price {
+  color: var(--pulsar-gray2) !important;
+  font-family: var(--font-body) !important;
+}
