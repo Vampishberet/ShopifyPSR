@@ -1,11 +1,72 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "pulsar-hero": {
+      "type": "pulsar-hero",
+      "settings": {
+        "eyebrow": "Team Pulsar",
+        "heading": "We Are\nPulsar.",
+        "tagline": "Competitive esports. Creator culture. Community first.",
+        "primary_cta_label": "Shop Merch",
+        "primary_cta_url": "/collections/all",
+        "secondary_cta_label": "Our Esports",
+        "secondary_cta_url": "/pages/esports"
+      }
+    },
+    "pulsar-brand-statement": {
+      "type": "pulsar-brand-statement",
+      "settings": {
+        "headline": "We don't just play games. We build legacies."
+      }
+    },
+    "pulsar-stats-counter": {
+      "type": "pulsar-stats-counter",
+      "settings": {
+        "label": "By the numbers"
+      }
+    },
+    "pulsar-member-ribbon": {
+      "type": "pulsar-member-ribbon",
+      "settings": {
+        "heading": "Our people"
+      }
+    },
+    "pulsar-esports-titles": {
+      "type": "pulsar-esports-titles",
       "settings": {}
+    },
+    "pulsar-featured-merch": {
+      "type": "pulsar-featured-merch",
+      "settings": {
+        "overline": "Official Merch",
+        "heading": "Gear Up",
+        "cta_label": "Shop All",
+        "shop_url": "/collections/all"
+      }
+    },
+    "pulsar-partners": {
+      "type": "pulsar-partners",
+      "settings": {
+        "overline": "Supported by",
+        "heading": "Our Partners"
+      }
+    },
+    "pulsar-cta": {
+      "type": "pulsar-cta",
+      "settings": {
+        "heading": "Join the Community",
+        "primary_label": "Shop Now",
+        "primary_url": "/collections/all"
+      }
     }
   },
   "order": [
-    "main"
+    "pulsar-hero",
+    "pulsar-brand-statement",
+    "pulsar-stats-counter",
+    "pulsar-member-ribbon",
+    "pulsar-esports-titles",
+    "pulsar-featured-merch",
+    "pulsar-partners",
+    "pulsar-cta"
   ]
 }
