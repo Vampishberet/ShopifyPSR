@@ -62,17 +62,20 @@
     align-items: center;
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    white-space: nowrap;
-    font-size: 28px;
-    line-height: 1;
-    text-transform: uppercase;
-    color: #d0d0d0;
-    padding: 0 24px;
-  }
+#pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #d0d0d0;
+  padding: 0 24px;
+}
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
     content: "•";
