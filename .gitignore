@@ -1,0 +1,37 @@
+# Large media files (use YouTube/CDN instead of committing these)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+
+# Large images at root level (images go in assets/ folder)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.bmp
+
+# Exception: allow images inside Shopify's assets/ folder
+!assets/*.jpg
+!assets/*.jpeg
+!assets/*.png
+!assets/*.gif
+!assets/*.webp
+!assets/*.svg
+!assets/*.woff
+!assets/*.woff2
+
+# Docs / notes
+*.txt
+*.md
+*.html
+!README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Shopify CLI
+.shopify/
