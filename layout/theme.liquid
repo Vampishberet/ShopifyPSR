@@ -39,9 +39,9 @@
 
     {% comment %} ── Pulsar Foundation ── {% endcomment %}
     {%- render 'pulsar-fonts' -%}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    {{ 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap' | stylesheet_tag: preload: true }}
     {{ 'pulsar-preloader.css' | asset_url | stylesheet_tag }}
     {{ 'pulsar-enhancements.css' | asset_url | stylesheet_tag }}
     {%- render 'pulsar-og-meta' -%}
@@ -143,9 +143,9 @@
     {% endif %}
 
     {% comment %} ── Pulsar Scripts (deferred — load after all native Shopify JS) ── {% endcomment %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
+    <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer="defer"></script>
     <script src="{{ 'pulsar-enhancements.js' | asset_url }}" defer></script>
     <script src="{{ 'pulsar-animations.js' | asset_url }}" defer></script>
 
