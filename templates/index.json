@@ -59,7 +59,7 @@
         "collection": "",
         "product_limit": 6,
         "cta_label": "Shop All",
-        "shop_url": "/collections/all"
+        "shop_url": "shopify://pages/merchandsie"
       }
     },
     "pulsar-partners": {

@@ -1,8 +1,22 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "pulsar-shop-hero": {
       "type": "pulsar-shop-hero",
-      "settings": {}
+      "settings": {
+        "overline": "New Drop",
+        "heading": "THE DROP",
+        "subtext": "Premium esports apparel. Limited runs. Wear the name.",
+        "show_scroll_indicator": true
+      }
     },
     "product_list_pVjWtT": {
       "type": "product-list",
@@ -60,11 +74,11 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_card_gallery_b4pcLk": {
+            "product_card_gallery_6mKhdQ": {
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "portrait",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -125,13 +139,17 @@
               "blocks": {}
             }
           },
-          "block_order": ["product_card_gallery_b4pcLk", "product_title_C8HriF", "price_UqCQMT"]
+          "block_order": [
+            "product_card_gallery_6mKhdQ",
+            "product_title_C8HriF",
+            "price_UqCQMT"
+          ]
         }
       },
       "name": "t:names.products_grid",
       "settings": {
         "collection": "frontpage",
-        "layout_type": "grid",
+        "layout_type": "editorial",
         "carousel_on_mobile": false,
         "max_products": 16,
         "columns": 3,
@@ -150,5 +168,8 @@
       }
     }
   },
-  "order": ["pulsar-shop-hero", "product_list_pVjWtT"]
+  "order": [
+    "pulsar-shop-hero",
+    "product_list_pVjWtT"
+  ]
 }
