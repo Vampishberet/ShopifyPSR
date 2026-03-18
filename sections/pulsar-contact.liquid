@@ -26,15 +26,15 @@
 
           <div class="pulsar-contact__channels">
             <a class="pulsar-contact__channel" href="mailto:{{ section.settings.email | default: 'pulsarclanggs@gmail.com' }}">
-              <span class="pulsar-contact__channel-label">EMAIL</span>
-              <span class="pulsar-contact__channel-value">{{ section.settings.email | default: 'pulsarclanggs@gmail.com' }}</span>
+              <span class="pulsar-contact__channel-label">Email</span>
+              <span class="pulsar-contact__channel-value">Send us a message ↗</span>
             </a>
             <a class="pulsar-contact__channel" href="https://x.com/PulsarLLC" target="_blank" rel="noopener noreferrer">
-              <span class="pulsar-contact__channel-label">TWITTER / X</span>
+              <span class="pulsar-contact__channel-label">Twitter / X</span>
               <span class="pulsar-contact__channel-value">@PulsarLLC</span>
             </a>
             <a class="pulsar-contact__channel" href="https://discord.gg/TeamPulsar" target="_blank" rel="noopener noreferrer">
-              <span class="pulsar-contact__channel-label">DISCORD</span>
+              <span class="pulsar-contact__channel-label">Discord</span>
               <span class="pulsar-contact__channel-value">discord.gg/TeamPulsar</span>
             </a>
           </div>
@@ -294,22 +294,36 @@
 
 .pulsar-contact__input,
 .pulsar-contact__textarea {
-  background: var(--pulsar-dark3);
-  border: 1px solid var(--pulsar-dark3);
-  color: var(--pulsar-white);
-  font: 400 0.9375rem/1.5 var(--font-body);
-  padding: 0.875rem 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease;
-  outline: none;
-  border-radius: 0;
-  -webkit-appearance: none;
+  background: var(--pulsar-dark3) !important;
+  background-color: var(--pulsar-dark3) !important;
+  border: 1px solid var(--pulsar-dark3) !important;
+  color: var(--pulsar-white) !important;
+  font: 400 0.9375rem/1.5 var(--font-body) !important;
+  padding: 0.875rem 1rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  -webkit-appearance: none !important;
+  caret-color: var(--pulsar-white) !important;
 }
 
 .pulsar-contact__input:focus,
 .pulsar-contact__textarea:focus {
-  border-color: var(--pulsar-gray2);
+  border-color: var(--pulsar-gray2) !important;
+  background: var(--pulsar-dark3) !important;
+  color: var(--pulsar-white) !important;
+}
+
+/* Belt-and-suspenders: beat Shopify color scheme overrides */
+.pulsar-contact__form input,
+.pulsar-contact__form textarea,
+.pulsar-contact__form select {
+  background-color: var(--pulsar-dark3) !important;
+  color: var(--pulsar-white) !important;
+  border-color: var(--pulsar-dark3) !important;
+  caret-color: var(--pulsar-white) !important;
 }
 
 .pulsar-contact__textarea {

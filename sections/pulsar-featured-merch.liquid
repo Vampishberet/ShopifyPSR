@@ -16,9 +16,6 @@
           {{ section.settings.heading | default: 'GEAR UP' }}
         </h2>
       </div>
-      <a href="{{ section.settings.shop_url | default: '/collections/all' }}" class="pulsar-btn pulsar-btn--ghost pulsar-reveal">
-        {{ section.settings.cta_label | default: 'Shop All' }}
-      </a>
     </div>
 
     <div class="pulsar-merch__grid pulsar-stagger-group">
@@ -69,6 +66,31 @@
             </a>
           </div>
         {%- endfor -%}
+
+        {%- comment -%} OG branding injection: Pulsa PRO Jersey — hardcoded if not in collection {%- endcomment -%}
+        {%- assign has_pro_jersey = false -%}
+        {%- for product in merch_collection.products -%}
+          {%- if product.title contains 'PRO Jersey' or product.title contains 'Pro Jersey' -%}
+            {%- assign has_pro_jersey = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- unless has_pro_jersey -%}
+          <div class="pulsar-merch__card pulsar-merch__card--og pulsar-stagger-item">
+            <div class="pulsar-merch__card-link" aria-label="Pulsa PRO Jersey — OG Edition">
+              <div class="pulsar-merch__card-image-wrap">
+                <div class="pulsar-merch__card-placeholder pulsar-merch__card-placeholder--og" aria-hidden="true">
+                  <span>PRO</span>
+                </div>
+                <div class="pulsar-merch__card-badge">OG</div>
+              </div>
+              <div class="pulsar-merch__card-info">
+                <h3 class="pulsar-merch__card-title">Pulsa PRO Jersey</h3>
+                <p class="pulsar-merch__card-price pulsar-merch__card-price--og">Legacy Edition</p>
+              </div>
+            </div>
+          </div>
+        {%- endunless -%}
+
       {%- else -%}
         {%- comment -%} Placeholder cards when no collection is set {%- endcomment -%}
         {%- for i in (1..6) -%}
@@ -87,11 +109,6 @@
       {%- endif -%}
     </div>
 
-    <div class="pulsar-merch__footer pulsar-reveal">
-      <a href="{{ section.settings.shop_url | default: '/collections/all' }}" class="pulsar-btn pulsar-btn--primary">
-        {{ section.settings.cta_label | default: 'Shop All Gear' }}
-      </a>
-    </div>
 
   </div>
 </section>
@@ -253,6 +270,37 @@
   /* Footer CTA */
   .pulsar-merch__footer { display: flex; justify-content: center; }
 
+  /* OG Jersey card */
+  .pulsar-merch__card--og { border-color: var(--pulsar-gray1); cursor: default; }
+  .pulsar-merch__card-placeholder--og {
+    background: linear-gradient(135deg, var(--pulsar-dark3) 0%, var(--pulsar-dark2) 100%);
+    border: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-merch__card-placeholder--og span {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--pulsar-gray1);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .pulsar-merch__card-badge {
+    position: absolute;
+    top: var(--pulsar-space-sm);
+    right: var(--pulsar-space-sm);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pulsar-black);
+    background: var(--pulsar-accent-purple1);
+    padding: 0.25em 0.6em;
+  }
+  .pulsar-merch__card-price--og {
+    color: var(--pulsar-accent-purple1) !important;
+    font-style: italic;
+  }
+
   /* Responsive */
   @media (max-width: 1199px) { .pulsar-merch__grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 767px) {
@@ -260,7 +308,6 @@
     .pulsar-merch__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
     .pulsar-merch__grid { grid-template-columns: repeat(2, 1fr); gap: var(--pulsar-space-sm); }
     .pulsar-merch__header { flex-direction: column; align-items: flex-start; }
-    .pulsar-merch__header .pulsar-btn { display: none; } /* Hide header CTA on mobile — footer CTA remains */
   }
 {% endstylesheet %}
 

@@ -1,128 +1,166 @@
 {%- liquid
-  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
+  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnolia,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
 -%}
 
-<section class="pulsar-ticker-section" aria-label="Team members">
+<section class="pulsar-ticker-section" id="pulsar-ticker-{{ section.id }}">
   {%- if section.settings.heading != blank -%}
-    <p class="pulsar-ticker-section__label pulsar-reveal">{{ section.settings.heading }}</p>
+    <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
-  <div class="ticker-wrap" aria-hidden="true">
-    <div class="ticker">
-      {%- for member in members -%}
-        <span class="ticker__item">{{ member }}</span>
-      {%- endfor -%}
-      {%- comment -%}Duplicate for seamless loop{%- endcomment -%}
-      {%- for member in members -%}
-        <span class="ticker__item">{{ member }}</span>
-      {%- endfor -%}
+  <div class="pulsar-ticker-viewport">
+    <div class="pulsar-ticker-track">
+      <div class="pulsar-ticker-group">
+        {%- for member in members -%}
+          <span class="pulsar-ticker-item">{{ member }}</span>
+        {%- endfor -%}
+      </div>
+
+      <div class="pulsar-ticker-group" aria-hidden="true">
+        {%- for member in members -%}
+          <span class="pulsar-ticker-item">{{ member }}</span>
+        {%- endfor -%}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .pulsar-ticker-section {
-    background-color: var(--pulsar-black);
+  #pulsar-ticker-{{ section.id }} {
+    background: var(--pulsar-black);
     border-top: 1px solid var(--pulsar-dark3);
     border-bottom: 1px solid var(--pulsar-dark3);
-    padding: var(--pulsar-space-lg) 0;
+    padding: 20px 0;
     overflow: hidden;
   }
 
-  .pulsar-ticker-section__label {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-heading {
+    margin: 0 0 16px;
+    text-align: center;
+    font-size: 0.65rem;
     font-family: var(--font-body);
-    font-size: 0.7rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--pulsar-gray1);
-    margin: 0 0 var(--pulsar-space-md);
-    text-align: center;
   }
 
-  @keyframes pulsar-ticker {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  .ticker-wrap {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
     width: 100%;
     overflow: hidden;
-    height: 4rem;
+    position: relative;
   }
 
-  .ticker {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
     display: flex;
-    align-items: center;
     width: max-content;
-    height: 4rem;
-    white-space: nowrap;
-    animation: pulsar-ticker 60s linear infinite;
     will-change: transform;
+    transform: translate3d(0, 0, 0);
   }
 
-  .ticker:hover {
-    animation-play-state: paused;
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-group {
+    display: flex;
+    flex-shrink: 0;
+    min-width: max-content;
+    align-items: center;
   }
 
-  .ticker__item {
-    display: inline-block;
-    padding: 0 2rem;
-    font-family: var(--font-secondary);
-    font-size: 2rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray2);
-    transition: color 0.2s ease;
-    cursor: default;
-  }
+#pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-family: var(--font-secondary);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pulsar-gray3);
+  padding: 0 20px;
+}
 
-  .ticker__item:hover {
-    color: var(--pulsar-white);
-  }
-
-  .ticker__item::after {
-    content: ' ·';
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
+    content: "◆";
+    margin-left: 20px;
     color: var(--pulsar-gray1);
-    margin-left: 2rem;
+    font-size: 0.4rem;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ticker {
-      animation: none !important;
-      flex-wrap: wrap;
-      width: auto;
-      height: auto;
-      padding: var(--pulsar-space-md) var(--pulsar-space-lg);
-      justify-content: center;
-      gap: var(--pulsar-space-sm);
+  @media screen and (max-width: 767px) {
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+      font-size: 20px;
+      padding: 0 16px;
     }
-    .ticker-wrap { height: auto; overflow: visible; }
-    .ticker__item:nth-child(n + 67) { display: none; }
-  }
 
-  @media (max-width: 767px) {
-    .ticker__item { font-size: 1.5rem; padding: 0 1.2rem; }
-    .ticker { animation-duration: 45s; }
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
+      margin-left: 16px;
+    }
   }
 </style>
+
+<script>
+  (function() {
+    const section = document.getElementById('pulsar-ticker-{{ section.id }}');
+    if (!section) return;
+
+    const track = section.querySelector('.pulsar-ticker-track');
+    const firstGroup = section.querySelector('.pulsar-ticker-group');
+    if (!track || !firstGroup) return;
+
+    let x = 0;
+    let speed = 0.7; // increase for faster movement
+    let groupWidth = firstGroup.offsetWidth;
+    let paused = false;
+    let rafId = null;
+
+    function measure() {
+      groupWidth = firstGroup.offsetWidth;
+    }
+
+    function animate() {
+      if (!paused) {
+        x -= speed;
+
+        if (Math.abs(x) >= groupWidth) {
+          x = 0;
+        }
+
+        track.style.transform = `translate3d(${x}px, 0, 0)`;
+      }
+
+      rafId = requestAnimationFrame(animate);
+    }
+
+    section.addEventListener('mouseenter', function() {
+      paused = true;
+    });
+
+    section.addEventListener('mouseleave', function() {
+      paused = false;
+    });
+
+    window.addEventListener('resize', measure);
+    document.addEventListener('shopify:section:load', measure);
+    document.addEventListener('shopify:section:reorder', measure);
+
+    measure();
+    animate();
+  })();
+</script>
 
 {% schema %}
 {
   "name": "Pulsar Member Ribbon",
-  "tag": "div",
-  "class": "pulsar-section",
   "settings": [
     {
       "type": "text",
       "id": "heading",
-      "label": "Section label (optional)",
-      "default": "Our people"
+      "label": "Section label",
+      "default": "The people that make it happen"
     }
   ],
   "presets": [
     {
-      "name": "Pulsar Member Ribbon",
-      "category": "Pulsar"
+      "name": "Pulsar Member Ribbon"
     }
   ]
 }

@@ -6,20 +6,27 @@
     </div>
 
     <div class="pulsar-videos__grid pulsar-stagger-group">
-      {%- assign video_1_url = section.settings.video_1_url | default: 'https://www.youtube.com/embed/MoZfg__UPRo' -%}
-      {%- assign video_2_url = section.settings.video_2_url | default: 'https://www.youtube.com/embed/3Po08NzKqlc' -%}
+      {%- assign video_1_base = section.settings.video_1_url | default: 'https://www.youtube.com/embed/MoZfg__UPRo' -%}
+      {%- assign video_2_base = section.settings.video_2_url | default: 'https://www.youtube.com/embed/3Po08NzKqlc' -%}
 
       <!-- Fortnite montage -->
       <div class="pulsar-videos__item pulsar-stagger-item">
-        <div class="pulsar-videos__embed-wrap">
-          <iframe
-            src="{{ video_1_url }}?rel=0&modestbranding=1"
-            title="{{ section.settings.video_1_title | default: 'Pulsar Fortnite Montage' }}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
+        <div class="pulsar-videos__frame-outer">
+          <div class="pulsar-videos__embed-wrap" data-pulsar-video-wrap>
+            <iframe
+              data-pulsar-video-src="{{ video_1_base }}?rel=0&modestbranding=1&enablejsapi=1"
+              src="{{ video_1_base }}?rel=0&modestbranding=1&enablejsapi=1"
+              title="{{ section.settings.video_1_title | default: 'Pulsar Fortnite Montage' }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--tl" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--tr" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--bl" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--br" aria-hidden="true"></div>
         </div>
         <div class="pulsar-videos__item-meta">
           <span class="pulsar-videos__item-tag">{{ section.settings.video_1_tag | default: 'Fortnite' }}</span>
@@ -29,15 +36,22 @@
 
       <!-- Valorant montage -->
       <div class="pulsar-videos__item pulsar-stagger-item">
-        <div class="pulsar-videos__embed-wrap">
-          <iframe
-            src="{{ video_2_url }}?rel=0&modestbranding=1"
-            title="{{ section.settings.video_2_title | default: 'Pulsar Valorant Montage' }}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
+        <div class="pulsar-videos__frame-outer">
+          <div class="pulsar-videos__embed-wrap" data-pulsar-video-wrap>
+            <iframe
+              data-pulsar-video-src="{{ video_2_base }}?rel=0&modestbranding=1&enablejsapi=1"
+              src="{{ video_2_base }}?rel=0&modestbranding=1&enablejsapi=1"
+              title="{{ section.settings.video_2_title | default: 'Pulsar Valorant Montage' }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--tl" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--tr" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--bl" aria-hidden="true"></div>
+          <div class="pulsar-videos__frame-corner pulsar-videos__frame-corner--br" aria-hidden="true"></div>
         </div>
         <div class="pulsar-videos__item-meta">
           <span class="pulsar-videos__item-tag">{{ section.settings.video_2_tag | default: 'Valorant' }}</span>
@@ -90,13 +104,28 @@
     flex-direction: column;
     gap: var(--pulsar-space-md);
   }
+  /* Premium video frame */
+  .pulsar-videos__frame-outer {
+    position: relative;
+  }
   .pulsar-videos__embed-wrap {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%; /* 16:9 — exact same ratio forces identical sizes */
     height: 0;
     overflow: hidden;
     background-color: var(--pulsar-black);
     border: 1px solid var(--pulsar-dark3);
+    box-shadow:
+      0 0 0 1px var(--pulsar-dark3),
+      0 32px 80px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: box-shadow 0.4s var(--pulsar-ease-out);
+  }
+  .pulsar-videos__frame-outer:hover .pulsar-videos__embed-wrap {
+    box-shadow:
+      0 0 0 1px var(--pulsar-gray1),
+      0 40px 100px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
   .pulsar-videos__embed-wrap iframe {
     position: absolute;
@@ -105,6 +134,19 @@
     height: 100%;
     border: none;
   }
+
+  /* Corner accent marks */
+  .pulsar-videos__frame-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .pulsar-videos__frame-corner--tl { top: -1px; left: -1px; border-top: 2px solid var(--pulsar-gray1); border-left: 2px solid var(--pulsar-gray1); }
+  .pulsar-videos__frame-corner--tr { top: -1px; right: -1px; border-top: 2px solid var(--pulsar-gray1); border-right: 2px solid var(--pulsar-gray1); }
+  .pulsar-videos__frame-corner--bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--pulsar-gray1); border-left: 2px solid var(--pulsar-gray1); }
+  .pulsar-videos__frame-corner--br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--pulsar-gray1); border-right: 2px solid var(--pulsar-gray1); }
   .pulsar-videos__item-meta {
     display: flex;
     flex-direction: column;
@@ -132,6 +174,33 @@
     .pulsar-videos__grid { grid-template-columns: 1fr; }
   }
 {% endstylesheet %}
+
+<script>
+  (function () {
+    /* Scroll-in Intersection Observer for video wrappers */
+    var wraps = document.querySelectorAll('[data-pulsar-video-wrap]');
+    if (!wraps.length || !('IntersectionObserver' in window)) return;
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var wrap = entry.target;
+        if (entry.isIntersecting) {
+          wrap.classList.add('pulsar-video--in-view');
+          /* Optional: trigger GSAP entrance if loaded */
+          if (window.gsap) {
+            gsap.fromTo(wrap.closest('.pulsar-videos__item'),
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }
+            );
+          }
+          obs.unobserve(wrap);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    wraps.forEach(function (wrap) { obs.observe(wrap); });
+  })();
+</script>
 
 {% schema %}
 {

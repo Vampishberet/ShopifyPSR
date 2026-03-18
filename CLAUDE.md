@@ -20,8 +20,8 @@ You are building the **Team Pulsar** esports website — a Shopify Liquid theme 
 ## Always Do First
 
 1. **Invoke the `shopify-theme-design` skill** before writing any code, every session, no exceptions.
-2. **Read `PRD.md`** — the PRD is the source of truth for all features, layouts, and specs.
-3. **Read `brand-positioning-document.md`** — for tone, values, and brand voice.
+2. **Read and embed `PRD.md` and `brand-positioning-document.md`** into your active context. You MUST refer back to these documents constantly throughout the session to ensure every decision aligns with the source of truth and brand values.
+3. **Acknowledge my changes** explicitly before proceeding.
 4. **Check current phase** — do not skip phases. Follow the phased execution plan in this document.
 
 ---
@@ -448,7 +448,8 @@ Six specialized agents live in `.claude/agents/`:
 | **liquid-agent** | Shopify Liquid sections, snippets, templates, JSON schemas |
 | **css-animation-agent** | CSS styling, GSAP animations, ScrollTrigger, Lenis, custom cursor, visual effects |
 | **content-agent** | Text/data updates: roster names, stats, copy, marquee data, social links |
-| **reviewer-agent** | Code review, Shopify compliance, design system audit, Liquid syntax validation |
+| **principal-art-director** | The "Brother Clone". Expert developer checking UI, motion design, CSS hierarchy, and brand signature. Imposes extreme "taste pressure" to reject timid or default theme code. |
+| **reviewer-agent** | Code review, Shopify compliance, baseline design system audit, Liquid syntax validation |
 | **debugger-agent** | Broken layouts, Liquid errors, JS conflicts, Shopify theme issues |
 | **integration-agent** | GA4, social embeds, YouTube iframes, Google Forms, newsletter, OG meta tags, cookie consent |
 
@@ -459,7 +460,8 @@ Six specialized agents live in `.claude/agents/`:
 - **Always** delegate text/data-only changes → `content-agent`
 - **Always** delegate "why is X broken" → `debugger-agent`
 - **Always** delegate GA4, YouTube, Twitter, forms, meta tags → `integration-agent`
-- **Always** run `reviewer-agent` after significant changes
+- **Always** run `principal-art-director` after completing complex UI components (like Navbars or Heroes) to guarantee an absolute premium, expensive feel.
+- **Always** run `reviewer-agent` as a baseline check before considering any phase done.
 - **Never** debug inline — always delegate to `debugger-agent`
 
 ### Dispatch Strategy
@@ -505,8 +507,9 @@ Before moving to the next phase, verify:
 
 ---
 
-## Continuous Improvement (MANDATORY)
+## Continuous Improvement & Agent Evolution (MANDATORY)
 
-After any correction from me, add an entry to `tasks/lessons.md`. 
-Format: `[date] | what went wrong | rule to follow next time`. 
-Read `tasks/lessons.md` at the start of **every** session and apply every rule before touching any code.
+1. **Lesson Logging:** After any correction from me, add an entry to `tasks/lessons.md`. 
+   Format: `[date] | what went wrong | rule to follow next time`. 
+   Read `tasks/lessons.md` at the start of **every** session and apply every rule before touching any code.
+2. **Subagent Evolution:** You are expected to constantly evaluate and improve your `.claude/agents/` subagents. If a subagent is underperforming or if a new specialized task arises, you MUST proactively modify existing agents or create new subagents to ensure the final product is a masterpiece.

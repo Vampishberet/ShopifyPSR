@@ -75,10 +75,11 @@
         <div class="pulsar-esports-titles__roster pulsar-stagger-group">
           {%- assign fn_players = 'Chimp,Gary,Light,Zire,Tuhronto,Channce,Vero,Ryiax,CeceNuggets,GazingNicole' | split: ',' -%}
           {%- for player in fn_players -%}
-            <div class="pulsar-player-card pulsar-stagger-item">
+            <div class="pulsar-player-card pulsar-stagger-item" data-pulsar-player="{{ player }}" data-pulsar-game="Fortnite" role="button" tabindex="0" aria-label="View PSR {{ player }} profile">
               <div class="pulsar-player-card__inner">
                 <span class="pulsar-player-card__game">Fortnite</span>
                 <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                <span class="pulsar-player-card__cta" aria-hidden="true">Connect ↗</span>
               </div>
             </div>
           {%- endfor -%}
@@ -119,10 +120,11 @@
           <div class="pulsar-esports-titles__roster pulsar-stagger-group">
             {%- assign val_players = 'Mikey,Moe,Psych,Indra,Klamran,Dag,Ian' | split: ',' -%}
             {%- for player in val_players -%}
-              <div class="pulsar-player-card pulsar-stagger-item">
+              <div class="pulsar-player-card pulsar-stagger-item" data-pulsar-player="{{ player }}" data-pulsar-game="Valorant" role="button" tabindex="0" aria-label="View PSR {{ player }} profile">
                 <div class="pulsar-player-card__inner">
                   <span class="pulsar-player-card__game">Valorant</span>
                   <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                  <span class="pulsar-player-card__cta" aria-hidden="true">Connect ↗</span>
                 </div>
               </div>
             {%- endfor -%}
@@ -138,10 +140,11 @@
           <div class="pulsar-esports-titles__roster pulsar-stagger-group">
             {%- assign gc_players = 'Cafe,Jid,Mei,Rina,Staryu,Vienna' | split: ',' -%}
             {%- for player in gc_players -%}
-              <div class="pulsar-player-card pulsar-player-card--gc pulsar-stagger-item">
+              <div class="pulsar-player-card pulsar-player-card--gc pulsar-stagger-item" data-pulsar-player="{{ player }}" data-pulsar-game="Valorant GC" role="button" tabindex="0" aria-label="View PSR {{ player }} profile">
                 <div class="pulsar-player-card__inner">
                   <span class="pulsar-player-card__game">Valorant GC</span>
                   <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                  <span class="pulsar-player-card__cta" aria-hidden="true">Connect ↗</span>
                 </div>
               </div>
             {%- endfor -%}
@@ -168,10 +171,11 @@
         <div class="pulsar-esports-titles__roster pulsar-stagger-group">
           {%- assign apex_players = 'Acsidius,zGato,iGOMA' | split: ',' -%}
           {%- for player in apex_players -%}
-            <div class="pulsar-player-card pulsar-stagger-item">
+            <div class="pulsar-player-card pulsar-stagger-item" data-pulsar-player="{{ player }}" data-pulsar-game="Apex Legends" role="button" tabindex="0" aria-label="View PSR {{ player }} profile">
               <div class="pulsar-player-card__inner">
                 <span class="pulsar-player-card__game">Apex Legends</span>
                 <p class="pulsar-player-card__name">PSR {{ player }}</p>
+                <span class="pulsar-player-card__cta" aria-hidden="true">Connect ↗</span>
               </div>
             </div>
           {%- endfor -%}
@@ -181,6 +185,54 @@
     </div><!-- /.pulsar-esports-titles__panels -->
   </div>
 </section>
+
+<!-- ── Player Social Drawer ── -->
+<div class="pulsar-player-drawer" id="pulsar-player-drawer" role="dialog" aria-modal="true" aria-label="Player profile" hidden>
+  <div class="pulsar-player-drawer__backdrop" id="pulsar-drawer-backdrop"></div>
+  <div class="pulsar-player-drawer__panel">
+    <button class="pulsar-player-drawer__close" id="pulsar-drawer-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="pulsar-player-drawer__header">
+      <p class="pulsar-player-drawer__game" id="pulsar-drawer-game">FORTNITE</p>
+      <h3 class="pulsar-player-drawer__name" id="pulsar-drawer-name">PSR PLAYER</h3>
+    </div>
+
+    <div class="pulsar-player-drawer__divider"></div>
+
+    <p class="pulsar-player-drawer__label">Find them on our platforms</p>
+
+    <div class="pulsar-player-drawer__socials">
+      <a href="https://x.com/PulsarLLC" target="_blank" rel="noopener noreferrer" class="pulsar-player-drawer__social">
+        <span class="pulsar-player-drawer__social-platform">Twitter / X</span>
+        <span class="pulsar-player-drawer__social-handle">@PulsarLLC</span>
+      </a>
+      <a href="https://www.twitch.tv/TeamPulsar" target="_blank" rel="noopener noreferrer" class="pulsar-player-drawer__social">
+        <span class="pulsar-player-drawer__social-platform">Twitch</span>
+        <span class="pulsar-player-drawer__social-handle">TeamPulsar</span>
+      </a>
+      <a href="https://discord.gg/TeamPulsar" target="_blank" rel="noopener noreferrer" class="pulsar-player-drawer__social">
+        <span class="pulsar-player-drawer__social-platform">Discord</span>
+        <span class="pulsar-player-drawer__social-handle">discord.gg/TeamPulsar</span>
+      </a>
+      <a href="https://www.youtube.com/@TeamPulsar" target="_blank" rel="noopener noreferrer" class="pulsar-player-drawer__social">
+        <span class="pulsar-player-drawer__social-platform">YouTube</span>
+        <span class="pulsar-player-drawer__social-handle">@TeamPulsar</span>
+      </a>
+      <a href="https://www.instagram.com/pulsarllc/" target="_blank" rel="noopener noreferrer" class="pulsar-player-drawer__social">
+        <span class="pulsar-player-drawer__social-platform">Instagram</span>
+        <span class="pulsar-player-drawer__social-handle">@pulsarllc</span>
+      </a>
+    </div>
+
+    <div class="pulsar-player-drawer__footer">
+      <p class="pulsar-player-drawer__footer-text">Part of the Pulsar family since day one.</p>
+    </div>
+  </div>
+</div>
 
 {% stylesheet %}
   .pulsar-esports-titles {
@@ -388,6 +440,167 @@
   .pulsar-player-card__social:hover { color: var(--pulsar-white); }
   .pulsar-player-card--gc .pulsar-player-card__inner { border-left: 2px solid var(--pulsar-gray1); }
 
+  /* Player card — clickable state */
+  .pulsar-player-card[data-pulsar-player] { cursor: pointer; }
+  .pulsar-player-card[data-pulsar-player]:hover { background-color: var(--pulsar-dark3); }
+  .pulsar-player-card[data-pulsar-player]:focus-visible {
+    outline: 2px solid var(--pulsar-white);
+    outline-offset: -2px;
+  }
+  .pulsar-player-card__cta {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin-top: var(--pulsar-space-xs);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+  .pulsar-player-card[data-pulsar-player]:hover .pulsar-player-card__cta {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--pulsar-gray3);
+  }
+
+  /* ── Player Social Drawer ── */
+  .pulsar-player-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    pointer-events: none;
+  }
+  .pulsar-player-drawer:not([hidden]) { pointer-events: auto; }
+
+  .pulsar-player-drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.35s var(--pulsar-ease-out);
+  }
+  .pulsar-player-drawer.is-open .pulsar-player-drawer__backdrop { opacity: 1; }
+
+  .pulsar-player-drawer__panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: min(420px, 90vw);
+    background: var(--pulsar-dark2);
+    border-left: 1px solid var(--pulsar-dark3);
+    padding: var(--pulsar-space-xl) var(--pulsar-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-lg);
+    transform: translateX(100%);
+    transition: transform 0.45s var(--pulsar-ease-out);
+    box-shadow: -40px 0 100px rgba(0, 0, 0, 0.6);
+    overflow-y: auto;
+  }
+  .pulsar-player-drawer.is-open .pulsar-player-drawer__panel {
+    transform: translateX(0);
+  }
+
+  .pulsar-player-drawer__close {
+    align-self: flex-end;
+    background: none;
+    border: 1px solid var(--pulsar-dark3);
+    color: var(--pulsar-gray2);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .pulsar-player-drawer__close:hover { border-color: var(--pulsar-white); color: var(--pulsar-white); }
+  .pulsar-player-drawer__close:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 2px; }
+
+  .pulsar-player-drawer__game {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0 0 var(--pulsar-space-xs);
+  }
+  .pulsar-player-drawer__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .pulsar-player-drawer__divider {
+    height: 1px;
+    background: var(--pulsar-dark3);
+  }
+
+  .pulsar-player-drawer__label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray2);
+    margin: 0;
+  }
+
+  .pulsar-player-drawer__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .pulsar-player-drawer__social {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--pulsar-space-md) 0;
+    border-bottom: 1px solid var(--pulsar-dark3);
+    text-decoration: none;
+    transition: opacity 0.18s ease;
+  }
+  .pulsar-player-drawer__socials .pulsar-player-drawer__social:first-child {
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-player-drawer__social:hover { opacity: 0.65; }
+  .pulsar-player-drawer__social:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 2px; }
+
+  .pulsar-player-drawer__social-platform {
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+  }
+  .pulsar-player-drawer__social-handle {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--pulsar-gray2);
+  }
+
+  .pulsar-player-drawer__footer {
+    margin-top: auto;
+    padding-top: var(--pulsar-space-lg);
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+  .pulsar-player-drawer__footer-text {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+
   @media (max-width: 767px) {
     .pulsar-esports-titles { padding: var(--pulsar-space-xl) 0; }
     .pulsar-esports-titles__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
@@ -458,6 +671,66 @@
         if (e.key === 'ArrowLeft') { tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
       });
     });
+  })();
+</script>
+
+<script>
+  /* ── Player Social Drawer ── */
+  (function () {
+    var drawer    = document.getElementById('pulsar-player-drawer');
+    var backdrop  = document.getElementById('pulsar-drawer-backdrop');
+    var closeBtn  = document.getElementById('pulsar-drawer-close');
+    var nameEl    = document.getElementById('pulsar-drawer-name');
+    var gameEl    = document.getElementById('pulsar-drawer-game');
+    var prevFocus = null;
+
+    if (!drawer) return;
+
+    function openDrawer(playerName, game) {
+      nameEl.textContent = 'PSR ' + playerName;
+      gameEl.textContent = game.toUpperCase();
+      drawer.removeAttribute('hidden');
+      /* rAF ensures hidden removal is painted before transition starts */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          drawer.classList.add('is-open');
+        });
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('is-open');
+      document.body.style.overflow = '';
+      /* Re-hide after transition completes */
+      var panel = drawer.querySelector('.pulsar-player-drawer__panel');
+      var onEnd = function () {
+        drawer.setAttribute('hidden', '');
+        panel.removeEventListener('transitionend', onEnd);
+        if (prevFocus) { prevFocus.focus(); prevFocus = null; }
+      };
+      panel.addEventListener('transitionend', onEnd);
+    }
+
+    /* Delegate clicks to all player cards */
+    document.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-pulsar-player]');
+      if (!card) return;
+      prevFocus = card;
+      openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || '');
+    });
+
+    /* Keyboard: Enter / Space on player cards */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        var card = e.target.closest('[data-pulsar-player]');
+        if (card) { e.preventDefault(); prevFocus = card; openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || ''); }
+      }
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) { closeDrawer(); }
+    });
+
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
   })();
 </script>
 

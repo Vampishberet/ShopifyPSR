@@ -51,6 +51,11 @@
   --pulsar-space-xxl: 7.5rem;    /* 120px */
   --pulsar-section-gap: var(--pulsar-space-xxl);
 
+  /* === Purple Legacy Accents — use sparingly & deliberately === */
+  --pulsar-accent-purple1: #cdc2f5;
+  --pulsar-accent-purple2: #bba8ff;
+  --pulsar-accent-purple3: #c6b7fe;
+
   /* === Motion === */
   --pulsar-ease-out:  cubic-bezier(0.16, 1, 0.30, 1);
   --pulsar-ease-in:   cubic-bezier(0.70, 0, 0.84, 0);
@@ -282,6 +287,64 @@ header-component a:focus-visible,
 .cart-count-bubble {
   background-color: var(--pulsar-white);
   color: var(--pulsar-black);
+}
+
+/* ── V2 Navbar: Signature Centered Underline Hover State ── */
+header-component nav a,
+.header__inline-menu a,
+.header__menu-item a,
+.header-section nav a {
+  position: relative;
+}
+header-component nav a::after,
+.header__inline-menu a::after,
+.header__menu-item a::after,
+.header-section nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: var(--pulsar-white);
+  transition:
+    left 0.28s var(--pulsar-ease-out),
+    right 0.28s var(--pulsar-ease-out);
+}
+header-component nav a:hover::after,
+.header__inline-menu a:hover::after,
+.header__menu-item a:hover::after,
+.header-section nav a:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* ── V2 Navbar: Submenu Visual Depth ── */
+.header__submenu,
+header-component [popover],
+.mega-menu,
+.header__mega-menu,
+.list-menu--disclosure {
+  background-color: rgba(10, 10, 12, 0.92) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid var(--pulsar-dark3) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+.header__submenu a,
+header-component [popover] a,
+.list-menu--disclosure a {
+  font-family: var(--font-secondary) !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--pulsar-gray2) !important;
+  transition: color 0.18s ease !important;
+}
+.header__submenu a:hover,
+header-component [popover] a:hover,
+.list-menu--disclosure a:hover {
+  color: var(--pulsar-white) !important;
 }
 
 

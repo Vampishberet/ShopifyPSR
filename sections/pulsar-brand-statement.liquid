@@ -1,27 +1,30 @@
-<section class="pulsar-brand-statement">
+<section class="pulsar-brand-statement" id="pulsar-brand-{{ section.id }}">
   <div class="pulsar-brand-statement__inner">
     <div class="pulsar-brand-statement__left">
       <p class="pulsar-brand-statement__overline pulsar-reveal">
         {{ section.settings.overline | default: 'Who We Are' }}
       </p>
     </div>
+
     <div class="pulsar-brand-statement__right">
       <h2 class="pulsar-brand-statement__headline pulsar-heading-reveal">
         {%- if section.settings.headline != blank -%}
-          {{ section.settings.headline }}
+          {{ section.settings.headline | newline_to_br }}
         {%- else -%}
           More than an org.<br>A movement.
         {%- endif -%}
       </h2>
+
       <p class="pulsar-brand-statement__body pulsar-reveal">
         {%- if section.settings.body != blank -%}
           {{ section.settings.body }}
         {%- else -%}
-          Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant. We're not just a team. We're the org people are proud to be part of.
+          Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant.
         {%- endif -%}
       </p>
+
       {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
-        <a href="{{ section.settings.cta_url }}" class="pulsar-btn pulsar-btn--ghost pulsar-reveal">
+        <a href="{{ section.settings.cta_url }}" class="pulsar-brand-statement__cta pulsar-reveal">
           {{ section.settings.cta_label }}
         </a>
       {%- endif -%}
@@ -29,57 +32,157 @@
   </div>
 </section>
 
-{% stylesheet %}
-  .pulsar-brand-statement {
-    background-color: var(--pulsar-dark1);
-    padding: var(--pulsar-space-xxl) 0;
-  }
-  .pulsar-brand-statement__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--pulsar-space-lg);
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: var(--pulsar-space-xl);
-    align-items: start;
-  }
-  .pulsar-brand-statement__overline {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray1);
-    margin: 0;
-    padding-top: 0.6rem; /* Align with headline cap height */
-  }
-  .pulsar-brand-statement__headline {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: var(--pulsar-white);
-    margin: 0 0 var(--pulsar-space-lg);
-  }
-  .pulsar-brand-statement__body {
-    font-family: var(--font-body);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: var(--pulsar-gray3);
-    margin: 0 0 var(--pulsar-space-lg);
-    max-width: 60ch;
+<style>
+  #pulsar-brand-{{ section.id }} {
+    background: #050608;
+    padding: 100px 0;
   }
 
-  @media (max-width: 767px) {
-    .pulsar-brand-statement__inner {
-      grid-template-columns: 1fr;
-      gap: var(--pulsar-space-md);
-      padding: 0 var(--pulsar-space-md);
-    }
-    .pulsar-brand-statement { padding: var(--pulsar-space-xl) 0; }
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: grid;
+    grid-template-columns: 0.8fr 2fr;
+    gap: 56px;
+    align-items: start;
   }
-{% endstylesheet %}
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__overline {
+    margin: 0;
+    padding-top: 10px;
+    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8f96a3;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__headline {
+    margin: 0 0 26px;
+    font-family: var(--font-heading), sans-serif;
+    font-size: clamp(46px, 6vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: #ffffff;
+    max-width: 9ch;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__body {
+    margin: 0 0 30px;
+    max-width: 62ch;
+    font-family: var(--font-body), sans-serif;
+    font-size: 18px;
+    line-height: 1.7;
+    color: #b8bec8;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 18px;
+    text-decoration: none;
+    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    border: 1px solid #353b45;
+    background: transparent;
+    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__cta:hover {
+    transform: translateY(-2px);
+    border-color: #ffffff;
+    background: #ffffff;
+    color: #000000;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-reveal,
+  #pulsar-brand-{{ section.id }} .pulsar-heading-reveal {
+    opacity: 0;
+    transform: translateY(34px);
+    transition: opacity 0.85s ease, transform 0.85s ease;
+    will-change: opacity, transform;
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-heading-reveal {
+    transform: translateY(44px);
+    transition-duration: 1s;
+  }
+
+  #pulsar-brand-{{ section.id }} .is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__overline { transition-delay: 0.05s; }
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__headline { transition-delay: 0.14s; }
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__body { transition-delay: 0.26s; }
+  #pulsar-brand-{{ section.id }} .pulsar-brand-statement__cta { transition-delay: 0.38s; }
+
+  @media (max-width: 767px) {
+    #pulsar-brand-{{ section.id }} {
+      padding: 68px 0;
+    }
+
+    #pulsar-brand-{{ section.id }} .pulsar-brand-statement__inner {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 0 18px;
+    }
+
+    #pulsar-brand-{{ section.id }} .pulsar-brand-statement__headline {
+      font-size: clamp(38px, 12vw, 58px);
+      max-width: none;
+      margin-bottom: 18px;
+    }
+
+    #pulsar-brand-{{ section.id }} .pulsar-brand-statement__body {
+      font-size: 16px;
+      line-height: 1.65;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pulsar-brand-{{ section.id }} .pulsar-reveal,
+    #pulsar-brand-{{ section.id }} .pulsar-heading-reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const section = document.getElementById('pulsar-brand-{{ section.id }}');
+    if (!section) return;
+
+    const items = section.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal');
+    if (!items.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -10% 0px'
+    });
+
+    items.forEach((item) => observer.observe(item));
+  })();
+</script>
 
 {% schema %}
 {
