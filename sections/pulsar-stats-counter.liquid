@@ -1,50 +1,61 @@
-<section class="pulsar-stats">
+<section class="pulsar-stats" id="pulsar-stats-{{ section.id }}">
   <div class="pulsar-stats__inner">
     {%- if section.settings.label != blank -%}
       <p class="pulsar-stats__section-label pulsar-reveal">{{ section.settings.label }}</p>
     {%- endif -%}
+
     <div class="pulsar-stats__grid">
       <div class="pulsar-stats__item pulsar-reveal">
         <div class="pulsar-stats__number">
           <span
             data-pulsar-counter="2"
+            data-pulsar-decimals="0"
             data-pulsar-suffix="M+"
-            data-pulsar-duration="2"
-          >2M+</span>
+            data-pulsar-duration="2000"
+          >0M+</span>
         </div>
         <p class="pulsar-stats__label">Combined Reach</p>
       </div>
+
       <div class="pulsar-stats__divider" aria-hidden="true"></div>
+
       <div class="pulsar-stats__item pulsar-reveal">
         <div class="pulsar-stats__number">
           <span
             data-pulsar-counter="125"
+            data-pulsar-decimals="0"
             data-pulsar-prefix="$"
             data-pulsar-suffix="K+"
-            data-pulsar-duration="2"
-          >$125K+</span>
+            data-pulsar-duration="2200"
+          >$0K+</span>
         </div>
         <p class="pulsar-stats__label">Prize Earnings</p>
       </div>
+
       <div class="pulsar-stats__divider" aria-hidden="true"></div>
+
       <div class="pulsar-stats__item pulsar-reveal">
         <div class="pulsar-stats__number">
           <span
             data-pulsar-counter="60"
+            data-pulsar-decimals="0"
             data-pulsar-suffix="+"
-            data-pulsar-duration="1.8"
-          >60+</span>
+            data-pulsar-duration="1800"
+          >0+</span>
         </div>
         <p class="pulsar-stats__label">Members</p>
       </div>
+
       <div class="pulsar-stats__divider" aria-hidden="true"></div>
+
       <div class="pulsar-stats__item pulsar-reveal">
         <div class="pulsar-stats__number">
           <span
             data-pulsar-counter="5"
+            data-pulsar-decimals="0"
             data-pulsar-suffix="+"
-            data-pulsar-duration="1.5"
-          >5+</span>
+            data-pulsar-duration="1500"
+          >0+</span>
         </div>
         <p class="pulsar-stats__label">Years Active</p>
       </div>
@@ -52,82 +63,214 @@
   </div>
 </section>
 
-{% stylesheet %}
-  .pulsar-stats {
-    background-color: var(--pulsar-dark2);
-    padding: var(--pulsar-space-xxl) 0;
-    border-top: 1px solid var(--pulsar-dark3);
-    border-bottom: 1px solid var(--pulsar-dark3);
+<style>
+  #pulsar-stats-{{ section.id }} {
+    background: #050608;
+    padding: 88px 0;
+    border-top: 1px solid #1c2128;
+    border-bottom: 1px solid #1c2128;
   }
-  .pulsar-stats__inner {
-    max-width: 1200px;
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__inner {
+    max-width: 1320px;
     margin: 0 auto;
-    padding: 0 var(--pulsar-space-lg);
+    padding: 0 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--pulsar-space-xl);
+    gap: 44px;
   }
-  .pulsar-stats__section-label {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray1);
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__section-label {
     margin: 0;
-  }
-  .pulsar-stats__grid {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    width: 100%;
-  }
-  .pulsar-stats__item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--pulsar-space-sm);
-    padding: 0 var(--pulsar-space-lg);
-  }
-  .pulsar-stats__number {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-size: 14px;
     line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--pulsar-white);
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-  }
-  .pulsar-stats__label {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray2);
-    margin: 0;
+    color: #8f96a3;
     text-align: center;
   }
-  .pulsar-stats__divider {
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__grid {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    gap: 0;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 0 18px;
+    text-align: center;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__number {
+    font-family: var(--font-heading), sans-serif;
+    font-size: clamp(58px, 9vw, 140px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__label {
+    margin: 0;
+    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-size: 13px;
+    line-height: 1.1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8f96a3;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__divider {
     width: 1px;
-    height: 80px;
-    background: var(--pulsar-dark3);
-    flex-shrink: 0;
+    min-width: 1px;
+    background: #1c2128;
+    margin: 0 6px;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+    will-change: opacity, transform;
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #pulsar-stats-{{ section.id }} .pulsar-stats__section-label { transition-delay: 0.05s; }
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(1) { transition-delay: 0.10s; }
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(3) { transition-delay: 0.18s; }
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(5) { transition-delay: 0.26s; }
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(7) { transition-delay: 0.34s; }
+
+  @media (max-width: 989px) {
+    #pulsar-stats-{{ section.id }} .pulsar-stats__number {
+      font-size: clamp(44px, 8vw, 88px);
+    }
   }
 
   @media (max-width: 767px) {
-    .pulsar-stats { padding: var(--pulsar-space-xl) 0; }
-    .pulsar-stats__inner { padding: 0 var(--pulsar-space-md); gap: var(--pulsar-space-lg); }
-    .pulsar-stats__grid {
-      flex-wrap: wrap;
-      gap: var(--pulsar-space-lg);
+    #pulsar-stats-{{ section.id }} {
+      padding: 64px 0;
     }
-    .pulsar-stats__item { min-width: calc(50% - var(--pulsar-space-lg)); padding: 0; }
-    .pulsar-stats__divider { display: none; }
-    .pulsar-stats__number { font-size: clamp(2.5rem, 10vw, 4rem); }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__inner {
+      padding: 0 18px;
+      gap: 28px;
+    }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px 16px;
+    }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__divider {
+      display: none;
+    }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__item {
+      padding: 0;
+      gap: 10px;
+    }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__number {
+      font-size: clamp(40px, 12vw, 64px);
+    }
+
+    #pulsar-stats-{{ section.id }} .pulsar-stats__label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+    }
   }
-{% endstylesheet %}
+
+  @media (prefers-reduced-motion: reduce) {
+    #pulsar-stats-{{ section.id }} .pulsar-reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const section = document.getElementById('pulsar-stats-{{ section.id }}');
+    if (!section) return;
+
+    const revealItems = section.querySelectorAll('.pulsar-reveal');
+    const counters = section.querySelectorAll('[data-pulsar-counter]');
+    let hasAnimated = false;
+
+    function animateCounter(el) {
+      const target = parseFloat(el.dataset.pulsarCounter || '0');
+      const decimals = parseInt(el.dataset.pulsarDecimals || '0', 10);
+      const prefix = el.dataset.pulsarPrefix || '';
+      const suffix = el.dataset.pulsarSuffix || '';
+      const duration = parseInt(el.dataset.pulsarDuration || '2000', 10);
+
+      const startTime = performance.now();
+
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = target * eased;
+
+        const formatted = decimals > 0
+          ? current.toFixed(decimals)
+          : Math.round(current).toString();
+
+        el.textContent = prefix + formatted + suffix;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          const finalValue = decimals > 0
+            ? target.toFixed(decimals)
+            : Math.round(target).toString();
+
+          el.textContent = prefix + finalValue + suffix;
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || hasAnimated) return;
+
+        hasAnimated = true;
+
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+        counters.forEach((counter) => animateCounter(counter));
+
+        observer.disconnect();
+      });
+    }, {
+      threshold: 0.25,
+      rootMargin: '0px 0px -10% 0px'
+    });
+
+    observer.observe(section);
+  })();
+</script>
 
 {% schema %}
 {

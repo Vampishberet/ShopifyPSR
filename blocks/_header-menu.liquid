@@ -178,34 +178,77 @@
 {% endcase %}
 
 {% stylesheet %}
-  .menu-list--mobile {
-    &.menu-list {
-      display: grid;
-    }
+.menu-list--mobile.menu-list {
+  display: grid;
+  align-items: center;
+}
 
-    & .menu-list__list {
-      width: max-content;
-      margin-inline: auto;
-      gap: var(--menu-horizontal-gap);
-    }
+.menu-list--mobile .menu-list__scroll-container {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.45rem;
+  scroll-snap-type: x proximity;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+}
 
-    & li {
-      width: max-content;
-      padding-block: var(--padding-sm);
-    }
+.menu-list--mobile .menu-list__scroll-container::-webkit-scrollbar {
+  display: none;
+}
 
-    & li:first-of-type {
-      padding-inline-start: var(--menu-horizontal-gap);
-    }
+.menu-list--mobile .menu-list__list {
+  width: max-content;
+  margin-inline: auto;
+  gap: 0.35rem;
+  align-items: center;
+}
 
-    & li:last-of-type {
-      padding-inline-end: var(--menu-horizontal-gap);
-    }
+.menu-list--mobile li {
+  width: max-content;
+  padding-block: 0;
+  scroll-snap-align: start;
+}
 
-    & a {
-      color: var(--color-foreground);
-    }
-  }
+.menu-list--mobile li:first-of-type {
+  padding-inline-start: var(--menu-horizontal-gap);
+}
+
+.menu-list--mobile li:last-of-type {
+  padding-inline-end: var(--menu-horizontal-gap);
+}
+
+.menu-list--mobile .menu-list__item {
+  color: var(--color-foreground);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.3rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+  border-radius: 999px;
+  background: rgb(var(--color-background-rgb) / 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.menu-list--mobile .menu-list__item:hover,
+.menu-list--mobile .menu-list__item[aria-current='page'] {
+  background: rgb(var(--color-foreground-rgb) / 0.08);
+  border-color: rgb(var(--color-foreground-rgb) / 0.24);
+  color: var(--color-foreground);
+  transform: translateY(-1px);
+}
 
   .menu-list__scroll-container {
     position: relative;

@@ -26,21 +26,20 @@
 
 <style>
   #pulsar-ticker-{{ section.id }} {
-    background: var(--pulsar-black);
-    border-top: 1px solid var(--pulsar-dark3);
-    border-bottom: 1px solid var(--pulsar-dark3);
-    padding: 20px 0;
+    background: #000;
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+    padding: 16px 0;
     overflow: hidden;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-heading {
     margin: 0 0 16px;
     text-align: center;
-    font-size: 0.65rem;
-    font-family: var(--font-body);
-    letter-spacing: 0.3em;
+    font-size: 12px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--pulsar-gray1);
+    color: #999;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
@@ -68,21 +67,20 @@
   align-items: center;
   flex: 0 0 auto;
   white-space: nowrap;
-  font-family: var(--font-secondary);
-  font-size: 1.25rem;
-  font-weight: 400;
+  font-family: var(--font-subheading);
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--pulsar-gray3);
+  letter-spacing: 0.03em;
+  color: #d0d0d0;
   padding: 0 20px;
 }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
-    content: "◆";
+    content: "•";
     margin-left: 20px;
-    color: var(--pulsar-gray1);
-    font-size: 0.4rem;
+    color: #666;
   }
 
   @media screen and (max-width: 767px) {
@@ -155,7 +153,7 @@
       "type": "text",
       "id": "heading",
       "label": "Section label",
-      "default": "The people that make it happen"
+      "default": "Our people"
     }
   ],
   "presets": [
