@@ -34,6 +34,9 @@ To achieve the mind-blowing animations and perfect execution required, you **MUS
 - **`/frontend-design`** — Use this alongside `shopify-theme-design` for high-end frontend polishing. Generates creative, polished code and UI design that avoids generic AI aesthetics.
 - **`/systematic-debugging`** — Use this strictly whenever a bug is encountered, a test failure happens, or a feature behaves unexpectedly. Do not guess; follow the rigorous scientific method this skill enforces to identify and resolve root causes.
 - **`/web-design-reviewer`** — Run this skill to visually inspect the site and detect layout breakages, responsive issues, and visual inconsistencies, making code-level fixes when problems are found.
+- **`/simplify`** — Use this to review changed code for reuse, quality, and efficiency to avoid bloated CSS and fragile logic (especially in complex components like Navbars).
+- **`/code-reviewer`** — Run this to conduct comprehensive code reviews on your own work.
+- **`/copywriting`** — Use this skill when modifying text and copy to ensure the website produces an emotional connection and doesn't feel "too AI".
 
 ---
 
@@ -134,8 +137,6 @@ All new Pulsar-specific files must be prefixed with `pulsar-`:
 - Assets: `assets/pulsar-animations.js`, `assets/pulsar-preloader.css`
 - CSS classes: `.pulsar-hero`, `.pulsar-stats`, `.pulsar-ribbon`
 
-This prevents conflicts with existing theme files and makes Pulsar-specific code instantly identifiable.
-
 ---
 
 ## Design System
@@ -155,19 +156,38 @@ Add these to `pulsar-enhancements.css` as `:root` variables:
   --pulsar-gray3: #C8C8CC;
   --pulsar-light1: #E8E8EC;
   --pulsar-white: #FFFFFF;
+  --pulsar-accent-purple1: #cdc2f5;
+  --pulsar-accent-purple2: #bba8ff;
+  --pulsar-accent-purple3: #c6b7fe;
 }
 ```
 
-**NO PURPLE. NO COLOR. Strictly monochromatic grayscale.**
+**Monochromatic base with small, deliberate accents of purple to show the legacy.**
 
-### Typography
+### Typography System (STRICT 3-FONT RULE)
 
-| Font | CSS Variable | Role | Source |
+Our typography reflects who we are: intentional, premium, and built to last. We operate a strict three-font system. No additional fonts are to be introduced.
+
+| Font | CSS Variable | Role & Rules | Source |
 |------|-------------|------|--------|
-| Monument Extended | `--font-display` | Hero text, page titles, large statements | Self-hosted: `MonumentExtended-Regular.woff2` (in assets/) |
-| Bebas Neue | `--font-secondary` | Section headers, navigation, accent text | Google Fonts |
-| Neue Haas Display | `--font-accent` | Subheadings, card titles where Monument is too wide | Self-hosted: `NeueHaasDisplayBold.woff2` (in assets/) |
-| Inter | `--font-body` | Paragraphs, descriptions, UI elements | Google Fonts or system |
+| **Monument Extended** | `--font-display` | Primary. Hero headlines, key brand statements. Bold, dominant, instantly recognizable. **ALWAYS in uppercase. Minimal use, maximum impact.** | Self-hosted |
+| **Bebas Neue** | `--font-secondary` | Secondary. Navigation, section headers, buttons, labels. Condensed, sharp, competitive. | Google Fonts |
+| **Inter** | `--font-body` | Body. All paragraphs, interface text. Modern, highly readable. | Google Fonts |
+
+**System Rules:**
+- Hierarchy must be respected at all times.
+- Use spacing and weight for emphasis, not color or decoration.
+- Keep layouts clean, structured, and intentional. Typography is not decoration.
+
+### Premium Navbar Rules (Expert Developer Rules)
+
+The navigation bar MUST be transparent and MUST feel deliberate, expensive, and premium. A generic, default-looking UI is failure. You must exhibit "taste pressure".
+
+1. **Clear Hierarchy:** Avoid bloated CSS supporting every generic theme variant. Separate layout, interaction, and aesthetic logic.
+2. **Top-Level Links:** Need stronger spacing and letter-spacing discipline. Subdued non-hovered items, instant active states.
+3. **Hover States:** Links must have a brand signature (e.g. tight typography, centered animated underline), not random decoration. Do not rely solely on opacity fades.
+4. **Submenus:** Must have visual depth (subtle blur, border, shadow) and coordinated, controlled reveal motion. Do NOT make it feel mechanical.
+5. **Mobile Nav:** Must feel touch-native. Rounded pills, snap behavior, hidden scrollbars, and definitive current-page styling.
 
 ### Animation Rules
 
