@@ -502,3 +502,11 @@ Before moving to the next phase, verify:
 
 *Team Pulsar — CLAUDE.md — March 2026*
 *Read PRD.md and brand-positioning-document.md before ANY work.*
+
+---
+
+## Continuous Improvement (MANDATORY)
+
+After any correction from me, add an entry to `tasks/lessons.md`. 
+Format: `[date] | what went wrong | rule to follow next time`. 
+Read `tasks/lessons.md` at the start of **every** session and apply every rule before touching any code.
