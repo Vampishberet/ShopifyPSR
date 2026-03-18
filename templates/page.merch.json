@@ -74,7 +74,7 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_card_gallery_6mKhdQ": {
+            "product_card_gallery_NH6Vax": {
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
@@ -140,7 +140,7 @@
             }
           },
           "block_order": [
-            "product_card_gallery_6mKhdQ",
+            "product_card_gallery_NH6Vax",
             "product_title_C8HriF",
             "price_UqCQMT"
           ]
