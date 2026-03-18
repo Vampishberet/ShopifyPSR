@@ -4,62 +4,30 @@
       <p class="pulsar-stats__section-label pulsar-reveal">{{ section.settings.label }}</p>
     {%- endif -%}
 
-    <div class="pulsar-stats__grid">
-      <div class="pulsar-stats__item pulsar-reveal">
-        <div class="pulsar-stats__number">
-          <span
-            data-pulsar-counter="2"
-            data-pulsar-decimals="0"
-            data-pulsar-suffix="M+"
-            data-pulsar-duration="2000"
-          >0M+</span>
-        </div>
-        <p class="pulsar-stats__label">Combined Reach</p>
+    {%- if section.blocks.size > 0 -%}
+      <div class="pulsar-stats__grid pulsar-stats__grid--{{ section.blocks.size }}">
+        {%- for block in section.blocks -%}
+          {%- if forloop.first == false -%}
+            <div class="pulsar-stats__divider" aria-hidden="true"></div>
+          {%- endif -%}
+
+          <div class="pulsar-stats__item pulsar-reveal" {{ block.shopify_attributes }}>
+            <div class="pulsar-stats__number">
+              <span
+                data-pulsar-counter="{{ block.settings.value }}"
+                data-pulsar-decimals="{{ block.settings.decimals }}"
+                {% if block.settings.prefix != blank %}data-pulsar-prefix="{{ block.settings.prefix }}"{% endif %}
+                {% if block.settings.suffix != blank %}data-pulsar-suffix="{{ block.settings.suffix }}"{% endif %}
+                data-pulsar-duration="{{ block.settings.duration }}"
+              >{{ block.settings.prefix }}{{ block.settings.value }}{{ block.settings.suffix }}</span>
+            </div>
+            {%- if block.settings.label != blank -%}
+              <p class="pulsar-stats__label">{{ block.settings.label }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
       </div>
-
-      <div class="pulsar-stats__divider" aria-hidden="true"></div>
-
-      <div class="pulsar-stats__item pulsar-reveal">
-        <div class="pulsar-stats__number">
-          <span
-            data-pulsar-counter="125"
-            data-pulsar-decimals="0"
-            data-pulsar-prefix="$"
-            data-pulsar-suffix="K+"
-            data-pulsar-duration="2200"
-          >$0K+</span>
-        </div>
-        <p class="pulsar-stats__label">Prize Earnings</p>
-      </div>
-
-      <div class="pulsar-stats__divider" aria-hidden="true"></div>
-
-      <div class="pulsar-stats__item pulsar-reveal">
-        <div class="pulsar-stats__number">
-          <span
-            data-pulsar-counter="60"
-            data-pulsar-decimals="0"
-            data-pulsar-suffix="+"
-            data-pulsar-duration="1800"
-          >0+</span>
-        </div>
-        <p class="pulsar-stats__label">Members</p>
-      </div>
-
-      <div class="pulsar-stats__divider" aria-hidden="true"></div>
-
-      <div class="pulsar-stats__item pulsar-reveal">
-        <div class="pulsar-stats__number">
-          <span
-            data-pulsar-counter="5"
-            data-pulsar-decimals="0"
-            data-pulsar-suffix="+"
-            data-pulsar-duration="1500"
-          >0+</span>
-        </div>
-        <p class="pulsar-stats__label">Years Active</p>
-      </div>
-    </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -156,6 +124,7 @@
   #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(3) { transition-delay: 0.18s; }
   #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(5) { transition-delay: 0.26s; }
   #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(7) { transition-delay: 0.34s; }
+  #pulsar-stats-{{ section.id }} .pulsar-stats__item:nth-child(9) { transition-delay: 0.42s; }
 
   @media (max-width: 989px) {
     #pulsar-stats-{{ section.id }} .pulsar-stats__number {
@@ -212,6 +181,7 @@
   "name": "Pulsar Stats Counter",
   "tag": "div",
   "class": "pulsar-section",
+  "max_blocks": 5,
   "settings": [
     {
       "type": "text",
@@ -220,10 +190,107 @@
       "default": "By the numbers"
     }
   ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "number",
+          "id": "value",
+          "label": "Number value",
+          "default": 0,
+          "info": "The target number the counter animates to"
+        },
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "Prefix",
+          "placeholder": "e.g. $",
+          "info": "Shown before the number (e.g. $ for currency)"
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Suffix",
+          "placeholder": "e.g. M+ or K+",
+          "info": "Shown after the number (e.g. M+, K+, +)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "placeholder": "e.g. Combined Reach"
+        },
+        {
+          "type": "range",
+          "id": "decimals",
+          "label": "Decimal places",
+          "min": 0,
+          "max": 2,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "duration",
+          "label": "Count duration (ms)",
+          "min": 500,
+          "max": 4000,
+          "step": 100,
+          "default": 2000,
+          "info": "How long the number counts up in milliseconds"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "Pulsar Stats Counter",
-      "category": "Pulsar"
+      "category": "Pulsar",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": 2,
+            "suffix": "M+",
+            "label": "Combined Reach",
+            "decimals": 0,
+            "duration": 2000
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": 125,
+            "prefix": "$",
+            "suffix": "K+",
+            "label": "Prize Earnings",
+            "decimals": 0,
+            "duration": 2200
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": 60,
+            "suffix": "+",
+            "label": "Members",
+            "decimals": 0,
+            "duration": 1800
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": 5,
+            "suffix": "+",
+            "label": "Years Active",
+            "decimals": 0,
+            "duration": 1500
+          }
+        }
+      ]
     }
   ]
 }

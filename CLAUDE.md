@@ -59,6 +59,37 @@ PSR/
 └── locales/                    ← Translations — DO NOT TOUCH
 ```
 
+### Motion & JS Architecture Rules (STRICT — added v3.0)
+
+These rules were established after an architecture audit. Do not violate them.
+
+#### Single Ownership — one file per feature:
+- `pulsar-animations.js` is the **sole owner** of all reveal logic: `.pulsar-reveal`, `.pulsar-heading-reveal`, `.pulsar-stagger-group`, stat counters, scroll animations.
+- `pulsar-enhancements.js` owns only: Lenis init, header scroll class, GSAP defaults. It must **never** contain reveal or counter logic.
+- If a new motion feature is added, assign it to exactly one file. Document the owner with a comment at the top of that file.
+
+#### Shopify Editor Safety (mandatory for all custom JS):
+- Every JS block that creates animation, ticker, or DOM-interactive behavior **must** handle `shopify:section:load` and `shopify:section:unload` events.
+- On `shopify:section:load`: re-initialize the feature scoped to `e.target` (the reloaded section element). Reset any init-guard flags so re-animation works.
+- On `shopify:section:unload`: destroy rAF loops (`cancelAnimationFrame`), kill `ScrollTrigger` instances whose `.trigger` lives inside the section, and remove all event listeners added by that section.
+- Never use global `document.querySelectorAll` inside a section's JS without scoping to `section.id`. Prefer `sectionElement.querySelectorAll(...)`.
+
+#### No Hardcoded Content in Sections:
+- Any content that a merchant might need to change (names, stats, labels, values, speeds) **must** be a Shopify `settings` or `blocks` entry in the section schema.
+- The only exception: content that is permanently fixed brand copy (e.g. legal text, trademarked taglines) can be hardcoded with a comment explaining why.
+- Member names → textarea setting (comma-separated). Stats → blocks. Labels → text settings.
+
+#### Motion Dependency Discipline:
+- Lenis is a **declared intentional dependency** for premium inertia scroll feel on desktop. It is not optional until explicitly removed.
+- If Lenis is removed, remove it from `theme.liquid` AND from `pulsar-enhancements.js` AND update this rule.
+- Do not add new third-party motion libraries without updating this section and documenting the ROI.
+
+#### Section-Scoped Selectors:
+- Prefer `#pulsar-section-{{ section.id }} .my-class` CSS selectors to prevent style bleed between sections.
+- All custom `<style>` blocks inside sections must be scoped to `#pulsar-{{ section.id }}` or `#pulsar-ticker-{{ section.id }}` etc.
+
+---
+
 ### Critical Rules
 
 #### NEVER do these:

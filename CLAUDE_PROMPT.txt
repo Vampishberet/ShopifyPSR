@@ -1,0 +1,31 @@
+# MASTER PROMPT FOR CLAUDE CODE
+
+Copy and paste the text below into your Claude Code terminal to execute the perfect build:
+
+--------------------------------------------------------------------------------
+
+/model claude-sonnet-4-6
+
+Hello Claude! We are building the Team Pulsar esports website as a premium, cinematic Shopify theme. I need you to act as the Master Architect and execute this flawlessly with zero mistakes.
+
+**STEP 1: INITIALIZE CONTEXT**
+Your absolute source of truth is `CLAUDE.md`. Read it completely right now. Also, read `PRD.md` to understand the features, design system, and phased execution plan. 
+
+**STEP 2: ACTIVATE SKILLS**
+You have access to powerful custom skills. You MUST use them proactively throughout this session:
+- Use `/ui-ux-pro-max` and `/frontend-design` for all UI components to guarantee mind-blowing animations, perfect spacing, and a non-basic, premium feel. 
+- Use `/systematic-debugging` if any bug occurs, a test fails, or things don't look right.
+- Use `/web-design-reviewer` to actively inspect the layout for breakages.
+- Use our custom `/shopify-theme-design` skill to adhere to Team Pulsar's specific aesthetic constraints.
+
+**STEP 3: EXECUTE MISSION**
+The homepage is currently lacking the cinematic animations and polish outlined in the PRD, and there are some skipped features/bugs. 
+
+Your task is to officially execute **Phase 2: Homepage**. 
+1. Build ALL the missing `pulsar-*` sections exactly as defined in `CLAUDE.md`.
+2. Ensure every single animation (GSAP, ScrollTrigger, counters, infinite ribbons) is implemented perfectly according to the PRD. 
+3. Wire them up in `templates/index.json` ONLY AFTER the section files exist.
+
+Before you write any code, give me a quick 1-sentence confirmation that you've read `CLAUDE.md` and understand the skills you must use, then immediately begin executing the work.
+
+--------------------------------------------------------------------------------

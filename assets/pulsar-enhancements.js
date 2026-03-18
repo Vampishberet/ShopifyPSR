@@ -1,13 +1,11 @@
 /* ============================================
-   PULSAR ENHANCEMENTS v2.1
-   GSAP init · Lenis smooth scroll · Header scroll · Scroll reveals
-   NOTE: Stat counters are owned by pulsar-animations.js.
+   PULSAR ENHANCEMENTS v3.0
+   Scope: Lenis smooth scroll · Header scroll behaviour · GSAP defaults
+   NOT in scope: reveal logic, stat counters — both owned by pulsar-animations.js.
    ============================================ */
 
 (function () {
   'use strict';
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ------------------------------------------
      Utility: wait for condition
@@ -27,10 +25,12 @@
 
   /* ------------------------------------------
      1. LENIS SMOOTH SCROLL
+     Intentional brand dependency — provides premium inertia scroll feel.
+     Desktop only. Tied into GSAP ticker when available.
   ------------------------------------------ */
   function initLenis() {
     if (typeof Lenis === 'undefined') return;
-    if (window.innerWidth < 768) return; // skip on mobile
+    if (window.innerWidth < 768) return; // mobile: native scroll is better
 
     var lenis = new Lenis({
       duration: 1.2,
@@ -60,7 +60,9 @@
   }
 
   /* ------------------------------------------
-     2. GSAP + SCROLLTRIGGER INIT
+     2. GSAP DEFAULTS
+     Sets global ScrollTrigger defaults. Registration is done by
+     pulsar-animations.js — safe to call registerPlugin twice.
   ------------------------------------------ */
   function initGSAP() {
     if (!window.gsap || !window.ScrollTrigger) return;
@@ -69,7 +71,7 @@
   }
 
   /* ------------------------------------------
-     4. HEADER SCROLL BEHAVIOUR
+     3. HEADER SCROLL BEHAVIOUR
   ------------------------------------------ */
   function initHeaderScroll() {
     var headerGroup = document.getElementById('header-group');
@@ -92,46 +94,12 @@
   }
 
   /* ------------------------------------------
-     5. SCROLL REVEALS (fallback — GSAP handles when loaded)
-  ------------------------------------------ */
-  function initScrollReveals() {
-    if (prefersReducedMotion) {
-      document.querySelectorAll('.pulsar-reveal').forEach(function (el) {
-        el.classList.add('is-visible');
-      });
-      return;
-    }
-
-    // If GSAP is ready, pulsar-animations.js handles reveals
-    if (window.gsap && window.ScrollTrigger) return;
-
-    var elements = document.querySelectorAll('.pulsar-reveal');
-    if (!elements.length) return;
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    elements.forEach(function (el) { obs.observe(el); });
-  }
-
-  /* ------------------------------------------
      INIT
+     Reveal logic is NOT here. pulsar-animations.js is the single
+     owner of all .pulsar-reveal and scroll animation behavior.
   ------------------------------------------ */
   function init() {
     initHeaderScroll();
-
-    if (prefersReducedMotion) {
-      document.querySelectorAll('.pulsar-reveal').forEach(function (el) {
-        el.classList.add('is-visible');
-      });
-      return;
-    }
 
     waitFor(
       function () { return window.gsap && window.ScrollTrigger; },
@@ -140,14 +108,10 @@
       }
     );
 
-    // Lenis
     waitFor(
       function () { return typeof Lenis !== 'undefined'; },
       initLenis
     );
-
-    // Fallback scroll reveals (if GSAP not loaded yet)
-    setTimeout(initScrollReveals, 300);
   }
 
   if (document.readyState === 'loading') {

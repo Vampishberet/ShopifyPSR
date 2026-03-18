@@ -1,0 +1,87 @@
+# EXECUTION BRIEF: Animation Architecture & Bug Fixes
+
+@claude Execute the following implementation brief exactly as written. Do not deviate. Do not redesign the visual brand.
+
+## 1. OBJECTIVE
+- Audit and fix broken or fragile animation behavior in the Shopify theme.
+- Standardize animation ownership so there is one reliable implementation path for hero reveal, stat counters, scroll reveals, and ticker behavior.
+- Remove fake or duplicate animation logic.
+
+## 2. CURRENT PROBLEM
+- **Hero animation contract is broken:**
+  - `assets/pulsar-animations.js` expects `window.pulsarRevealHero()` to exist.
+  - `sections/pulsar-hero.liquid` does not actually define that function.
+  - Result: intended premium hero reveal is not implemented; fallback fade is doing the work.
+- **Stat counters are implemented in multiple places:**
+  - `assets/pulsar-enhancements.js` contains global counter logic.
+  - `sections/pulsar-stats-counter.liquid` also contains inline counter logic.
+  - Result: duplicate ownership, race-condition risk, inconsistent behavior.
+- **Stats selector mismatch:**
+  - `assets/pulsar-animations.js` targets `#pulsar-stats`.
+  - Actual section id is `#pulsar-stats-{{ section.id }}`.
+  - Result: dedicated stats section animation block never matches the real section.
+- **Member ribbon ticker lacks lifecycle cleanup:**
+  - `sections/pulsar-member-ribbon.liquid` starts a perpetual `requestAnimationFrame` loop and adds listeners.
+  - No teardown logic for Shopify editor section unload/re-render.
+  - Result: possible duplicate loops/listeners in theme editor.
+- **Marquee depends on external JS:**
+  - Uses `marquee.js` and `var(--marquee-speed)`, but speed is not defined in the section itself.
+  - Custom CSS in Shopify is insufficient for these behavior bugs because these problems require JavaScript, section scoping, and Shopify lifecycle handling.
+
+## 3. IMPLEMENTATION STRATEGY
+- Make `assets/pulsar-animations.js` the single source of truth for motion behavior.
+- Keep `assets/pulsar-enhancements.js` limited to non-animation enhancements only.
+- Remove inline JS behavior from sections where a global controller is more reliable.
+- Implement real hero animation behavior instead of fallback pretending (either define `window.pulsarRevealHero()` or move logic entirely to global scope).
+- Fix stats targeting by using section-scoped selectors.
+- Add proper Shopify editor lifecycle safety for ticker animations (`shopify:section:unload`).
+
+## 4. FILE INSTRUCTIONS
+
+**1. `assets/pulsar-animations.js`**
+- Action: Patch
+- Purpose: Make this the only animation controller. Fix stats selector logic. Own hero reveal and counter triggering cleanly. Support reduced motion.
+
+**2. `assets/pulsar-enhancements.js`**
+- Action: Patch
+- Purpose: Remove stat counter logic. Remove any animation ownership that duplicates `pulsar-animations.js`. Keep only UI utility enhancements.
+
+**3. `sections/pulsar-stats-counter.liquid`**
+- Action: Patch
+- Purpose: Keep Liquid structure and data attributes. Remove inline JavaScript counter/reveal logic. Ensure markup is animation-ready for the global controller.
+
+**4. `sections/pulsar-hero.liquid`**
+- Action: Patch
+- Purpose: Implement hero reveal fully (either via `window.pulsarRevealHero()` or data attributes). Remove misleading line-mask comments. Keep reduced-motion-safe initial states.
+
+**5. `sections/pulsar-member-ribbon.liquid`**
+- Action: Patch
+- Purpose: Make ticker lifecycle-safe. Prevent duplicate `requestAnimationFrame` loops. Add `shopify:section:unload` listener to clean up the loop in the editor.
+
+**6. `sections/marquee.liquid`**
+- Action: Review and Patch (only if needed)
+- Purpose: Document dependency on `marquee.js`. Ensure no fake assumption that CSS alone controls speed.
+
+## 5. CLAUDE EXECUTION RULES
+- Do not redesign the visual brand.
+- Do not keep duplicate animation ownership.
+- Scope all JS to real section elements (use actual rendered markup selectors).
+- Preserve valid Shopify Liquid and valid schema.
+- Keep mobile behavior intact. Respect `prefers-reduced-motion`.
+- If using IntersectionObserver, implement it fully and safely.
+- Provide a cleanup path (`shopify:section:unload`) for Shopify editor reloads.
+
+## 6. ACCEPTANCE CRITERIA
+- Hero elements animate reliably on storefront load.
+- Stat counters animate exactly once when entering viewport, controlled by one system only.
+- Stats animation selectors match the actual rendered section.
+- Member ribbon animates continuously without stacking duplicate loops in Shopify editor.
+- No console errors exist. Section remains editable in customizer.
+
+## 7. OUTPUT TO GENERATE
+- A minimal patch set for: `pulsar-animations.js`, `pulsar-enhancements.js`, `pulsar-stats-counter.liquid`, `pulsar-hero.liquid`, `pulsar-member-ribbon.liquid`.
+- Return full replacement code only for files where partial patching would be fragile.
+
+## 8. OPTIONAL WARNINGS
+- Shopify custom CSS cannot fix JS-driven behaviors like counters.
+- Storefront API token is exposed in `CLAUDE.md` and should be rotated outside this task.

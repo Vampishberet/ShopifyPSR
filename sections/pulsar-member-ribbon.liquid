@@ -1,8 +1,16 @@
 {%- liquid
-  assign members = 'PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnolia,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster' | split: ','
+  assign member_names = section.settings.member_names | strip
+  assign members = member_names | split: ','
+  assign ticker_speed = section.settings.ticker_speed | default: 0.7
+  assign pause_on_hover = section.settings.pause_on_hover
 -%}
 
-<section class="pulsar-ticker-section" id="pulsar-ticker-{{ section.id }}">
+<section
+  class="pulsar-ticker-section"
+  id="pulsar-ticker-{{ section.id }}"
+  data-ticker-speed="{{ ticker_speed }}"
+  data-pause-on-hover="{{ pause_on_hover }}"
+>
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
@@ -11,13 +19,19 @@
     <div class="pulsar-ticker-track">
       <div class="pulsar-ticker-group">
         {%- for member in members -%}
-          <span class="pulsar-ticker-item">{{ member }}</span>
+          {%- assign name = member | strip -%}
+          {%- if name != blank -%}
+            <span class="pulsar-ticker-item">{{ name }}</span>
+          {%- endif -%}
         {%- endfor -%}
       </div>
 
       <div class="pulsar-ticker-group" aria-hidden="true">
         {%- for member in members -%}
-          <span class="pulsar-ticker-item">{{ member }}</span>
+          {%- assign name = member | strip -%}
+          {%- if name != blank -%}
+            <span class="pulsar-ticker-item">{{ name }}</span>
+          {%- endif -%}
         {%- endfor -%}
       </div>
     </div>
@@ -63,20 +77,20 @@
     align-items: center;
   }
 
-#pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
-  display: inline-flex;
-  align-items: center;
-  flex: 0 0 auto;
-  white-space: nowrap;
-  font-family: var(--font-secondary);
-  font-size: 1.25rem;
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--pulsar-gray3);
-  padding: 0 20px;
-}
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-family: var(--font-secondary);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--pulsar-gray3);
+    padding: 0 20px;
+  }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
     content: "✦";
@@ -95,68 +109,102 @@
       margin-left: 16px;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
 </style>
 
 <script>
   (function() {
     var sectionId = '{{ section.id }}';
-    var section = document.getElementById('pulsar-ticker-' + sectionId);
-    if (!section) return;
 
-    var track = section.querySelector('.pulsar-ticker-track');
-    var firstGroup = section.querySelector('.pulsar-ticker-group');
-    if (!track || !firstGroup) return;
+    function initTicker() {
+      var section = document.getElementById('pulsar-ticker-' + sectionId);
+      if (!section) return;
 
-    var x = 0;
-    var speed = 0.7;
-    var groupWidth = firstGroup.offsetWidth;
-    var paused = false;
-    var rafId = null;
+      var track = section.querySelector('.pulsar-ticker-track');
+      var firstGroup = section.querySelector('.pulsar-ticker-group');
+      if (!track || !firstGroup) return;
 
-    function measure() {
-      groupWidth = firstGroup.offsetWidth;
-    }
+      // Read configurable values from data attributes (set via schema)
+      var speed = parseFloat(section.dataset.tickerSpeed) || 0.7;
+      var pauseOnHover = section.dataset.pauseOnHover !== 'false';
 
-    function animate() {
-      if (!paused) {
-        x -= speed;
-        if (Math.abs(x) >= groupWidth) {
-          x = 0;
+      var x = 0;
+      var groupWidth = firstGroup.offsetWidth;
+      var paused = false;
+      var rafId = null;
+
+      // Respect prefers-reduced-motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      function measure() {
+        groupWidth = firstGroup.offsetWidth;
+      }
+
+      function animate() {
+        if (!paused) {
+          x -= speed;
+          if (Math.abs(x) >= groupWidth) {
+            x = 0;
+          }
+          track.style.transform = 'translate3d(' + x + 'px, 0, 0)';
         }
-        track.style.transform = 'translate3d(' + x + 'px, 0, 0)';
+        rafId = requestAnimationFrame(animate);
       }
-      rafId = requestAnimationFrame(animate);
+
+      function onMouseEnter() { if (pauseOnHover) paused = true; }
+      function onMouseLeave() { if (pauseOnHover) paused = false; }
+
+      section.addEventListener('mouseenter', onMouseEnter);
+      section.addEventListener('mouseleave', onMouseLeave);
+
+      window.addEventListener('resize', measure);
+
+      // Shopify editor: re-measure on section changes
+      function onSectionChange(e) {
+        measure();
+      }
+      document.addEventListener('shopify:section:load', onSectionChange);
+      document.addEventListener('shopify:section:reorder', onSectionChange);
+
+      // Shopify editor: destroy on section unload
+      function onUnload(e) {
+        if (e.detail && e.detail.sectionId !== sectionId) return;
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        section.removeEventListener('mouseenter', onMouseEnter);
+        section.removeEventListener('mouseleave', onMouseLeave);
+        window.removeEventListener('resize', measure);
+        document.removeEventListener('shopify:section:load', onSectionChange);
+        document.removeEventListener('shopify:section:reorder', onSectionChange);
+        document.removeEventListener('shopify:section:unload', onUnload);
+      }
+
+      document.addEventListener('shopify:section:unload', onUnload);
+
+      measure();
+      animate();
     }
 
-    function onMouseEnter() { paused = true; }
-    function onMouseLeave() { paused = false; }
-
-    section.addEventListener('mouseenter', onMouseEnter);
-    section.addEventListener('mouseleave', onMouseLeave);
-
-    window.addEventListener('resize', measure);
-    document.addEventListener('shopify:section:load', measure);
-    document.addEventListener('shopify:section:reorder', measure);
-
-    // Shopify editor lifecycle: cancel the loop when this section is removed
-    function onUnload(e) {
-      if (e.detail && e.detail.sectionId !== sectionId) return;
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      section.removeEventListener('mouseenter', onMouseEnter);
-      section.removeEventListener('mouseleave', onMouseLeave);
-      window.removeEventListener('resize', measure);
-      document.removeEventListener('shopify:section:load', measure);
-      document.removeEventListener('shopify:section:reorder', measure);
-      document.removeEventListener('shopify:section:unload', onUnload);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTicker);
+    } else {
+      initTicker();
     }
 
-    document.addEventListener('shopify:section:unload', onUnload);
-
-    measure();
-    animate();
+    // Re-init if this section is reloaded in the editor
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail && e.detail.sectionId === sectionId) {
+        initTicker();
+      }
+    });
   })();
 </script>
 
@@ -169,6 +217,29 @@
       "id": "heading",
       "label": "Section label",
       "default": "The people that make it happen"
+    },
+    {
+      "type": "textarea",
+      "id": "member_names",
+      "label": "Member names",
+      "info": "Comma-separated list of member names. Each name scrolls in the ribbon.",
+      "default": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster"
+    },
+    {
+      "type": "range",
+      "id": "ticker_speed",
+      "label": "Ticker speed",
+      "min": 0.2,
+      "max": 3.0,
+      "step": 0.1,
+      "default": 0.7,
+      "info": "Pixels moved per animation frame. Higher = faster scroll."
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
     }
   ],
   "presets": [

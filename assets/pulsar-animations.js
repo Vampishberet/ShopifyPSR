@@ -1,7 +1,7 @@
 /* ============================================================
-   PULSAR ANIMATIONS v2.1
-   Preloader exit → Hero entrance → ScrollTrigger reveals → Stat counters
-   Single source of truth for all motion behavior.
+   PULSAR ANIMATIONS v3.0
+   Single owner of: reveal logic, stat counters, scroll animations.
+   Shopify editor lifecycle safe — supports section load/unload/reorder.
    ============================================================ */
 
 // @ts-nocheck
@@ -110,9 +110,7 @@
 
   /* ------------------------------------------
      2. HERO ENTRANCE
-     Animates [data-pulsar-hero-element] elements
-     defined in pulsar-hero.liquid. No external
-     function contract required.
+     Animates [data-pulsar-hero-element] elements.
   ------------------------------------------ */
   function revealHero() {
     var elements = document.querySelectorAll('[data-pulsar-hero-element]');
@@ -132,12 +130,19 @@
 
   /* ------------------------------------------
      3. SCROLL ANIMATIONS
+     Single owner of all .pulsar-reveal, .pulsar-heading-reveal,
+     .pulsar-stagger-group, counter, video, partner, CTA, esports
+     reveal animations.
+
+     root: HTMLElement | Document — scope for selectors.
+     Pass a section element on shopify:section:load re-init.
   ------------------------------------------ */
-  function initScrollAnimations() {
+  function initScrollAnimationsIn(root) {
+    root = root || document;
     if (!window.gsap || !window.ScrollTrigger) return;
 
     /* Section headings — slide up 40px */
-    gsap.utils.toArray('.pulsar-heading-reveal').forEach(function (el) {
+    gsap.utils.toArray('.pulsar-heading-reveal', root).forEach(function (el) {
       gsap.from(el, {
         y: 40,
         opacity: 0,
@@ -148,7 +153,7 @@
     });
 
     /* Stagger groups (product cards, player cards) */
-    gsap.utils.toArray('.pulsar-stagger-group').forEach(function (group) {
+    gsap.utils.toArray('.pulsar-stagger-group', root).forEach(function (group) {
       var items = group.querySelectorAll('.pulsar-stagger-item');
       if (!items.length) return;
       gsap.from(items, {
@@ -161,8 +166,8 @@
       });
     });
 
-    /* Generic .pulsar-reveal */
-    gsap.utils.toArray('.pulsar-reveal').forEach(function (el) {
+    /* Generic .pulsar-reveal — single owner, no duplicate in enhancements.js */
+    gsap.utils.toArray('.pulsar-reveal', root).forEach(function (el) {
       if (el.classList.contains('is-visible')) return;
       gsap.from(el, {
         y: 28,
@@ -179,7 +184,8 @@
     });
 
     /* Stats sections — scoped to real rendered section ids */
-    document.querySelectorAll('[id^="pulsar-stats-"]').forEach(function (statsSection) {
+    var statsRoot = root === document ? document : root;
+    statsRoot.querySelectorAll('[id^="pulsar-stats-"]').forEach(function (statsSection) {
       var statItems = statsSection.querySelectorAll('.pulsar-stats__item');
       if (!statItems.length) return;
       gsap.from(statItems, {
@@ -193,7 +199,7 @@
     });
 
     /* Video showcase — scale in */
-    var videoItems = document.querySelectorAll('.pulsar-videos__item');
+    var videoItems = (root === document ? document : root).querySelectorAll('.pulsar-videos__item');
     if (videoItems.length) {
       gsap.from(videoItems, {
         scale: 0.96,
@@ -210,7 +216,7 @@
     }
 
     /* Partner logos — stagger fade up */
-    var partnerLogos = document.querySelectorAll('.pulsar-partners__logo-link');
+    var partnerLogos = (root === document ? document : root).querySelectorAll('.pulsar-partners__logo-link');
     if (partnerLogos.length) {
       gsap.from(partnerLogos, {
         y: 20,
@@ -227,7 +233,7 @@
     }
 
     /* CTA heading — dramatic scale entrance */
-    var ctaHeading = document.querySelector('.pulsar-cta__heading');
+    var ctaHeading = (root === document ? document : root).querySelector('.pulsar-cta__heading');
     if (ctaHeading) {
       gsap.from(ctaHeading, {
         scale: 0.94,
@@ -240,7 +246,7 @@
     }
 
     /* Esports tabs — stagger entrance */
-    var esTabs = document.querySelectorAll('.pulsar-esports-titles__tab');
+    var esTabs = (root === document ? document : root).querySelectorAll('.pulsar-esports-titles__tab');
     if (esTabs.length) {
       var esTabList = esTabs[0].closest('.pulsar-esports-titles__tabs') || esTabs[0];
       gsap.from(esTabs, {
@@ -256,21 +262,27 @@
 
   /* ------------------------------------------
      4. STAT COUNTERS
-     Single owner. pulsar-enhancements.js and
-     pulsar-stats-counter.liquid contain no counter logic.
+     Single owner. pulsar-enhancements.js contains no counter logic.
      data-pulsar-duration is in milliseconds.
+
+     root: HTMLElement | Document — scope for counter selectors.
   ------------------------------------------ */
-  function initStatCounters() {
-    var counters = document.querySelectorAll('[data-pulsar-counter]');
+  function initStatCountersIn(root) {
+    root = root || document;
+    var counters = root.querySelectorAll('[data-pulsar-counter]');
     if (!counters.length) return;
 
     counters.forEach(function (el) {
+      // Skip already-initialized counters to prevent duplication on re-init
+      if (el.dataset.pulsarCounterInit) return;
+      el.dataset.pulsarCounterInit = '1';
+
       var target     = parseFloat(el.dataset.pulsarCounter || '0');
       var decimals   = parseInt(el.dataset.pulsarDecimals  || '0', 10);
       var prefix     = el.dataset.pulsarPrefix  || '';
       var suffix     = el.dataset.pulsarSuffix  || '';
       var durationMs = parseInt(el.dataset.pulsarDuration  || '2000', 10);
-      var durationS  = durationMs / 1000; // GSAP uses seconds
+      var durationS  = durationMs / 1000;
 
       function format(val) {
         return prefix + (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
@@ -316,6 +328,54 @@
   }
 
   /* ------------------------------------------
+     5. SHOPIFY EDITOR SECTION LIFECYCLE
+     Re-init animations when a section is loaded/reloaded in the editor.
+     Kill ScrollTriggers when a section is removed.
+  ------------------------------------------ */
+  document.addEventListener('shopify:section:load', function (e) {
+    var sectionEl = e.target;
+    if (!sectionEl) return;
+
+    // Reset init flags on counters inside reloaded section so they re-animate
+    sectionEl.querySelectorAll('[data-pulsar-counter-init]').forEach(function (el) {
+      delete el.dataset.pulsarCounterInit;
+    });
+
+    if (prefersReducedMotion) {
+      sectionEl.querySelectorAll('.pulsar-reveal, [data-pulsar-hero-element]').forEach(function (el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.classList.add('is-visible');
+      });
+      initStatCountersIn(sectionEl);
+      return;
+    }
+
+    if (window.gsap && window.ScrollTrigger) {
+      initScrollAnimationsIn(sectionEl);
+      initStatCountersIn(sectionEl);
+    } else {
+      // GSAP not yet loaded — reveal immediately so editor doesn't show invisible content
+      sectionEl.querySelectorAll('.pulsar-reveal').forEach(function (el) {
+        el.classList.add('is-visible');
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  });
+
+  document.addEventListener('shopify:section:unload', function (e) {
+    var sectionEl = e.target;
+    if (!sectionEl || !window.ScrollTrigger) return;
+    // Kill any ScrollTriggers whose trigger element lives inside this section
+    ScrollTrigger.getAll().forEach(function (trigger) {
+      if (trigger.trigger && sectionEl.contains(trigger.trigger)) {
+        trigger.kill();
+      }
+    });
+  });
+
+  /* ------------------------------------------
      INIT
   ------------------------------------------ */
   function init() {
@@ -327,7 +387,7 @@
         el.style.transform = 'none';
         el.classList.add('is-visible');
       });
-      initStatCounters(); // shows final values immediately
+      initStatCountersIn(document);
       return;
     }
 
@@ -336,8 +396,8 @@
       function () {
         gsap.registerPlugin(ScrollTrigger);
         runPreloader();
-        initScrollAnimations();
-        initStatCounters();
+        initScrollAnimationsIn(document);
+        initStatCountersIn(document);
       }
     );
 
@@ -350,7 +410,7 @@
           el.style.opacity   = '1';
           el.style.transform = 'none';
         });
-        initStatCounters(); // will use IntersectionObserver fallback
+        initStatCountersIn(document); // uses IntersectionObserver fallback
       }
     }, 5000);
   }

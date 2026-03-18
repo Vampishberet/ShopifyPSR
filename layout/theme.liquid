@@ -143,6 +143,15 @@
     {% endif %}
 
     {% comment %} ── Pulsar Scripts (deferred — load after all native Shopify JS) ── {% endcomment %}
+    {% comment %}
+      Dependency rationale:
+      - GSAP + ScrollTrigger: required for all reveal animations, stat counters, preloader exit. Non-negotiable.
+      - Lenis: intentional brand dependency for premium inertia scroll on desktop only.
+                Desktop-only (skipped under 768px). Tied into GSAP ticker in pulsar-enhancements.js.
+                Remove only if smooth scroll conflicts arise; replacing it requires auditing Lenis-dependent ScrollTrigger sync.
+      - pulsar-enhancements.js: Lenis init, GSAP defaults, header scroll class.
+      - pulsar-animations.js: single owner of all reveals, stat counters, section lifecycle.
+    {% endcomment %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
     <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer="defer"></script>
