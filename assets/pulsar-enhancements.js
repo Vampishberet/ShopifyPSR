@@ -1,7 +1,7 @@
 /* ============================================
-   PULSAR ENHANCEMENTS v2.0
-   GSAP init · Lenis smooth scroll · Custom cursor
-   Stat counters · Header scroll · Scroll reveals
+   PULSAR ENHANCEMENTS v2.1
+   GSAP init · Lenis smooth scroll · Header scroll · Scroll reveals
+   NOTE: Stat counters are owned by pulsar-animations.js.
    ============================================ */
 
 (function () {
@@ -92,67 +92,7 @@
   }
 
   /* ------------------------------------------
-     5. STAT COUNTERS
-  ------------------------------------------ */
-  var countersInitialized = false;
-
-  function initStatCounters() {
-    if (countersInitialized) return;
-    countersInitialized = true;
-
-    var counters = document.querySelectorAll('[data-pulsar-counter]');
-    if (!counters.length) return;
-
-    counters.forEach(function (el) {
-      var target   = parseFloat(el.dataset.pulsarCounter);
-      var suffix   = el.dataset.pulsarSuffix   || '';
-      var prefix   = el.dataset.pulsarPrefix   || '';
-      var duration = parseFloat(el.dataset.pulsarDuration) || 2;
-      var isInt    = Number.isInteger(target);
-
-      // If reduced motion — just show final value immediately
-      if (prefersReducedMotion) {
-        el.textContent = prefix + target + suffix;
-        return;
-      }
-
-      if (window.gsap && window.ScrollTrigger) {
-        var obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: duration,
-          ease: 'power1.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            once: true,
-          },
-          onUpdate: function () {
-            el.textContent = prefix + (isInt ? Math.round(obj.val) : obj.val.toFixed(1)) + suffix;
-          },
-        });
-      } else {
-        // Fallback: IntersectionObserver count-up
-        var obs = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            obs.unobserve(el);
-            var startTime = Date.now();
-            var ms = duration * 1000;
-            (function tick() {
-              var p = Math.min((Date.now() - startTime) / ms, 1);
-              el.textContent = prefix + Math.round(target * p) + suffix;
-              if (p < 1) requestAnimationFrame(tick);
-            })();
-          });
-        }, { threshold: 0.3 });
-        obs.observe(el);
-      }
-    });
-  }
-
-  /* ------------------------------------------
-     6. SCROLL REVEALS (fallback — GSAP handles when loaded)
+     5. SCROLL REVEALS (fallback — GSAP handles when loaded)
   ------------------------------------------ */
   function initScrollReveals() {
     if (prefersReducedMotion) {
@@ -190,19 +130,15 @@
       document.querySelectorAll('.pulsar-reveal').forEach(function (el) {
         el.classList.add('is-visible');
       });
-      initStatCounters(); // show final values immediately
       return;
     }
 
-    // Try GSAP-powered counters first, fall back after 4s
     waitFor(
       function () { return window.gsap && window.ScrollTrigger; },
       function () {
         initGSAP();
-        initStatCounters();
       }
     );
-    setTimeout(initStatCounters, 4000); // fallback if CDN is slow
 
     // Lenis
     waitFor(

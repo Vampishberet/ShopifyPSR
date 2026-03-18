@@ -1,5 +1,10 @@
 
 
+{%- comment -%}
+  marquee.liquid depends on assets/marquee.js (custom element: marquee-component).
+  marquee.js reads data-speed-factor and sets --marquee-speed on the element at runtime.
+  The CSS animation below uses var(--marquee-speed) which is JS-driven — CSS alone cannot control speed.
+{%- endcomment -%}
 <script
   src="{{ 'marquee.js' | asset_url }}"
   type="module"

@@ -81,6 +81,7 @@ Loaded in `theme.liquid` before `</body>`:
 
 ## Hard Rules
 
+- **Strictly use IntersectionObserver** for scroll-triggered events (like Counters or Autoplay videos). NEVER use raw scroll event listeners or blind `requestAnimationFrame` loops for viewport detection.
 - **Only animate `transform` and `opacity`** — never animate width, height, top, left, margin, padding
 - **Never use `transition-all`** — always target specific properties
 - **Use `power2.out`** for entrances, `power2.inOut` for transitions

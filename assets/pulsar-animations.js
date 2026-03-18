@@ -1,22 +1,18 @@
 /* ============================================================
-   PULSAR ANIMATIONS v2.0
-   Preloader exit → Hero entrance → ScrollTrigger reveals
+   PULSAR ANIMATIONS v2.1
+   Preloader exit → Hero entrance → ScrollTrigger reveals → Stat counters
+   Single source of truth for all motion behavior.
    ============================================================ */
 
 // @ts-nocheck
 
 (function () {
   'use strict';
-  var ScrollTrigger = window.ScrollTrigger;
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /**
    * Utility: poll until condition or timeout
-   * @param {() => boolean} condition 
-   * @param {() => void} cb 
-   * @param {number} [interval=50] 
-   * @param {number} [timeout=6000] 
    */
   function waitFor(condition, cb, interval, timeout) {
     interval = interval || 50;
@@ -114,17 +110,11 @@
 
   /* ------------------------------------------
      2. HERO ENTRANCE
-     Calls window.pulsarRevealHero() defined in
-     pulsar-hero.liquid (line-mask reveal).
-     Falls back to data-pulsar-hero-element.
+     Animates [data-pulsar-hero-element] elements
+     defined in pulsar-hero.liquid. No external
+     function contract required.
   ------------------------------------------ */
   function revealHero() {
-    // New hero: defined inline in pulsar-hero.liquid
-    if (typeof window.pulsarRevealHero === 'function') {
-      window.pulsarRevealHero();
-      return;
-    }
-    // Legacy fallback: data-pulsar-hero-element
     var elements = document.querySelectorAll('[data-pulsar-hero-element]');
     if (!elements.length || prefersReducedMotion) {
       elements.forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'none'; });
@@ -135,6 +125,8 @@
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.18, delay: 0.1 }
       );
+    } else {
+      elements.forEach(function (el) { el.style.opacity = '1'; });
     }
   }
 
@@ -186,21 +178,19 @@
       });
     });
 
-    /* Stats section — staggered stat items */
-    var statsSection = document.getElementById('pulsar-stats');
-    if (statsSection) {
+    /* Stats sections — scoped to real rendered section ids */
+    document.querySelectorAll('[id^="pulsar-stats-"]').forEach(function (statsSection) {
       var statItems = statsSection.querySelectorAll('.pulsar-stats__item');
-      if (statItems.length) {
-        gsap.from(statItems, {
-          y: 30,
-          opacity: 0,
-          duration: 0.6,
-          ease: 'power2.out',
-          stagger: 0.15,
-          scrollTrigger: { trigger: statsSection, start: 'top 80%', once: true }
-        });
-      }
-    }
+      if (!statItems.length) return;
+      gsap.from(statItems, {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        stagger: 0.15,
+        scrollTrigger: { trigger: statsSection, start: 'top 80%', once: true }
+      });
+    });
 
     /* Video showcase — scale in */
     var videoItems = document.querySelectorAll('.pulsar-videos__item');
@@ -265,16 +255,79 @@
   }
 
   /* ------------------------------------------
+     4. STAT COUNTERS
+     Single owner. pulsar-enhancements.js and
+     pulsar-stats-counter.liquid contain no counter logic.
+     data-pulsar-duration is in milliseconds.
+  ------------------------------------------ */
+  function initStatCounters() {
+    var counters = document.querySelectorAll('[data-pulsar-counter]');
+    if (!counters.length) return;
+
+    counters.forEach(function (el) {
+      var target     = parseFloat(el.dataset.pulsarCounter || '0');
+      var decimals   = parseInt(el.dataset.pulsarDecimals  || '0', 10);
+      var prefix     = el.dataset.pulsarPrefix  || '';
+      var suffix     = el.dataset.pulsarSuffix  || '';
+      var durationMs = parseInt(el.dataset.pulsarDuration  || '2000', 10);
+      var durationS  = durationMs / 1000; // GSAP uses seconds
+
+      function format(val) {
+        return prefix + (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
+      }
+
+      if (prefersReducedMotion) {
+        el.textContent = format(target);
+        return;
+      }
+
+      if (window.gsap && window.ScrollTrigger) {
+        var obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: durationS,
+          ease: 'power1.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+          onUpdate:   function () { el.textContent = format(obj.val); },
+          onComplete: function () { el.textContent = format(target); }
+        });
+      } else {
+        // IntersectionObserver fallback when GSAP is unavailable
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            obs.unobserve(el);
+            var startTime = Date.now();
+            (function tick() {
+              var p = Math.min((Date.now() - startTime) / durationMs, 1);
+              var eased = 1 - Math.pow(1 - p, 3);
+              el.textContent = format(target * eased);
+              if (p < 1) {
+                requestAnimationFrame(tick);
+              } else {
+                el.textContent = format(target);
+              }
+            })();
+          });
+        }, { threshold: 0.3 });
+        obs.observe(el);
+      }
+    });
+  }
+
+  /* ------------------------------------------
      INIT
   ------------------------------------------ */
   function init() {
     if (prefersReducedMotion) {
       document.querySelectorAll(
-        '.pulsar-reveal, [data-pulsar-hero-element], .pulsar-hero__line-inner, .pulsar-hero__eyebrow, .pulsar-hero__tagline, .pulsar-hero__actions, .pulsar-hero__scroll-cue'
+        '.pulsar-reveal, [data-pulsar-hero-element]'
       ).forEach(function (el) {
-        el.style.opacity  = '1';
+        el.style.opacity   = '1';
         el.style.transform = 'none';
+        el.classList.add('is-visible');
       });
+      initStatCounters(); // shows final values immediately
       return;
     }
 
@@ -284,6 +337,7 @@
         gsap.registerPlugin(ScrollTrigger);
         runPreloader();
         initScrollAnimations();
+        initStatCounters();
       }
     );
 
@@ -291,11 +345,12 @@
     setTimeout(function () {
       if (!window.gsap) {
         revealHero();
-        document.querySelectorAll('.pulsar-reveal').forEach(function (el) {
+        document.querySelectorAll('.pulsar-reveal, [data-pulsar-hero-element]').forEach(function (el) {
           el.classList.add('is-visible');
-          el.style.opacity  = '1';
+          el.style.opacity   = '1';
           el.style.transform = 'none';
         });
+        initStatCounters(); // will use IntersectionObserver fallback
       }
     }, 5000);
   }

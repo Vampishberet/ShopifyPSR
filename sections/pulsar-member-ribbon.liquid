@@ -99,18 +99,19 @@
 
 <script>
   (function() {
-    const section = document.getElementById('pulsar-ticker-{{ section.id }}');
+    var sectionId = '{{ section.id }}';
+    var section = document.getElementById('pulsar-ticker-' + sectionId);
     if (!section) return;
 
-    const track = section.querySelector('.pulsar-ticker-track');
-    const firstGroup = section.querySelector('.pulsar-ticker-group');
+    var track = section.querySelector('.pulsar-ticker-track');
+    var firstGroup = section.querySelector('.pulsar-ticker-group');
     if (!track || !firstGroup) return;
 
-    let x = 0;
-    let speed = 0.7; // increase for faster movement
-    let groupWidth = firstGroup.offsetWidth;
-    let paused = false;
-    let rafId = null;
+    var x = 0;
+    var speed = 0.7;
+    var groupWidth = firstGroup.offsetWidth;
+    var paused = false;
+    var rafId = null;
 
     function measure() {
       groupWidth = firstGroup.offsetWidth;
@@ -119,28 +120,40 @@
     function animate() {
       if (!paused) {
         x -= speed;
-
         if (Math.abs(x) >= groupWidth) {
           x = 0;
         }
-
-        track.style.transform = `translate3d(${x}px, 0, 0)`;
+        track.style.transform = 'translate3d(' + x + 'px, 0, 0)';
       }
-
       rafId = requestAnimationFrame(animate);
     }
 
-    section.addEventListener('mouseenter', function() {
-      paused = true;
-    });
+    function onMouseEnter() { paused = true; }
+    function onMouseLeave() { paused = false; }
 
-    section.addEventListener('mouseleave', function() {
-      paused = false;
-    });
+    section.addEventListener('mouseenter', onMouseEnter);
+    section.addEventListener('mouseleave', onMouseLeave);
 
     window.addEventListener('resize', measure);
     document.addEventListener('shopify:section:load', measure);
     document.addEventListener('shopify:section:reorder', measure);
+
+    // Shopify editor lifecycle: cancel the loop when this section is removed
+    function onUnload(e) {
+      if (e.detail && e.detail.sectionId !== sectionId) return;
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      section.removeEventListener('mouseenter', onMouseEnter);
+      section.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('resize', measure);
+      document.removeEventListener('shopify:section:load', measure);
+      document.removeEventListener('shopify:section:reorder', measure);
+      document.removeEventListener('shopify:section:unload', onUnload);
+    }
+
+    document.addEventListener('shopify:section:unload', onUnload);
 
     measure();
     animate();
