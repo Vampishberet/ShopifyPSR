@@ -362,7 +362,6 @@ header-component [popover] a:hover,
    ============================================ */
 .pulsar-btn,
 .pulsar-btn--primary,
-.button,
 .btn,
 .product-form__submit {
   display: inline-flex;
@@ -388,7 +387,6 @@ header-component [popover] a:hover,
 }
 .pulsar-btn:hover,
 .pulsar-btn--primary:hover,
-.button:hover,
 .btn:hover,
 .product-form__submit:hover {
   transform: scale(1.04);
@@ -396,7 +394,6 @@ header-component [popover] a:hover,
 }
 .pulsar-btn:focus-visible,
 .pulsar-btn--primary:focus-visible,
-.button:focus-visible,
 .btn:focus-visible,
 .product-form__submit:focus-visible {
   outline: 2px solid var(--pulsar-white);
