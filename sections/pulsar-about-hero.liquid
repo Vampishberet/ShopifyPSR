@@ -1,17 +1,17 @@
 <section class="pulsar-about-hero" aria-label="About Team Pulsar">
-  <div class="pulsar-about-hero__bg" aria-hidden="true">
+  <div class="pulsar-about-hero__bg" aria-hidden="true" data-pulsar-parallax data-pulsar-parallax-strength="28">
     <div class="pulsar-about-hero__grid"></div>
     <div class="pulsar-about-hero__vignette"></div>
   </div>
 
   <div class="pulsar-about-hero__content">
-    <p class="pulsar-about-hero__overline" data-pulsar-about-hero="overline">
+    <p class="pulsar-about-hero__overline pulsar-reveal">
       {{ section.settings.overline | default: 'EST. APRIL 6, 2020 · NORTH AMERICA' }}
     </p>
-    <h1 class="pulsar-about-hero__heading" data-pulsar-about-hero="heading">
+    <h1 class="pulsar-about-hero__heading pulsar-heading-reveal">
       {{ section.settings.heading | default: 'MORE THAN AN ORG.' }}
     </h1>
-    <p class="pulsar-about-hero__subtext" data-pulsar-about-hero="subtext">
+    <p class="pulsar-about-hero__subtext pulsar-reveal">
       {{ section.settings.subtext | default: 'We are a community. A competitive powerhouse. A family. Five years of intent, trust, and relentless pursuit of excellence.' }}
     </p>
   </div>
@@ -138,36 +138,6 @@
   .pulsar-about-hero__subtext { font-size: 1rem; }
 }
 </style>
-
-<script>
-(function () {
-  var els = [
-    document.querySelector('[data-pulsar-about-hero="overline"]'),
-    document.querySelector('[data-pulsar-about-hero="heading"]'),
-    document.querySelector('[data-pulsar-about-hero="subtext"]')
-  ].filter(Boolean);
-
-  if (!els.length) return;
-
-  function animate() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-      return;
-    }
-    if (window.gsap) {
-      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
-    } else {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animate);
-  } else {
-    animate();
-  }
-})();
-</script>
 
 {% schema %}
 {

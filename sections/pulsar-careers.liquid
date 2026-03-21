@@ -7,11 +7,11 @@
       <div class="pulsar-careers__hero-vignette"></div>
     </div>
     <div class="pulsar-careers__hero-content">
-      <p class="pulsar-careers__overline" data-pulsar-careers="overline">CAREERS</p>
-      <h1 class="pulsar-careers__heading" data-pulsar-careers="heading">
+      <p class="pulsar-careers__overline pulsar-reveal">CAREERS</p>
+      <h1 class="pulsar-careers__heading pulsar-heading-reveal">
         {{ section.settings.heading | default: 'JOIN THE TEAM.' }}
       </h1>
-      <p class="pulsar-careers__subtext" data-pulsar-careers="subtext">
+      <p class="pulsar-careers__subtext pulsar-reveal">
         {{ section.settings.subtext | default: 'We are always looking for dedicated players, creators, and operators who share our vision. If you have what it takes, we want to hear from you.' }}
       </p>
     </div>
@@ -328,36 +328,6 @@
   .pulsar-careers__cta { flex-direction: column; align-items: flex-start; }
 }
 </style>
-
-<script>
-(function () {
-  var els = [
-    document.querySelector('[data-pulsar-careers="overline"]'),
-    document.querySelector('[data-pulsar-careers="heading"]'),
-    document.querySelector('[data-pulsar-careers="subtext"]')
-  ].filter(Boolean);
-
-  if (!els.length) return;
-
-  function animate() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-      return;
-    }
-    if (window.gsap) {
-      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
-    } else {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animate);
-  } else {
-    animate();
-  }
-})();
-</script>
 
 {% schema %}
 {

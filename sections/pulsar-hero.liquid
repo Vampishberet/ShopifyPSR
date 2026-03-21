@@ -1,18 +1,27 @@
-<section class="pulsar-hero" aria-label="Hero">
-  <div class="pulsar-hero__bg" aria-hidden="true">
+<section
+  class="pulsar-hero"
+  aria-label="Hero"
+  id="pulsar-hero-{{ section.id }}"
+>
+  <div class="pulsar-hero__bg" aria-hidden="true" data-pulsar-parallax data-pulsar-parallax-strength="22">
     {%- if section.settings.bg_video != blank -%}
       <video
         class="pulsar-hero__bg-video"
         src="{{ section.settings.bg_video }}"
-        autoplay muted loop playsinline
+        autoplay
+        muted
+        loop
+        playsinline
         aria-hidden="true"
       ></video>
     {%- else -%}
-      {%- comment -%} Fallback: reuse the preloader animation as a looping hero background {%- endcomment -%}
       <video
         class="pulsar-hero__bg-video"
         src="{{ '3d animation for preloader.mp4' | asset_url }}"
-        autoplay muted loop playsinline
+        autoplay
+        muted
+        loop
+        playsinline
         aria-hidden="true"
       ></video>
     {%- endif -%}
@@ -20,36 +29,71 @@
   </div>
 
   <div class="pulsar-hero__content">
-    <p
-      class="pulsar-hero__eyebrow"
-      data-pulsar-hero-element
-    >{{ section.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}</p>
-
-    <h1
-      class="pulsar-hero__heading"
-      data-pulsar-hero-element
+    {%- comment -%} Slides container — single default slide or schema blocks {%- endcomment -%}
+    <div
+      class="pulsar-hero__slides"
+      data-slide-interval="{{ section.settings.slide_interval | default: 5000 }}"
     >
-      {%- if section.settings.heading != blank -%}
-        {{ section.settings.heading }}
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div
+            class="pulsar-hero__slide{% if forloop.first %} is-active{% endif %}"
+            role="group"
+            aria-label="Slide {{ forloop.index }} of {{ section.blocks.size }}"
+            {%- unless forloop.first %}
+              aria-hidden="true"
+            {% endunless %}
+            {{ block.shopify_attributes }}
+          >
+            <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
+              {{ block.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
+            </p>
+            <div class="pulsar-hero__mask" aria-hidden="false">
+              <h1 class="pulsar-hero__heading pulsar-hero__mask-inner">
+                {{ block.settings.heading | default: 'TEAM PULSAR' }}
+              </h1>
+            </div>
+            <p class="pulsar-hero__tagline" data-pulsar-hero-element>
+              {{ block.settings.tagline | default: 'Move With Intent.' }}
+            </p>
+          </div>
+        {%- endfor -%}
       {%- else -%}
-        TEAM<br>PULSAR
+        {%- comment -%} Fallback: single slide from section settings {%- endcomment -%}
+        <div class="pulsar-hero__slide is-active" role="group" aria-label="Hero">
+          <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
+            {{ section.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
+          </p>
+          <div class="pulsar-hero__mask">
+            <h1 class="pulsar-hero__heading pulsar-hero__mask-inner">
+              {%- if section.settings.heading != blank -%}
+                {{ section.settings.heading }}
+              {%- else -%}
+                TEAM<br>
+                PULSAR
+              {%- endif -%}
+            </h1>
+          </div>
+          <p class="pulsar-hero__tagline" data-pulsar-hero-element>
+            {{ section.settings.tagline | default: 'Move With Intent.' }}
+          </p>
+        </div>
       {%- endif -%}
-    </h1>
-
-    <p
-      class="pulsar-hero__tagline"
-      data-pulsar-hero-element
-    >{{ section.settings.tagline | default: 'Move With Intent.' }}</p>
+    </div>
 
     <div class="pulsar-hero__actions" data-pulsar-hero-element>
       <a
         href="{{ section.settings.primary_cta_url | default: '/collections/all' }}"
         class="pulsar-btn pulsar-btn--primary"
-      >{{ section.settings.primary_cta_label | default: 'Shop Now' }}</a>
+      >
+        {{- section.settings.primary_cta_label | default: 'Shop Now' -}}
+      </a>
       <a
         href="{{ section.settings.secondary_cta_url | default: '/pages/esports' }}"
         class="pulsar-btn pulsar-btn--ghost"
-      >{{ section.settings.secondary_cta_label | default: 'Our Rosters' }}</a>
+      >
+        {{- section.settings.secondary_cta_label | default: 'Our Rosters' -}}
+      </a>
     </div>
   </div>
 
@@ -75,12 +119,13 @@
     position: absolute;
     inset: 0;
     z-index: 0;
+    will-change: transform;
   }
   .pulsar-hero__bg-video {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100%;
+    height: 110%; /* Extra height absorbs parallax travel */
     object-fit: cover;
     opacity: 0.18;
   }
@@ -95,7 +140,7 @@
     );
   }
 
-  /* Content */
+  /* Content wrapper */
   .pulsar-hero__content {
     position: relative;
     z-index: 1;
@@ -106,6 +151,48 @@
     flex-direction: column;
     align-items: center;
     gap: var(--pulsar-space-md);
+    width: 100%;
+  }
+
+  /* Slides container */
+  .pulsar-hero__slides {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-md);
+  }
+
+  /* Non-active slides: positioned out of flow */
+  .pulsar-hero__slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pulsar-space-md);
+    opacity: 0;
+    pointer-events: none;
+  }
+  /* Active slide: in flow, takes height */
+  .pulsar-hero__slide.is-active {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Text mask reveal — heading clips inside overflow:hidden wrapper */
+  .pulsar-hero__mask {
+    overflow: hidden;
+    display: block;
+    line-height: 1;
+  }
+  .pulsar-hero__mask-inner {
+    display: block;
+    /* Progressive enhancement: visible if GSAP fails */
   }
 
   .pulsar-hero__eyebrow {
@@ -115,8 +202,7 @@
     text-transform: uppercase;
     color: var(--pulsar-gray2);
     margin: 0;
-    /* Initial state for GSAP entrance */
-    opacity: 0;
+    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   .pulsar-hero__heading {
@@ -128,7 +214,7 @@
     text-transform: uppercase;
     color: var(--pulsar-white);
     margin: 0;
-    opacity: 0;
+    /* No opacity:0 — mask clip via .pulsar-hero__mask handles initial hide */
   }
 
   .pulsar-hero__tagline {
@@ -138,14 +224,14 @@
     text-transform: uppercase;
     color: var(--pulsar-gray3);
     margin: 0;
-    opacity: 0;
+    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   .pulsar-hero__actions {
     display: flex;
     gap: var(--pulsar-space-md);
     margin-top: var(--pulsar-space-sm);
-    opacity: 0;
+    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   /* Scroll indicator */
@@ -159,7 +245,7 @@
     align-items: center;
     gap: var(--pulsar-space-xs);
     z-index: 1;
-    opacity: 0;
+    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
   .pulsar-hero__scroll-label {
     font-family: var(--font-body);
@@ -175,15 +261,39 @@
     animation: pulsar-scroll-pulse 2s ease-in-out infinite;
   }
   @keyframes pulsar-scroll-pulse {
-    0%, 100% { opacity: 0.3; transform: scaleY(1); }
-    50% { opacity: 1; transform: scaleY(0.6); }
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scaleY(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleY(0.6);
+    }
+  }
+
+  /* Tilt-safe: GSAP owns transform on tilt cards — strip CSS transform transition */
+  .pulsar-merch__card.has-pulsar-tilt {
+    transition: border-color 0.35s ease, box-shadow 0.35s var(--pulsar-ease-out);
+  }
+  .pulsar-merch__card.has-pulsar-tilt:hover {
+    transform: none; /* GSAP controls this */
   }
 
   /* Responsive */
   @media (max-width: 767px) {
-    .pulsar-hero__heading { font-size: clamp(4rem, 20vw, 6rem); }
-    .pulsar-hero__actions { flex-direction: column; width: 100%; max-width: 300px; }
-    .pulsar-hero__actions .pulsar-btn { text-align: center; justify-content: center; }
+    .pulsar-hero__heading {
+      font-size: clamp(4rem, 20vw, 6rem);
+    }
+    .pulsar-hero__actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+    }
+    .pulsar-hero__actions .pulsar-btn {
+      text-align: center;
+      justify-content: center;
+    }
   }
 {% endstylesheet %}
 
@@ -193,6 +303,10 @@
   "tag": "div",
   "class": "pulsar-section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Single slide (fallback, no blocks)"
+    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -214,7 +328,20 @@
     {
       "type": "url",
       "id": "bg_video",
-      "label": "Background video URL (optional — uses preloader animation by default)"
+      "label": "Background video URL (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Multi-slide settings"
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "label": "Slide interval (ms)",
+      "min": 1000,
+      "max": 9000,
+      "step": 500,
+      "default": 5000
     },
     {
       "type": "header",
@@ -245,6 +372,33 @@
       "type": "url",
       "id": "secondary_cta_url",
       "label": "Button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow text",
+          "default": "EST. 2020 · NORTH AMERICA"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "TEAM PULSAR"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Move With Intent."
+        }
+      ]
     }
   ],
   "presets": [

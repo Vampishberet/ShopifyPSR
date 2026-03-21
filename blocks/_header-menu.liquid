@@ -47,6 +47,11 @@
                 </a>
               </li>
             {% endfor %}
+              <li>
+                <a href="/pages/about" id="MenuItem-about" class="menu-list__item">
+                  About
+                </a>
+              </li>
           </ul>
         </div>
       </div>
@@ -131,6 +136,18 @@
           {%- endif -%}
         </li>
       {% endfor %}
+      <li
+        role="presentation"
+        class="menu-list__list-item"
+        on:focus="/activate"
+        on:blur="/deactivate"
+        on:pointerenter="/activate"
+        on:pointerleave="/deactivate"
+      >
+        <a href="/pages/about" data-skip-node-update="true" class="menu-list__link" ref="menuitem">
+          <span class="menu-list__link-title">About</span>
+        </a>
+      </li>
       <li
         class="menu-list__list-item"
         role="presentation"

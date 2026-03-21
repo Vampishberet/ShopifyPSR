@@ -33,10 +33,10 @@
 
 <style>
   #pulsar-stats-{{ section.id }} {
-    background: #050608;
+    background: var(--pulsar-black);
     padding: 88px 0;
-    border-top: 1px solid #1c2128;
-    border-bottom: 1px solid #1c2128;
+    border-top: 1px solid var(--pulsar-dark3);
+    border-bottom: 1px solid var(--pulsar-dark3);
   }
 
   #pulsar-stats-{{ section.id }} .pulsar-stats__inner {
@@ -51,12 +51,12 @@
 
   #pulsar-stats-{{ section.id }} .pulsar-stats__section-label {
     margin: 0;
-    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-family: var(--font-secondary), sans-serif;
     font-size: 14px;
     line-height: 1;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: #8f96a3;
+    color: var(--pulsar-gray2);
     text-align: center;
   }
 
@@ -81,37 +81,37 @@
   }
 
   #pulsar-stats-{{ section.id }} .pulsar-stats__number {
-    font-family: var(--font-heading), sans-serif;
+    font-family: var(--font-display), sans-serif;
     font-size: clamp(58px, 9vw, 140px);
     line-height: 0.92;
     letter-spacing: -0.05em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: var(--pulsar-white);
     white-space: nowrap;
   }
 
   #pulsar-stats-{{ section.id }} .pulsar-stats__label {
     margin: 0;
-    font-family: var(--font-accent), var(--font-subheading), sans-serif;
+    font-family: var(--font-secondary), sans-serif;
     font-size: 13px;
     line-height: 1.1;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #8f96a3;
+    color: var(--pulsar-gray2);
   }
 
   #pulsar-stats-{{ section.id }} .pulsar-stats__divider {
     width: 1px;
     min-width: 1px;
-    background: #1c2128;
+    background: var(--pulsar-dark3);
     margin: 0 6px;
   }
 
+  /* Initial hidden state. Animation is owned by gsap.fromTo in pulsar-animations.js.
+     No CSS transition here — avoids racing GSAP inline styles when is-visible is added. */
   #pulsar-stats-{{ section.id }} .pulsar-reveal {
     opacity: 0;
     transform: translateY(26px);
-    transition: opacity 0.75s ease, transform 0.75s ease;
-    will-change: opacity, transform;
   }
 
   #pulsar-stats-{{ section.id }} .pulsar-reveal.is-visible {

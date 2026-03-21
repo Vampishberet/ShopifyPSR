@@ -7,11 +7,11 @@
       <div class="pulsar-partners-pg__hero-vignette"></div>
     </div>
     <div class="pulsar-partners-pg__hero-content">
-      <p class="pulsar-partners-pg__overline" data-pulsar-partners="overline">PARTNERSHIPS</p>
-      <h1 class="pulsar-partners-pg__heading" data-pulsar-partners="heading">
+      <p class="pulsar-partners-pg__overline pulsar-reveal">PARTNERSHIPS</p>
+      <h1 class="pulsar-partners-pg__heading pulsar-heading-reveal">
         {{ section.settings.heading | default: 'OUR PARTNERS.' }}
       </h1>
-      <p class="pulsar-partners-pg__subtext" data-pulsar-partners="subtext">
+      <p class="pulsar-partners-pg__subtext pulsar-reveal">
         {{ section.settings.subtext | default: 'We partner with brands that align with our players, our community, and our values. Every partnership is built on mutual growth and real results.' }}
       </p>
     </div>
@@ -498,33 +498,6 @@
   .pulsar-partners-pg__pitch-grid { grid-template-columns: 1fr; gap: var(--pulsar-space-xl); }
 }
 </style>
-
-<script>
-(function () {
-  var els = [
-    document.querySelector('[data-pulsar-partners="overline"]'),
-    document.querySelector('[data-pulsar-partners="heading"]'),
-    document.querySelector('[data-pulsar-partners="subtext"]')
-  ].filter(Boolean);
-  if (!els.length) return;
-  function animate() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-      return;
-    }
-    if (window.gsap) {
-      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
-    } else {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-    }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animate);
-  } else {
-    animate();
-  }
-})();
-</script>
 
 {% schema %}
 {

@@ -1,6 +1,7 @@
 /* ============================================================
-   PULSAR ANIMATIONS v3.0
-   Single owner of: reveal logic, stat counters, scroll animations.
+   PULSAR ANIMATIONS v3.1
+   Single owner of: reveal logic, stat counters, scroll animations, preloader.
+   Exposes: window.PulsarAnimations = { initSection, destroySection }
    Shopify editor lifecycle safe — supports section load/unload/reorder.
    ============================================================ */
 
@@ -11,9 +12,9 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /**
-   * Utility: poll until condition or timeout
-   */
+  /* ------------------------------------------
+     UTILITY: poll until condition or timeout
+  ------------------------------------------ */
   function waitFor(condition, cb, interval, timeout) {
     interval = interval || 50;
     timeout  = timeout  || 6000;
@@ -50,9 +51,9 @@
       return;
     }
 
-    var fill  = preloader.querySelector('.pulsar-preloader__progress-fill');
-    var label = preloader.querySelector('.pulsar-preloader__label');
-    var startTime = Date.now();
+    var fill       = preloader.querySelector('.pulsar-preloader__progress-fill');
+    var label      = preloader.querySelector('.pulsar-preloader__label');
+    var startTime  = Date.now();
     var minDuration = 2600;
     var currentProgress = 0;
 
@@ -103,6 +104,7 @@
       ease: 'power2.inOut',
       onComplete: function () {
         preloader.style.display = 'none';
+        preloader.remove(); // Free DOM + video decode resources after exit
         revealHero();
       }
     });
@@ -111,28 +113,45 @@
   /* ------------------------------------------
      2. HERO ENTRANCE
      Animates [data-pulsar-hero-element] elements.
+     Also triggers mask reveals (.pulsar-hero__mask-inner) and hero slider.
   ------------------------------------------ */
   function revealHero() {
     var elements = document.querySelectorAll('[data-pulsar-hero-element]');
-    if (!elements.length || prefersReducedMotion) {
+    var masks    = document.querySelectorAll('.pulsar-hero__mask-inner');
+
+    if (prefersReducedMotion) {
       elements.forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+      masks.forEach(function (m) { m.style.transform = 'none'; });
       return;
     }
+
     if (window.gsap) {
-      gsap.fromTo(elements,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.18, delay: 0.1 }
-      );
+      if (elements.length) {
+        gsap.fromTo(elements,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.18, delay: 0.1 }
+        );
+      }
+      // Mask reveals for Monument Extended headings (yPercent slide-up from overflow wrapper)
+      if (masks.length) {
+        gsap.fromTo(masks,
+          { yPercent: 105 },
+          { yPercent: 0, duration: 0.78, ease: 'power2.out', stagger: 0.14, delay: 0.2 }
+        );
+      }
     } else {
       elements.forEach(function (el) { el.style.opacity = '1'; });
+      masks.forEach(function (m) { m.style.transform = 'none'; });
     }
+
+    // Start multi-slide crossfade timer if 2+ slides present
+    initHeroSlider(document);
   }
 
   /* ------------------------------------------
      3. SCROLL ANIMATIONS
      Single owner of all .pulsar-reveal, .pulsar-heading-reveal,
-     .pulsar-stagger-group, counter, video, partner, CTA, esports
-     reveal animations.
+     .pulsar-stagger-group, counter, video, partner, CTA, esports reveals.
 
      root: HTMLElement | Document — scope for selectors.
      Pass a section element on shopify:section:load re-init.
@@ -141,128 +160,169 @@
     root = root || document;
     if (!window.gsap || !window.ScrollTrigger) return;
 
-    /* Section headings — slide up 40px */
     gsap.utils.toArray('.pulsar-heading-reveal', root).forEach(function (el) {
-      gsap.from(el, {
-        y: 40,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-      });
+      gsap.fromTo(el,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+        }
+      );
     });
 
-    /* Stagger groups (product cards, player cards) */
     gsap.utils.toArray('.pulsar-stagger-group', root).forEach(function (group) {
       var items = group.querySelectorAll('.pulsar-stagger-item');
       if (!items.length) return;
-      gsap.from(items, {
-        y: 35,
-        opacity: 0,
-        duration: 0.55,
-        ease: 'power2.out',
-        stagger: 0.09,
-        scrollTrigger: { trigger: group, start: 'top 80%', once: true }
-      });
+      gsap.fromTo(items,
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          ease: 'power2.out',
+          stagger: 0.09,
+          scrollTrigger: { trigger: group, start: 'top 80%', once: true }
+        }
+      );
     });
 
-    /* Generic .pulsar-reveal — single owner, no duplicate in enhancements.js */
+    /* Generic .pulsar-reveal — single owner, no duplicate in enhancements.js.
+       Uses gsap.fromTo so elements whose CSS default is already opacity:0
+       are explicitly animated to a visible final state. */
     gsap.utils.toArray('.pulsar-reveal', root).forEach(function (el) {
       if (el.classList.contains('is-visible')) return;
-      gsap.from(el, {
-        y: 28,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 87%',
-          once: true,
-          onEnter: function () { el.classList.add('is-visible'); }
+      gsap.fromTo(el,
+        { opacity: 0, y: 28 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 87%',
+            once: true,
+            onEnter: function () { el.classList.add('is-visible'); }
+          }
         }
-      });
+      );
     });
 
-    /* Stats sections — scoped to real rendered section ids */
-    var statsRoot = root === document ? document : root;
-    statsRoot.querySelectorAll('[id^="pulsar-stats-"]').forEach(function (statsSection) {
-      var statItems = statsSection.querySelectorAll('.pulsar-stats__item');
-      if (!statItems.length) return;
-      gsap.from(statItems, {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        stagger: 0.15,
-        scrollTrigger: { trigger: statsSection, start: 'top 80%', once: true }
-      });
-    });
-
-    /* Video showcase — scale in */
     var videoItems = (root === document ? document : root).querySelectorAll('.pulsar-videos__item');
     if (videoItems.length) {
-      gsap.from(videoItems, {
-        scale: 0.96,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: videoItems[0].closest('section') || videoItems[0],
-          start: 'top 82%',
-          once: true
+      gsap.fromTo(videoItems,
+        { scale: 0.96, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power2.out',
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: videoItems[0].closest('section') || videoItems[0],
+            start: 'top 82%',
+            once: true
+          }
         }
-      });
+      );
     }
 
-    /* Partner logos — stagger fade up */
     var partnerLogos = (root === document ? document : root).querySelectorAll('.pulsar-partners__logo-link');
     if (partnerLogos.length) {
-      gsap.from(partnerLogos, {
-        y: 20,
-        opacity: 0,
-        duration: 0.55,
-        ease: 'power2.out',
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: partnerLogos[0].closest('section') || partnerLogos[0],
-          start: 'top 82%',
-          once: true
+      gsap.fromTo(partnerLogos,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          ease: 'power2.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: partnerLogos[0].closest('section') || partnerLogos[0],
+            start: 'top 82%',
+            once: true
+          }
         }
-      });
+      );
     }
 
-    /* CTA heading — dramatic scale entrance */
     var ctaHeading = (root === document ? document : root).querySelector('.pulsar-cta__heading');
     if (ctaHeading) {
-      gsap.from(ctaHeading, {
-        scale: 0.94,
-        opacity: 0,
-        y: 30,
-        duration: 0.9,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: ctaHeading, start: 'top 85%', once: true }
-      });
+      gsap.fromTo(ctaHeading,
+        { scale: 0.94, opacity: 0, y: 30 },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: ctaHeading, start: 'top 85%', once: true }
+        }
+      );
     }
 
-    /* Esports tabs — stagger entrance */
     var esTabs = (root === document ? document : root).querySelectorAll('.pulsar-esports-titles__tab');
     if (esTabs.length) {
       var esTabList = esTabs[0].closest('.pulsar-esports-titles__tabs') || esTabs[0];
-      gsap.from(esTabs, {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-        stagger: 0.1,
-        scrollTrigger: { trigger: esTabList, start: 'top 88%', once: true }
-      });
+      gsap.fromTo(esTabs,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          stagger: 0.1,
+          scrollTrigger: { trigger: esTabList, start: 'top 88%', once: true }
+        }
+      );
     }
+
+    // Phase 3 feature inits — scoped to root
+    initParallax(root);
+    initHeroSlider(root);
+    initCardTilt(root);
+    initQuickAddFeedback(root);
+    initEsportsTabs(root);
+
+    /* Ticker / Member Ribbon — Infinite Seamless GSAP Loop */
+    var tickers = (root === document ? document : root).querySelectorAll('.pulsar-ticker-section');
+    tickers.forEach(function (tickerSection) {
+      var track = tickerSection.querySelector('.pulsar-ticker-track');
+      var firstGroup = tickerSection.querySelector('.pulsar-ticker-group');
+      if (!track || !firstGroup) return;
+
+      var speedSetting = parseFloat(tickerSection.dataset.tickerSpeed) || 0.7;
+      var duration = 10 / speedSetting; // Base duration inversely proportional to speed
+
+      var tween = gsap.to(track, {
+        x: function() { return -firstGroup.offsetWidth; },
+        duration: duration,
+        ease: 'none',
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize(function(x) {
+            return parseFloat(x) % firstGroup.offsetWidth; // Seamless loop math
+          })
+        }
+      });
+
+      // Store on element for cleanup later
+      tickerSection._pulsarTickerTween = tween;
+
+      if (tickerSection.dataset.pauseOnHover !== 'false') {
+        tickerSection.addEventListener('mouseenter', function() { tween.pause(); });
+        tickerSection.addEventListener('mouseleave', function() { tween.play(); });
+      }
+    });
   }
 
   /* ------------------------------------------
      4. STAT COUNTERS
      Single owner. pulsar-enhancements.js contains no counter logic.
+     Uses IntersectionObserver for scroll detection (never window scroll events).
      data-pulsar-duration is in milliseconds.
 
      root: HTMLElement | Document — scope for counter selectors.
@@ -273,7 +333,6 @@
     if (!counters.length) return;
 
     counters.forEach(function (el) {
-      // Skip already-initialized counters to prevent duplication on re-init
       if (el.dataset.pulsarCounterInit) return;
       el.dataset.pulsarCounterInit = '1';
 
@@ -293,25 +352,24 @@
         return;
       }
 
-      if (window.gsap && window.ScrollTrigger) {
-        var obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: durationS,
-          ease: 'power1.out',
-          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-          onUpdate:   function () { el.textContent = format(obj.val); },
-          onComplete: function () { el.textContent = format(target); }
-        });
-      } else {
-        // IntersectionObserver fallback when GSAP is unavailable
-        var obs = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            obs.unobserve(el);
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          obs.unobserve(el);
+
+          if (window.gsap) {
+            var obj = { val: 0 };
+            gsap.to(obj, {
+              val: target,
+              duration: durationS,
+              ease: 'power1.out',
+              onUpdate: function () { el.textContent = format(obj.val); },
+              onComplete: function () { el.textContent = format(target); }
+            });
+          } else {
             var startTime = Date.now();
             (function tick() {
-              var p = Math.min((Date.now() - startTime) / durationMs, 1);
+              var p     = Math.min((Date.now() - startTime) / durationMs, 1);
               var eased = 1 - Math.pow(1 - p, 3);
               el.textContent = format(target * eased);
               if (p < 1) {
@@ -320,74 +378,602 @@
                 el.textContent = format(target);
               }
             })();
-          });
-        }, { threshold: 0.3 });
-        obs.observe(el);
-      }
+          }
+        });
+      }, { threshold: 0.1 });
+
+      obs.observe(el);
     });
   }
 
   /* ------------------------------------------
-     5. SHOPIFY EDITOR SECTION LIFECYCLE
-     Re-init animations when a section is loaded/reloaded in the editor.
-     Kill ScrollTriggers when a section is removed.
+     5. PUBLIC API
+     initSection  — init all animations inside a section element.
+     destroySection — kill ScrollTriggers scoped to a section element.
+     Exposed as window.PulsarAnimations for use by external modules.
   ------------------------------------------ */
-  document.addEventListener('shopify:section:load', function (e) {
-    var sectionEl = e.target;
+  function initSection(sectionEl) {
     if (!sectionEl) return;
 
-    // Reset init flags on counters inside reloaded section so they re-animate
-    sectionEl.querySelectorAll('[data-pulsar-counter-init]').forEach(function (el) {
-      delete el.dataset.pulsarCounterInit;
-    });
-
-    if (prefersReducedMotion) {
-      sectionEl.querySelectorAll('.pulsar-reveal, [data-pulsar-hero-element]').forEach(function (el) {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-        el.classList.add('is-visible');
-      });
-      initStatCountersIn(sectionEl);
+      if (prefersReducedMotion) {
+        sectionEl.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
+          el.style.opacity   = '1';
+          el.style.transform = 'none';
+          el.classList.add('is-visible');
+        });
+        initStatCountersIn(sectionEl);
       return;
     }
 
     if (window.gsap && window.ScrollTrigger) {
       initScrollAnimationsIn(sectionEl);
       initStatCountersIn(sectionEl);
-    } else {
-      // GSAP not yet loaded — reveal immediately so editor doesn't show invisible content
-      sectionEl.querySelectorAll('.pulsar-reveal').forEach(function (el) {
-        el.classList.add('is-visible');
-        el.style.opacity = '1';
-        el.style.transform = 'none';
+      } else {
+        sectionEl.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal').forEach(function (el) {
+          el.classList.add('is-visible');
+          el.style.opacity   = '1';
+          el.style.transform = 'none';
+        });
+      }
+  }
+
+  function destroySection(sectionEl) {
+    if (!sectionEl) return;
+
+    if (window.ScrollTrigger) {
+      ScrollTrigger.getAll().forEach(function (st) {
+        if (st.trigger && sectionEl.contains(st.trigger)) {
+          st.kill();
+        }
       });
     }
+
+    // Kill ticker tweens
+    sectionEl.querySelectorAll('.pulsar-ticker-section').forEach(function(ticker) {
+      if (ticker._pulsarTickerTween) {
+        ticker._pulsarTickerTween.kill();
+        delete ticker._pulsarTickerTween;
+      }
+    });
+
+    // Reset counter init flags so they re-animate if section reloads
+    sectionEl.querySelectorAll('[data-pulsar-counter-init]').forEach(function (el) {
+      delete el.dataset.pulsarCounterInit;
+    });
+
+    // Kill hero slider timer and reset init guard
+    sectionEl.querySelectorAll('.pulsar-hero__slides').forEach(function (c) {
+      if (c._pulsarSliderTimer) { clearInterval(c._pulsarSliderTimer); delete c._pulsarSliderTimer; }
+      delete c._pulsarHeroSliderInit;
+    });
+
+    // Kill 3D tilt listeners
+    sectionEl.querySelectorAll('[data-pulsar-tilt]').forEach(function (card) {
+      if (card._pulsarTiltEnter) card.removeEventListener('mouseenter', card._pulsarTiltEnter);
+      if (card._pulsarTiltLeave) card.removeEventListener('mouseleave', card._pulsarTiltLeave);
+      if (card._pulsarTiltMove)  card.removeEventListener('mousemove',  card._pulsarTiltMove);
+      card.classList.remove('has-pulsar-tilt');
+      delete card._pulsarTiltBound;
+      delete card._pulsarTiltEnter;
+      delete card._pulsarTiltLeave;
+      delete card._pulsarTiltMove;
+      if (window.gsap) gsap.set(card, { clearProps: 'transform,rotateX,rotateY,scale' });
+    });
+
+    // Reset quick-add init flags
+    sectionEl.querySelectorAll('.pulsar-merch__quick-add').forEach(function (btn) {
+      delete btn._pulsarQaInit;
+    });
+
+      // Reset esports tabs init guard
+      sectionEl.querySelectorAll('[data-pulsar-esports]').forEach(function (s) {
+        if (s._pulsarEsportsMq && s._pulsarEsportsMqHandler) {
+          if (s._pulsarEsportsMq.removeEventListener) {
+            s._pulsarEsportsMq.removeEventListener('change', s._pulsarEsportsMqHandler);
+          } else if (s._pulsarEsportsMq.removeListener) {
+            s._pulsarEsportsMq.removeListener(s._pulsarEsportsMqHandler);
+          }
+        }
+        delete s._pulsarEsportsInit;
+        delete s._pulsarEsportsMq;
+        delete s._pulsarEsportsMqHandler;
+      });
+    }
+
+  /* ------------------------------------------
+     7. PARALLAX SCROLL
+     Owner: pulsar-animations.js.
+     Target: [data-pulsar-parallax]. Disabled on mobile < 768px.
+     Strength controlled via data-pulsar-parallax-strength (default 30px).
+  ------------------------------------------ */
+  function initParallax(root) {
+    root = root || document;
+    if (!window.gsap || !window.ScrollTrigger || prefersReducedMotion) return;
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+
+    var scope = root === document ? document : root;
+    scope.querySelectorAll('[data-pulsar-parallax]').forEach(function (el) {
+      if (el._pulsarParallaxInit) return;
+      el._pulsarParallaxInit = true;
+      var strength = parseFloat(el.dataset.pulsarParallaxStrength || '30');
+      var trigger  = el.closest('section') || el.parentElement;
+      gsap.fromTo(el,
+        { y: 0 },
+        {
+          y: strength,
+          ease: 'none',
+          scrollTrigger: { trigger: trigger, start: 'top bottom', end: 'bottom top', scrub: true }
+        }
+      );
+    });
+  }
+
+  /* ------------------------------------------
+     8. HERO SLIDER — Multi-slide crossfade
+     Owner: pulsar-animations.js.
+     Single slide: no-op (mask reveals handled by revealHero).
+     Multi-slide: GSAP crossfade + mask reveal per slide.
+     data-slide-interval on .pulsar-hero__slides (ms, default 5000).
+  ------------------------------------------ */
+  function initHeroSlider(root) {
+    root = root || document;
+    var scope = root === document ? document : root;
+    var slidesContainer = scope.querySelector('.pulsar-hero__slides');
+    if (!slidesContainer || slidesContainer._pulsarHeroSliderInit) return;
+
+    var slides = slidesContainer.querySelectorAll('.pulsar-hero__slide');
+    if (slides.length < 2) return; // Single slide — revealHero already handled masks
+
+    slidesContainer._pulsarHeroSliderInit = true;
+
+    if (prefersReducedMotion) {
+      slides.forEach(function (s, i) {
+        s.style.opacity = i === 0 ? '1' : '0';
+        if (i !== 0) s.setAttribute('aria-hidden', 'true');
+      });
+      return;
+    }
+
+    var current      = 0;
+    var slideInterval = parseInt(slidesContainer.dataset.slideInterval || '5000', 10);
+
+    function crossfadeTo(next) {
+      if (next === current || !window.gsap) return;
+      var from = slides[current];
+      var to   = slides[next];
+
+      // Animate out: mask-inner up, fade elements, fade slide
+      var outMasks = from.querySelectorAll('.pulsar-hero__mask-inner');
+      var outFade  = from.querySelectorAll('[data-pulsar-hero-element]');
+      if (outMasks.length) gsap.to(outMasks, { yPercent: -105, duration: 0.38, ease: 'power2.in', stagger: 0.06 });
+      if (outFade.length)  gsap.to(outFade,  { opacity: 0, y: -15, duration: 0.3, ease: 'power2.in', stagger: 0.06 });
+
+      gsap.to(from, {
+        opacity: 0,
+        duration: 0.4,
+        delay: 0.2,
+        ease: 'power2.inOut',
+        onComplete: function () {
+          from.classList.remove('is-active');
+          from.setAttribute('aria-hidden', 'true');
+          // Reset outgoing for next cycle
+          if (outMasks.length) gsap.set(outMasks, { yPercent: 105 });
+          if (outFade.length)  gsap.set(outFade,  { opacity: 0, y: 30 });
+
+          to.classList.add('is-active');
+          to.removeAttribute('aria-hidden');
+          current = next;
+
+          // Animate in new slide
+          var inMasks = to.querySelectorAll('.pulsar-hero__mask-inner');
+          var inFade  = to.querySelectorAll('[data-pulsar-hero-element]');
+          gsap.fromTo(to, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'none' });
+          if (inMasks.length) {
+            gsap.fromTo(inMasks, { yPercent: 105 }, { yPercent: 0, duration: 0.72, ease: 'power2.out', stagger: 0.12 });
+          }
+          if (inFade.length) {
+            gsap.fromTo(inFade, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12 });
+          }
+        }
+      });
+    }
+
+    slidesContainer._pulsarSliderTimer = setInterval(function () {
+      crossfadeTo((current + 1) % slides.length);
+    }, slideInterval);
+  }
+
+  /* ------------------------------------------
+     9. 3D CARD TILT
+     Owner: pulsar-animations.js.
+     Target: [data-pulsar-tilt]. Disabled on mobile + reduced-motion.
+     Adds .has-pulsar-tilt class so CSS removes conflicting transform transition.
+  ------------------------------------------ */
+  function initCardTilt(root) {
+    root = root || document;
+    if (prefersReducedMotion || !window.gsap) return;
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+
+    var scope = root === document ? document : root;
+    scope.querySelectorAll('[data-pulsar-tilt]').forEach(function (card) {
+      if (card._pulsarTiltBound) return;
+
+      function onEnter() {
+        gsap.to(card, { scale: 1.025, duration: 0.3, ease: 'power2.out' });
+      }
+      function onLeave() {
+        gsap.to(card, { rotateX: 0, rotateY: 0, scale: 1, duration: 0.5, ease: 'power2.out' });
+      }
+      function onMove(e) {
+        var rect = card.getBoundingClientRect();
+        var dx   = (e.clientX - (rect.left + rect.width  / 2)) / (rect.width  / 2);
+        var dy   = (e.clientY - (rect.top  + rect.height / 2)) / (rect.height / 2);
+        gsap.to(card, {
+          rotateY: dx * 9,
+          rotateX: -dy * 6,
+          transformPerspective: 900,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      }
+
+      card.addEventListener('mouseenter', onEnter);
+      card.addEventListener('mouseleave', onLeave);
+      card.addEventListener('mousemove',  onMove);
+      card._pulsarTiltBound = true;
+      card._pulsarTiltEnter = onEnter;
+      card._pulsarTiltLeave = onLeave;
+      card._pulsarTiltMove  = onMove;
+      card.classList.add('has-pulsar-tilt');
+    });
+  }
+
+  /* ------------------------------------------
+     10. QUICK-ADD MICRO-ANIMATION
+     Owner: pulsar-animations.js.
+     Target: .pulsar-merch__quick-add buttons.
+     Scale pulse on card + opacity flash on button.
+  ------------------------------------------ */
+  function initQuickAddFeedback(root) {
+    root = root || document;
+    if (!window.gsap) return;
+
+    var scope = root === document ? document : root;
+    scope.querySelectorAll('.pulsar-merch__quick-add').forEach(function (btn) {
+      if (btn._pulsarQaInit) return;
+      btn._pulsarQaInit = true;
+
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        var card = btn.closest('.pulsar-merch__card');
+        if (!card) return;
+        // Card pulse
+        gsap.fromTo(card,
+          { scale: 1 },
+          { scale: 0.965, duration: 0.1, ease: 'power2.in', yoyo: true, repeat: 1,
+            onComplete: function () { gsap.to(card, { scale: 1, duration: 0.2, ease: 'power2.out' }); }
+          }
+        );
+        // Button flash for immediate submit feedback
+        gsap.fromTo(btn,
+          { opacity: 1 },
+          { opacity: 0.45, duration: 0.12, ease: 'power2.in', yoyo: true, repeat: 1 }
+        );
+      });
+    });
+  }
+
+  /* ------------------------------------------
+     11. ESPORTS TAB / ACCORDION SYSTEM
+     Owner: pulsar-animations.js. Replaces inline <script> in pulsar-esports-titles.liquid.
+     Desktop (≥ 768px): GSAP opacity+y crossfade between panels.
+     Mobile (< 768px):  GSAP height accordion via .pulsar-esports-titles__accordion-header.
+  ------------------------------------------ */
+  function initEsportsTabs(root) {
+    root = root || document;
+    var sections;
+    if (root === document) {
+      sections = Array.prototype.slice.call(document.querySelectorAll('[data-pulsar-esports]'));
+    } else if (root.dataset && 'pulsarEsports' in root.dataset) {
+      sections = [root];
+    } else {
+      sections = Array.prototype.slice.call(root.querySelectorAll('[data-pulsar-esports]'));
+    }
+
+    sections.forEach(function (section) {
+      if (!section || section._pulsarEsportsInit) return;
+      section._pulsarEsportsInit = true;
+
+      var tabs = section.querySelectorAll('.pulsar-esports-titles__tab');
+      var accordionHeaders = section.querySelectorAll('.pulsar-esports-titles__accordion-header');
+      var panels = section.querySelectorAll('.pulsar-esports-titles__panel');
+      var mq = window.matchMedia('(max-width: 767px)');
+
+      function isMobile() { return mq.matches; }
+
+      function getActiveKey() {
+        var activeTab = section.querySelector('.pulsar-esports-titles__tab.is-active');
+        if (activeTab) return activeTab.dataset.tab;
+        var activePanel = section.querySelector('.pulsar-esports-titles__panel.is-active');
+        if (activePanel) return activePanel.dataset.panel;
+        return panels.length ? panels[0].dataset.panel : '';
+      }
+
+      function getPanelBody(panel) {
+        return panel ? panel.querySelector('.pulsar-esports-titles__panel-body') : null;
+      }
+
+      function setActiveStates(key) {
+        tabs.forEach(function (t) {
+          var on = t.dataset.tab === key;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.setAttribute('tabindex', on ? '0' : '-1');
+        });
+        accordionHeaders.forEach(function (h) {
+          var on = h.dataset.tab === key;
+          h.setAttribute('aria-expanded', on ? 'true' : 'false');
+          h.classList.toggle('is-active', on);
+        });
+      }
+
+      function syncDesktopPanels(key) {
+        panels.forEach(function (panel) {
+          var on = panel.dataset.panel === key;
+          var body = getPanelBody(panel);
+          panel.classList.toggle('is-active', on);
+          if (on) {
+            panel.removeAttribute('hidden');
+          } else {
+            panel.setAttribute('hidden', '');
+          }
+          if (body) {
+            body.removeAttribute('hidden');
+            body.style.height = '';
+            body.style.overflow = '';
+            body.style.opacity = '';
+          }
+        });
+      }
+
+      function syncMobilePanels(key) {
+        panels.forEach(function (panel) {
+          var on = panel.dataset.panel === key;
+          var body = getPanelBody(panel);
+          panel.classList.toggle('is-active', on);
+          panel.removeAttribute('hidden');
+          if (!body) return;
+          body.style.height = '';
+          body.style.overflow = '';
+          body.style.opacity = '';
+          if (on) {
+            body.removeAttribute('hidden');
+          } else {
+            body.setAttribute('hidden', '');
+          }
+        });
+      }
+
+      function syncMode(key) {
+        setActiveStates(key);
+        if (isMobile()) {
+          syncMobilePanels(key);
+        } else {
+          syncDesktopPanels(key);
+        }
+      }
+
+      function switchDesktop(key) {
+        var from = section.querySelector('.pulsar-esports-titles__panel.is-active');
+        var to   = section.querySelector('#panel-' + key);
+        var fromBody = getPanelBody(from);
+        var toBody = getPanelBody(to);
+        if (!to || from === to) return;
+
+        setActiveStates(key);
+
+        if (window.gsap && from) {
+          gsap.fromTo(from,
+            { opacity: 1, y: 0 },
+            {
+              opacity: 0, y: -10, duration: 0.25, ease: 'power2.in',
+              onComplete: function () {
+                from.classList.remove('is-active');
+                from.setAttribute('hidden', '');
+                if (fromBody) fromBody.removeAttribute('hidden');
+                to.removeAttribute('hidden');
+                to.classList.add('is-active');
+                if (toBody) toBody.removeAttribute('hidden');
+                gsap.fromTo(to,
+                  { opacity: 0, y: 15 },
+                  { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+                );
+              }
+            }
+          );
+        } else {
+          syncDesktopPanels(key);
+        }
+      }
+
+      function switchMobile(key) {
+        var from = section.querySelector('.pulsar-esports-titles__panel.is-active');
+        var to   = section.querySelector('#panel-' + key);
+        var fromBody = getPanelBody(from);
+        var toBody = getPanelBody(to);
+        if (!to || from === to || !toBody) return;
+
+        setActiveStates(key);
+
+        function openBody(body, panel) {
+          panel.classList.add('is-active');
+          body.removeAttribute('hidden');
+          if (!window.gsap) return;
+          var h = body.scrollHeight;
+          gsap.fromTo(body,
+            { height: 0, opacity: 0, overflow: 'hidden' },
+            { height: h, opacity: 1, duration: 0.4, ease: 'power2.out',
+              onComplete: function () {
+                body.style.height = 'auto';
+                body.style.overflow = '';
+                body.style.opacity = '';
+              }
+            }
+          );
+        }
+
+        if (from && fromBody && window.gsap) {
+          gsap.fromTo(fromBody,
+            { height: fromBody.offsetHeight, opacity: 1, overflow: 'hidden' },
+            {
+              height: 0, opacity: 0, duration: 0.3, ease: 'power2.inOut',
+              onComplete: function () {
+                from.classList.remove('is-active');
+                fromBody.setAttribute('hidden', '');
+                fromBody.style.height = '';
+                fromBody.style.overflow = '';
+                fromBody.style.opacity = '';
+                openBody(toBody, to);
+              }
+            }
+          );
+        } else {
+          if (from && fromBody) {
+            from.classList.remove('is-active');
+            fromBody.setAttribute('hidden', '');
+          }
+          openBody(toBody, to);
+        }
+      }
+
+      function onSwitch(key) {
+        if (isMobile()) {
+          switchMobile(key);
+        } else {
+          switchDesktop(key);
+        }
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () { onSwitch(this.dataset.tab); });
+      });
+      accordionHeaders.forEach(function (h) {
+        h.addEventListener('click', function () { onSwitch(this.dataset.tab); });
+      });
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight') { e.preventDefault(); tabs[(i + 1) % tabs.length].focus(); }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
+        });
+      });
+
+      section._pulsarEsportsMq = mq;
+      section._pulsarEsportsMqHandler = function () {
+        syncMode(getActiveKey());
+      };
+
+      if (mq.addEventListener) {
+        mq.addEventListener('change', section._pulsarEsportsMqHandler);
+      } else if (mq.addListener) {
+        mq.addListener(section._pulsarEsportsMqHandler);
+      }
+
+      syncMode(getActiveKey());
+    });
+
+    initPlayerDrawer();
+  }
+
+  /* ------------------------------------------
+     12. PLAYER SOCIAL DRAWER — Global singleton
+     Owner: pulsar-animations.js. Replaces inline <script> in pulsar-esports-titles.liquid.
+     Uses document-level event delegation — safe across section reloads.
+  ------------------------------------------ */
+  var _drawerDocListenersAdded = false;
+  var _drawerFocusPrev         = null;
+
+  function _getDrawerEls() {
+    return {
+      drawer: document.getElementById('pulsar-player-drawer'),
+      nameEl: document.getElementById('pulsar-drawer-name'),
+      gameEl: document.getElementById('pulsar-drawer-game')
+    };
+  }
+
+  function _openDrawer(playerName, game) {
+    var els = _getDrawerEls();
+    if (!els.drawer) return;
+    els.nameEl.textContent = 'PSR ' + playerName;
+    els.gameEl.textContent = game.toUpperCase();
+    els.drawer.removeAttribute('hidden');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { els.drawer.classList.add('is-open'); });
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function _closeDrawer() {
+    var els = _getDrawerEls();
+    if (!els.drawer || !els.drawer.classList.contains('is-open')) return;
+    els.drawer.classList.remove('is-open');
+    document.body.style.overflow = '';
+    var panel = els.drawer.querySelector('.pulsar-player-drawer__panel');
+    if (!panel) { els.drawer.setAttribute('hidden', ''); return; }
+    var onEnd = function () {
+      els.drawer.setAttribute('hidden', '');
+      panel.removeEventListener('transitionend', onEnd);
+      if (_drawerFocusPrev) { _drawerFocusPrev.focus(); _drawerFocusPrev = null; }
+    };
+    panel.addEventListener('transitionend', onEnd);
+  }
+
+  function initPlayerDrawer() {
+    if (_drawerDocListenersAdded) return;
+    _drawerDocListenersAdded = true;
+
+    document.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-pulsar-player]');
+      if (card) { _drawerFocusPrev = card; _openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || ''); return; }
+      if (e.target.closest('.pulsar-player-drawer__close') || e.target.id === 'pulsar-drawer-backdrop') {
+        _closeDrawer();
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        var card = e.target.closest('[data-pulsar-player]');
+        if (card) { e.preventDefault(); _drawerFocusPrev = card; _openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || ''); }
+      }
+      if (e.key === 'Escape') { _closeDrawer(); }
+    });
+  }
+
+  /* ------------------------------------------
+     6. SHOPIFY EDITOR SECTION LIFECYCLE
+  ------------------------------------------ */
+  document.addEventListener('shopify:section:load', function (e) {
+    var sectionEl = e.target;
+    if (!sectionEl) return;
+    destroySection(sectionEl); // clean stale state before re-init
+    initSection(sectionEl);
   });
 
   document.addEventListener('shopify:section:unload', function (e) {
-    var sectionEl = e.target;
-    if (!sectionEl || !window.ScrollTrigger) return;
-    // Kill any ScrollTriggers whose trigger element lives inside this section
-    ScrollTrigger.getAll().forEach(function (trigger) {
-      if (trigger.trigger && sectionEl.contains(trigger.trigger)) {
-        trigger.kill();
-      }
-    });
+    if (e.target) destroySection(e.target);
   });
 
   /* ------------------------------------------
      INIT
   ------------------------------------------ */
   function init() {
-    if (prefersReducedMotion) {
-      document.querySelectorAll(
-        '.pulsar-reveal, [data-pulsar-hero-element]'
-      ).forEach(function (el) {
-        el.style.opacity   = '1';
-        el.style.transform = 'none';
-        el.classList.add('is-visible');
-      });
-      initStatCountersIn(document);
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
+          el.style.opacity   = '1';
+          el.style.transform = 'none';
+          el.classList.add('is-visible');
+        });
+        initStatCountersIn(document);
       return;
     }
 
@@ -398,19 +984,20 @@
         runPreloader();
         initScrollAnimationsIn(document);
         initStatCountersIn(document);
+        initPlayerDrawer(); // Global singleton — safe to call once here
       }
     );
 
-    // Emergency fallback: if GSAP fails to load in 5s
+    // Emergency fallback: GSAP failed to load within 5s
     setTimeout(function () {
       if (!window.gsap) {
         revealHero();
-        document.querySelectorAll('.pulsar-reveal, [data-pulsar-hero-element]').forEach(function (el) {
-          el.classList.add('is-visible');
-          el.style.opacity   = '1';
-          el.style.transform = 'none';
-        });
-        initStatCountersIn(document); // uses IntersectionObserver fallback
+          document.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
+            el.classList.add('is-visible');
+            el.style.opacity   = '1';
+            el.style.transform = 'none';
+          });
+        initStatCountersIn(document);
       }
     }, 5000);
   }
@@ -420,5 +1007,11 @@
   } else {
     init();
   }
+
+  // Expose public API
+  window.PulsarAnimations = {
+    initSection:    initSection,
+    destroySection: destroySection
+  };
 
 })();

@@ -21,49 +21,67 @@
     <div class="pulsar-merch__grid pulsar-stagger-group">
       {%- if merch_collection.products.size > 0 -%}
         {%- for product in merch_collection.products limit: product_limit -%}
-          <div class="pulsar-merch__card pulsar-stagger-item">
-            <a href="{{ product.url }}" class="pulsar-merch__card-link" aria-label="{{ product.title }}">
-              <div class="pulsar-merch__card-image-wrap">
-                {%- if product.featured_image -%}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 600 }}"
-                    alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                    class="pulsar-merch__card-image pulsar-merch__card-image--primary"
-                    width="600"
-                    height="600"
-                    loading="lazy"
-                  >
-                  {%- if product.images[1] != blank -%}
+          <div class="pulsar-merch__card pulsar-stagger-item" data-pulsar-tilt>
+            <div class="pulsar-merch__card-surface">
+              <a href="{{ product.url }}" class="pulsar-merch__card-link" aria-label="{{ product.title }}">
+                <div class="pulsar-merch__card-image-wrap">
+                  {%- if product.featured_image -%}
                     <img
-                      src="{{ product.images[1] | image_url: width: 600 }}"
-                      alt="{{ product.images[1].alt | default: product.title | escape }}"
-                      class="pulsar-merch__card-image pulsar-merch__card-image--secondary"
+                      src="{{ product.featured_image | image_url: width: 600 }}"
+                      alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                      class="pulsar-merch__card-image pulsar-merch__card-image--primary"
                       width="600"
                       height="600"
                       loading="lazy"
                     >
-                  {%- endif -%}
-                {%- else -%}
-                  <div class="pulsar-merch__card-placeholder" aria-hidden="true">
-                    <span>{{ product.title | truncate: 2, '' }}</span>
-                  </div>
-                {%- endif -%}
-                <div class="pulsar-merch__card-overlay" aria-hidden="true">
-                  <span class="pulsar-merch__card-view">View Product</span>
-                </div>
-              </div>
-              <div class="pulsar-merch__card-info">
-                <h3 class="pulsar-merch__card-title">{{ product.title }}</h3>
-                <p class="pulsar-merch__card-price">
-                  {%- if product.compare_at_price > product.price -%}
-                    <span class="pulsar-merch__card-price--sale">{{ product.price | money }}</span>
-                    <span class="pulsar-merch__card-price--was">{{ product.compare_at_price | money }}</span>
+                    {%- if product.images[1] != blank -%}
+                      <img
+                        src="{{ product.images[1] | image_url: width: 600 }}"
+                        alt="{{ product.images[1].alt | default: product.title | escape }}"
+                        class="pulsar-merch__card-image pulsar-merch__card-image--secondary"
+                        width="600"
+                        height="600"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
                   {%- else -%}
-                    {{ product.price | money }}
+                    <div class="pulsar-merch__card-placeholder" aria-hidden="true">
+                      <span>{{ product.title | truncate: 2, '' }}</span>
+                    </div>
                   {%- endif -%}
-                </p>
-              </div>
-            </a>
+                  <div class="pulsar-merch__card-overlay" aria-hidden="true">
+                    <span class="pulsar-merch__card-view">View Product</span>
+                  </div>
+                </div>
+                <div class="pulsar-merch__card-info">
+                  <h3 class="pulsar-merch__card-title">{{ product.title }}</h3>
+                  <p class="pulsar-merch__card-price">
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="pulsar-merch__card-price--sale">{{ product.price | money }}</span>
+                      <span class="pulsar-merch__card-price--was">{{ product.compare_at_price | money }}</span>
+                    {%- else -%}
+                      {{ product.price | money }}
+                    {%- endif -%}
+                  </p>
+                </div>
+              </a>
+
+              {%- form 'product', product, class: 'pulsar-merch__quick-add-form' -%}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button
+                  class="pulsar-merch__quick-add"
+                  type="submit"
+                  aria-label="Quick add {{ product.title | escape }} to cart"
+                  {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                >
+                  {%- if product.selected_or_first_available_variant.available -%}
+                    Quick Add
+                  {%- else -%}
+                    Sold Out
+                  {%- endif -%}
+                </button>
+              {%- endform -%}
+            </div>
           </div>
         {%- endfor -%}
 
@@ -167,11 +185,26 @@
       transform 0.35s var(--pulsar-ease-out),
       border-color 0.35s ease,
       box-shadow 0.35s var(--pulsar-ease-out);
+    transform-style: preserve-3d;
   }
   .pulsar-merch__card:hover {
     transform: translateY(-6px);
     border-color: var(--pulsar-gray1);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  }
+  /* GSAP tilt active: strip CSS transform transition so GSAP owns it */
+  .pulsar-merch__card.has-pulsar-tilt {
+    transition:
+      border-color 0.35s ease,
+      box-shadow 0.35s var(--pulsar-ease-out);
+  }
+  .pulsar-merch__card.has-pulsar-tilt:hover {
+    transform: none;
+  }
+  .pulsar-merch__card-surface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   .pulsar-merch__card-link {
     display: block;
@@ -246,6 +279,10 @@
     flex-direction: column;
     gap: var(--pulsar-space-xs);
   }
+  .pulsar-merch__quick-add-form {
+    padding: 0 var(--pulsar-space-md) var(--pulsar-space-md);
+    margin-top: auto;
+  }
   .pulsar-merch__card-title {
     font-family: var(--font-secondary);
     font-size: 0.95rem;
@@ -265,6 +302,34 @@
     text-decoration: line-through;
     color: var(--pulsar-gray1);
     font-size: 0.8rem;
+  }
+
+  /* Quick-add button */
+  .pulsar-merch__quick-add {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 1px solid var(--pulsar-dark3);
+    color: var(--pulsar-gray2);
+    font-family: var(--font-secondary);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.6rem 0;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .pulsar-merch__quick-add:hover {
+    border-color: var(--pulsar-gray2);
+    color: var(--pulsar-white);
+  }
+  .pulsar-merch__quick-add[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .pulsar-merch__quick-add:focus-visible {
+    outline: 2px solid var(--pulsar-white);
+    outline-offset: 2px;
   }
 
   /* Footer CTA */

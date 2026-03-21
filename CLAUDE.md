@@ -2,7 +2,17 @@
 
 ## Project Identity
 
-You are building the **Team Pulsar** esports website — a Shopify Liquid theme that must feel **cinematic, premium, and mind-blowing**. This is NOT a generic store. Every pixel must reinforce the brand values: **Excellence, Community, Intent**.
+You are building the **Team Pulsar** esports website — a Shopify Liquid theme that must feel cinematic, premium, and deliberate. This is not a generic store. Every pixel reinforces the brand values: **Excellence, Community, Intent**.
+
+## Language Protocol — Absolute
+
+You must not write passive, AI-sounding code comments, copy, or agent instructions. The following are unconditionally banned:
+- Filler phrases: "embark," "delve," "enhance your experience," "testament to," "elevate your game," "seamlessly."
+- Exclamation points in agent prompts, code comments, or copy.
+- Hedging language: "might," "could potentially," "feel free to," "let me know if."
+- Bloated code: redundant CSS rules, fragile DOM selectors, inline animation logic in Liquid files.
+
+Use operational imperatives: "You must," "Never," "Ensure," "Verify." Short sentences. Cold precision.
 
 **Three core objectives:**
 1. **Sell merchandise** — primary revenue stream (~6 products)
@@ -111,6 +121,23 @@ These rules were established after an architecture audit. Do not violate them.
 - **ALWAYS** use JSON template format for `templates/*.json`
 - **ALWAYS** use CSS variables from the design system — never hardcode colors
 - **ALWAYS** test that existing cart/product functionality works after changes
+
+### Available Custom Skills (MANDATORY INVOCATION)
+
+You have access to a suite of highly powerful custom skills located in `.claude/skills/`. You MUST proactively invoke these skills whenever applicable to elevate your code above standard outputs:
+- `/brand-guidelines`: Apply official brand colors and typography.
+- `/claude-cost-optimization`: Cost tracking and optimization for Claude deployments.
+- `/connect-apps`: Connect Claude to external apps like Gmail, Slack, GitHub.
+- `/copywriting`: Inherit the brand positioning document to rewrite marketing copy for maximum emotional resonance.
+- `/excalidraw-diagram`: Create Excalidraw JSON diagrams to visualize architectures.
+- `/frontend-design`: Create distinctive, production-grade frontend interfaces without generic AI aesthetics. 
+- `/self-improving-agent`: Auto-triggers on skill completion/error to continuously evolve the codebase.
+- `/shadcn`: Manage components and project presets.
+- `/skill-creator`: Create, modify, and optimize existing skills.
+- `/systematic-debugging`: Mandatory invocation when encountering any bug, test failure, or visual glitch before touching code.
+- `/valyu-best-practices`: Perform real-time web search and content extraction.
+- `/web-design-guidelines`: Review UI code for strict Interface Guidelines compliance.
+- `/web-design-reviewer`: Visually inspect layouts to fix responsive breakage or design inconsistency.
 
 ### How Shopify Templates Work
 
@@ -470,30 +497,59 @@ Add the following to `layout/theme.liquid` (extend, don't replace):
 
 ## Agent Orchestration
 
+### Execution Pipeline — Enforced Order
+
+Claude must follow this pipeline without deviation. Do not skip steps. Do not merge steps.
+
+```
+1. liquid-agent       → Liquid structure, schemas, templates first
+2. css-animation-agent → CSS and animation second, after structure exists
+3. reviewer-agent     → Quality gate third, before anything ships
+4. debugger-agent     → Only on confirmed failure. Never pre-emptively.
+```
+
+**Authority Hierarchy:**
+- Pipeline order is absolute. No agent executes out of sequence.
+- If two agents claim the same task → Claude must STOP and reject execution. Do not proceed with ambiguous ownership.
+- `principal-art-director` runs after step 3, before final sign-off on complex UI components only.
+
+**Conflict Resolution:**
+- If a task touches animation AND Liquid structure → split the task. `liquid-agent` builds structure first, then `css-animation-agent` handles animation. Never merge.
+- If ownership is unclear → do not guess. Route to the pipeline owner defined in the table below. If still ambiguous, reject the task and ask for clarification.
+
+**Single Ownership Rule — Non-Negotiable:**
+- Every feature has exactly one owner. No exceptions.
+- `pulsar-animations.js` is the sole owner of all reveal logic, stat counters, and scroll animations. No other file or agent touches these.
+- If a fix requires changing animation ownership → it is an architecture decision, not a bug fix. Escalate; do not proceed inline.
+
+---
+
 ### Sub-Agents
 
-Six specialized agents live in `.claude/agents/`:
+Seven specialized agents live in `.claude/agents/`. Role boundaries are absolute — overlap is forbidden.
 
-| Agent | Purpose |
-|-------|---------|
-| **liquid-agent** | Shopify Liquid sections, snippets, templates, JSON schemas |
-| **css-animation-agent** | CSS styling, GSAP animations, ScrollTrigger, Lenis, custom cursor, visual effects |
-| **content-agent** | Text/data updates: roster names, stats, copy, marquee data, social links |
-| **principal-art-director** | The "Brother Clone". Expert developer checking UI, motion design, CSS hierarchy, and brand signature. Imposes extreme "taste pressure" to reject timid or default theme code. |
-| **reviewer-agent** | Code review, Shopify compliance, baseline design system audit, Liquid syntax validation |
-| **debugger-agent** | Broken layouts, Liquid errors, JS conflicts, Shopify theme issues |
-| **integration-agent** | GA4, social embeds, YouTube iframes, Google Forms, newsletter, OG meta tags, cookie consent |
+| Agent | Owns | Forbidden From |
+|-------|------|---------------|
+| **liquid-agent** | Sections, snippets, templates, JSON schemas, Liquid architecture | CSS, animation JS, inline styles, content-only edits |
+| **css-animation-agent** | All CSS, GSAP, ScrollTrigger, Lenis, hover states, preloader, custom cursor | Liquid structure, schema changes, content copy |
+| **content-agent** | Text, copy, data values, social URLs, roster names, stats | CSS classes, structural HTML, JS, schema settings |
+| **principal-art-director** | Aesthetic quality gate, motion audit, brand signature review | Architecture decisions, production code, any structural changes |
+| **reviewer-agent** | Compliance audit, design system enforcement, quality gate | Writing production code (audit only) |
+| **debugger-agent** | Root cause analysis, targeted bug fixes — root cause only | Architecture changes, animation ownership, refactoring |
+| **integration-agent** | GA4, YouTube, Twitter embeds, OG meta, cookie consent, social links | Animation logic, reveal logic, CSS visual styling, Liquid structure |
 
-### Delegation Rules
+### Dispatch Rules — Zero Ambiguity
 
-- **Always** delegate Liquid template + section creation → `liquid-agent`
-- **Always** delegate CSS, GSAP, animations, visual effects → `css-animation-agent`
-- **Always** delegate text/data-only changes → `content-agent`
-- **Always** delegate "why is X broken" → `debugger-agent`
-- **Always** delegate GA4, YouTube, Twitter, forms, meta tags → `integration-agent`
-- **Always** run `principal-art-director` after completing complex UI components (like Navbars or Heroes) to guarantee an absolute premium, expensive feel.
-- **Always** run `reviewer-agent` as a baseline check before considering any phase done.
-- **Never** debug inline — always delegate to `debugger-agent`
+- Liquid section or snippet creation or modification → `liquid-agent`
+- CSS, GSAP, animations, hover states, visual effects → `css-animation-agent`
+- Text, copy, roster names, stats, social links → `content-agent`
+- Any broken behavior, error, or unexpected output → `debugger-agent`
+- GA4, YouTube, Twitter, Google Forms, OG tags, cookie consent → `integration-agent`
+- After any complex UI component is complete → `principal-art-director` (required)
+- Before any phase is marked done → `reviewer-agent` (required, final step)
+- Do not debug inline. Route to `debugger-agent` without exception.
+- `css-animation-agent` never writes animation logic inside `.liquid` files.
+- `liquid-agent` never writes inline `<style>` or `<script>` animation blocks.
 
 ### Dispatch Strategy
 

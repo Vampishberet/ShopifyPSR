@@ -39,7 +39,7 @@
   /* === Typography (rendered by pulsar-fonts.liquid + Google Fonts) === */
   --font-display:   'Monument Extended', 'Arial Narrow', sans-serif;
   --font-secondary: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-accent:    'Neue Haas Display', 'Arial Black', sans-serif;
+  --font-accent:    var(--font-secondary);
   --font-body:      'Inter', system-ui, -apple-system, sans-serif;
 
   /* === Spacing === */
@@ -122,10 +122,19 @@ hr, .section-divider {
 /* ============================================
    3. TYPOGRAPHY
    ============================================ */
-body h1, body h2, body h3, body h4, body h5, body h6,
-.shopify-section h1, .shopify-section h2, .shopify-section h3,
-.shopify-section h4, .shopify-section h5, .shopify-section h6 {
+body h1, .shopify-section h1 {
   font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--pulsar-white);
+}
+
+body h2, body h3, body h4, body h5, body h6,
+.shopify-section h2, .shopify-section h3,
+.shopify-section h4, .shopify-section h5, .shopify-section h6 {
+  font-family: var(--font-secondary);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.02em;
@@ -180,7 +189,7 @@ body a:focus-visible {
   color: var(--pulsar-white);
 }
 .pulsar-heading-md {
-  font-family: var(--font-accent);
+  font-family: var(--font-secondary);
   font-weight: 700;
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   line-height: 1.2;
@@ -352,7 +361,10 @@ header-component [popover] a:hover,
    5. BUTTONS
    ============================================ */
 .pulsar-btn,
-.pulsar-btn--primary {
+.pulsar-btn--primary,
+.button,
+.btn,
+.product-form__submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -375,12 +387,18 @@ header-component [popover] a:hover,
     color 0.2s var(--pulsar-ease-std);
 }
 .pulsar-btn:hover,
-.pulsar-btn--primary:hover {
+.pulsar-btn--primary:hover,
+.button:hover,
+.btn:hover,
+.product-form__submit:hover {
   transform: scale(1.04);
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
 }
 .pulsar-btn:focus-visible,
-.pulsar-btn--primary:focus-visible {
+.pulsar-btn--primary:focus-visible,
+.button:focus-visible,
+.btn:focus-visible,
+.product-form__submit:focus-visible {
   outline: 2px solid var(--pulsar-white);
   outline-offset: 4px;
 }

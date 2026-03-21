@@ -241,6 +241,9 @@
                 {% endif %}
               </li>
             {%- endfor -%}
+            <li class="menu-drawer__list-item--flat" style="--menu-drawer-animation-index: 99;">
+              <a href="/pages/about" class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"><span class="menu-drawer__menu-item-text wrap-text">About</span></a>
+            </li>
           {% else %}
             {%- comment -%}
               Handle menus with 3 levels of links
@@ -555,6 +558,9 @@
                 {%- endif -%}
               </li>
             {%- endfor -%}
+            <li class="menu-drawer__list-item" style="--menu-drawer-animation-index: 99;">
+               <a href="/pages/about" class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"><span class="menu-drawer__menu-item-text wrap-text">About</span></a>
+            </li>
           {% endif %}
         </ul>
       </nav>

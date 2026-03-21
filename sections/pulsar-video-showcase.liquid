@@ -175,33 +175,6 @@
   }
 {% endstylesheet %}
 
-<script>
-  (function () {
-    /* Scroll-in Intersection Observer for video wrappers */
-    var wraps = document.querySelectorAll('[data-pulsar-video-wrap]');
-    if (!wraps.length || !('IntersectionObserver' in window)) return;
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        var wrap = entry.target;
-        if (entry.isIntersecting) {
-          wrap.classList.add('pulsar-video--in-view');
-          /* Optional: trigger GSAP entrance if loaded */
-          if (window.gsap) {
-            gsap.fromTo(wrap.closest('.pulsar-videos__item'),
-              { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }
-            );
-          }
-          obs.unobserve(wrap);
-        }
-      });
-    }, { threshold: 0.25 });
-
-    wraps.forEach(function (wrap) { obs.observe(wrap); });
-  })();
-</script>
-
 {% schema %}
 {
   "name": "Pulsar Video Showcase",

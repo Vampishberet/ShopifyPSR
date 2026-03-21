@@ -7,8 +7,8 @@
       <div class="pulsar-contact__hero-vignette"></div>
     </div>
     <div class="pulsar-contact__hero-content">
-      <p class="pulsar-contact__overline" data-pulsar-contact="overline">CONTACT</p>
-      <h1 class="pulsar-contact__heading" data-pulsar-contact="heading">
+      <p class="pulsar-contact__overline pulsar-reveal">CONTACT</p>
+      <h1 class="pulsar-contact__heading pulsar-heading-reveal">
         {{ section.settings.heading | default: 'GET IN TOUCH.' }}
       </h1>
     </div>
@@ -402,32 +402,6 @@
   .pulsar-contact__grid { grid-template-columns: 1fr; gap: var(--pulsar-space-xl); }
 }
 </style>
-
-<script>
-(function () {
-  var els = [
-    document.querySelector('[data-pulsar-contact="overline"]'),
-    document.querySelector('[data-pulsar-contact="heading"]')
-  ].filter(Boolean);
-  if (!els.length) return;
-  function animate() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-      return;
-    }
-    if (window.gsap) {
-      gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out', delay: 0.2 });
-    } else {
-      els.forEach(function (el) { el.style.opacity = '1'; });
-    }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animate);
-  } else {
-    animate();
-  }
-})();
-</script>
 
 {% schema %}
 {
