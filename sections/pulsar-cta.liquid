@@ -3,7 +3,7 @@
     <p class="pulsar-cta__overline pulsar-reveal">{{ section.settings.overline | default: 'Ready?' }}</p>
     <h2 class="pulsar-cta__heading pulsar-heading-reveal">
       {%- if section.settings.heading != blank -%}
-        {{ section.settings.heading }}
+        {{ section.settings.heading | newline_to_br }}
       {%- else -%}
         THIS IS<br>YOUR ORG.
       {%- endif -%}

@@ -13,7 +13,7 @@
       "type": "pulsar-hero",
       "settings": {
         "eyebrow": "Team Pulsar",
-        "heading": "We ArePulsar.",
+        "heading": "We Are Pulsar.",
         "tagline": "Competitive esports. Creator culture. Community first.",
         "bg_video": "",
         "primary_cta_label": "Shop Merch",
@@ -29,17 +29,48 @@
         "headline": "We don't just play games. We build legacies.",
         "body": "Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant.",
         "cta_label": "Our Story",
-        "cta_url": ""
+        "cta_url": "/pages/about"
       }
     },
     "pulsar-stats-counter": {
       "type": "pulsar-stats-counter",
-      "custom_css": [
-        ".fade-in {opacity: 0; animation: fadeIn 1.2s ease forwards;}"
-      ],
       "settings": {
         "label": "By the numbers"
-      }
+      },
+      "blocks": {
+        "stat-reach": {
+          "type": "stat",
+          "settings": {
+            "value": 2,
+            "suffix": "M+",
+            "label": "Combined Reach",
+            "decimals": 0,
+            "duration": 2000
+          }
+        },
+        "stat-earnings": {
+          "type": "stat",
+          "settings": {
+            "value": 125,
+            "prefix": "$",
+            "suffix": "K+",
+            "label": "Prize Earnings",
+            "decimals": 0,
+            "duration": 2200
+          }
+        },
+        "stat-members": {
+          "type": "stat",
+          "settings": {
+            "value": 60,
+            "suffix": "+",
+            "label": "Members",
+            "decimals": 0,
+            "duration": 1800
+          }
+        }
+      },
+      "block_order": ["stat-reach", "stat-earnings", "stat-members"]
     },
     "pulsar-member-ribbon": {
       "type": "pulsar-member-ribbon",
@@ -59,11 +90,19 @@
       "settings": {
         "overline": "Official Merch",
         "heading": "Gear Up",
-        "collection": "",
+        "collection": "all",
         "product_limit": 6,
         "cta_label": "Shop All",
-        "shop_url": "shopify://pages/merchandsie"
+        "shop_url": "/collections/all"
       }
+    },
+    "pulsar-video-showcase": {
+      "type": "pulsar-video-showcase",
+      "settings": {}
+    },
+    "pulsar-twitter-feed": {
+      "type": "pulsar-twitter-feed",
+      "settings": {}
     },
     "pulsar-partners": {
       "type": "pulsar-partners",
@@ -76,7 +115,7 @@
         "show_cta": true,
         "cta_text": "Interested in partnering with Team Pulsar?",
         "cta_label": "Become a Partner",
-        "cta_url": ""
+        "cta_url": "/pages/contact"
       }
     },
     "pulsar-cta": {
@@ -88,7 +127,7 @@
         "primary_label": "Shop Now",
         "primary_url": "/collections/all",
         "secondary_label": "Join Us",
-        "secondary_url": ""
+        "secondary_url": "/pages/careers"
       }
     }
   },
@@ -99,6 +138,8 @@
     "pulsar-member-ribbon",
     "pulsar-esports-titles",
     "pulsar-featured-merch",
+    "pulsar-video-showcase",
+    "pulsar-twitter-feed",
     "pulsar-partners",
     "pulsar-cta"
   ]

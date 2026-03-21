@@ -272,14 +272,6 @@
     }
   }
 
-  /* Tilt-safe: GSAP owns transform on tilt cards — strip CSS transform transition */
-  .pulsar-merch__card.has-pulsar-tilt {
-    transition: border-color 0.35s ease, box-shadow 0.35s var(--pulsar-ease-out);
-  }
-  .pulsar-merch__card.has-pulsar-tilt:hover {
-    transform: none; /* GSAP controls this */
-  }
-
   /* Responsive */
   @media (max-width: 767px) {
     .pulsar-hero__heading {
