@@ -1,1 +1,105 @@
-{"sections":{"pulsar-hero":{"type":"pulsar-hero","settings":{"eyebrow":"Team Pulsar","heading":"We Are\nPulsar.","tagline":"Competitive esports. Creator culture. Community first.","bg_video":"","primary_cta_label":"Shop Merch","primary_cta_url":"\/collections\/all","secondary_cta_label":"Our Esports","secondary_cta_url":"\/pages\/esports"}},"pulsar-brand-statement":{"type":"pulsar-brand-statement","settings":{"overline":"Who We Are","headline":"We don't just play games. We build legacies.","body":"Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant.","cta_label":"Our Story","cta_url":""}},"pulsar-stats-counter":{"type":"pulsar-stats-counter","custom_css":[".fade-in {opacity: 0; animation: fadeIn 1.2s ease forwards;}"],"settings":{"label":"By the numbers"}},"pulsar-member-ribbon":{"type":"pulsar-member-ribbon","settings":{"heading":"Our people"}},"pulsar-esports-titles":{"type":"pulsar-esports-titles","settings":{}},"pulsar-featured-merch":{"type":"pulsar-featured-merch","settings":{"overline":"Official Merch","heading":"Gear Up","collection":"","product_limit":6,"cta_label":"Shop All","shop_url":"shopify:\/\/pages\/merchandsie"}},"pulsar-partners":{"type":"pulsar-partners","settings":{"overline":"Supported by","heading":"Our Partners","partner_1_url":"","partner_2_url":"","show_cta":true,"cta_text":"Interested in partnering with Team Pulsar?","cta_label":"Become a Partner","cta_url":""}},"pulsar-cta":{"type":"pulsar-cta","settings":{"overline":"Ready?","heading":"Join the Community","body":"Join the movement. Wear the name. Compete at the highest level.","primary_label":"Shop Now","primary_url":"\/collections\/all","secondary_label":"Join Us","secondary_url":""}}},"order":["pulsar-hero","pulsar-brand-statement","pulsar-stats-counter","pulsar-member-ribbon","pulsar-esports-titles","pulsar-featured-merch","pulsar-partners","pulsar-cta"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pulsar-hero": {
+      "type": "pulsar-hero",
+      "settings": {
+        "eyebrow": "Team Pulsar",
+        "heading": "We ArePulsar.",
+        "tagline": "Competitive esports. Creator culture. Community first.",
+        "bg_video": "",
+        "primary_cta_label": "Shop Merch",
+        "primary_cta_url": "/collections/all",
+        "secondary_cta_label": "Our Esports",
+        "secondary_cta_url": "/pages/esports"
+      }
+    },
+    "pulsar-brand-statement": {
+      "type": "pulsar-brand-statement",
+      "settings": {
+        "overline": "Who We Are",
+        "headline": "We don't just play games. We build legacies.",
+        "body": "Team Pulsar is a North American esports organisation built on trust, community, and competitive excellence. Founded in 2020 by a group of high school friends with a shared dream, we've grown into a multi-title powerhouse — 60+ members strong, competing across Fortnite, Apex Legends, and Valorant.",
+        "cta_label": "Our Story",
+        "cta_url": ""
+      }
+    },
+    "pulsar-stats-counter": {
+      "type": "pulsar-stats-counter",
+      "custom_css": [
+        ".fade-in {opacity: 0; animation: fadeIn 1.2s ease forwards;}"
+      ],
+      "settings": {
+        "label": "By the numbers"
+      }
+    },
+    "pulsar-member-ribbon": {
+      "type": "pulsar-member-ribbon",
+      "settings": {
+        "heading": "The People who make it happen",
+        "member_names": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster",
+        "ticker_speed": 0.7,
+        "pause_on_hover": true
+      }
+    },
+    "pulsar-esports-titles": {
+      "type": "pulsar-esports-titles",
+      "settings": {}
+    },
+    "pulsar-featured-merch": {
+      "type": "pulsar-featured-merch",
+      "settings": {
+        "overline": "Official Merch",
+        "heading": "Gear Up",
+        "collection": "",
+        "product_limit": 6,
+        "cta_label": "Shop All",
+        "shop_url": "shopify://pages/merchandsie"
+      }
+    },
+    "pulsar-partners": {
+      "type": "pulsar-partners",
+      "settings": {
+        "overline": "Supported by",
+        "heading": "Our Partners",
+        "partner_1_url": "",
+        "partner_2_url": "",
+        "partner_3_url": "",
+        "show_cta": true,
+        "cta_text": "Interested in partnering with Team Pulsar?",
+        "cta_label": "Become a Partner",
+        "cta_url": ""
+      }
+    },
+    "pulsar-cta": {
+      "type": "pulsar-cta",
+      "settings": {
+        "overline": "Ready?",
+        "heading": "Join the Community",
+        "body": "Join the movement. Wear the name. Compete at the highest level.",
+        "primary_label": "Shop Now",
+        "primary_url": "/collections/all",
+        "secondary_label": "Join Us",
+        "secondary_url": ""
+      }
+    }
+  },
+  "order": [
+    "pulsar-hero",
+    "pulsar-brand-statement",
+    "pulsar-stats-counter",
+    "pulsar-member-ribbon",
+    "pulsar-esports-titles",
+    "pulsar-featured-merch",
+    "pulsar-partners",
+    "pulsar-cta"
+  ]
+}
