@@ -28,6 +28,37 @@
     })();
   }
 
+  function addVisibleState(el) {
+    if (!el) return;
+    el.classList.add('is-visible');
+  }
+
+  function finalizeVisibleState(el) {
+    if (!el) return;
+    addVisibleState(el);
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  }
+
+  function finalizeVisibleSet(root, selector) {
+    if (!root) return;
+    root.querySelectorAll(selector).forEach(function (el) {
+      finalizeVisibleState(el);
+    });
+  }
+
+  function resetAnimatedStyles(el) {
+    if (!el || !window.gsap) return;
+    addVisibleState(el);
+    gsap.set(el, { clearProps: 'opacity,transform' });
+  }
+
+  function claimInit(el, key) {
+    if (!el || el[key]) return false;
+    el[key] = true;
+    return true;
+  }
+
   /* ------------------------------------------
      1. PRELOADER EXIT
   ------------------------------------------ */
@@ -161,6 +192,8 @@
     if (!window.gsap || !window.ScrollTrigger) return;
 
     gsap.utils.toArray('.pulsar-heading-reveal', root).forEach(function (el) {
+      if (el.classList.contains('pulsar-word-reveal')) return; // owned by initWordMaskReveal
+      if (!claimInit(el, '_pulsarHeadingRevealInit')) return;
       gsap.fromTo(el,
         { y: 40, opacity: 0 },
         {
@@ -168,12 +201,19 @@
           opacity: 1,
           duration: 0.7,
           ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+          onComplete: function () { resetAnimatedStyles(el); },
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            once: true,
+            onEnter: function () { addVisibleState(el); }
+          }
         }
       );
     });
 
     gsap.utils.toArray('.pulsar-stagger-group', root).forEach(function (group) {
+      if (!claimInit(group, '_pulsarStaggerInit')) return;
       var items = group.querySelectorAll('.pulsar-stagger-item');
       if (!items.length) return;
       gsap.fromTo(items,
@@ -184,16 +224,54 @@
           duration: 0.55,
           ease: 'power2.out',
           stagger: 0.09,
-          scrollTrigger: { trigger: group, start: 'top 80%', once: true }
+          onComplete: function () {
+            items.forEach(function (item) { resetAnimatedStyles(item); });
+          },
+          scrollTrigger: {
+            trigger: group,
+            start: 'top 80%',
+            once: true,
+            onEnter: function () {
+              items.forEach(function (item) { addVisibleState(item); });
+            }
+          }
         }
       );
     });
+
+    /* Stats items — scale + back.out bounce entrance.
+       Runs before generic .pulsar-reveal so items can be claimed here first. */
+    var statsItems = (root === document ? document : root).querySelectorAll('.pulsar-stats__item.pulsar-reveal');
+    if (statsItems.length) {
+      var statsTrigger = statsItems[0].closest('.pulsar-stats__grid') || statsItems[0].closest('section') || statsItems[0];
+      statsItems.forEach(function (el) { claimInit(el, '_pulsarRevealInit'); });
+      gsap.fromTo(statsItems,
+        { y: 50, opacity: 0, scale: 0.85 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.72,
+          ease: 'back.out(1.4)',
+          stagger: 0.12,
+          onComplete: function () {
+            statsItems.forEach(function (el) { resetAnimatedStyles(el); });
+          },
+          scrollTrigger: {
+            trigger: statsTrigger,
+            start: 'top 78%',
+            once: true,
+            onEnter: function () { statsItems.forEach(function (el) { addVisibleState(el); }); }
+          }
+        }
+      );
+    }
 
     /* Generic .pulsar-reveal — single owner, no duplicate in enhancements.js.
        Uses gsap.fromTo so elements whose CSS default is already opacity:0
        are explicitly animated to a visible final state. */
     gsap.utils.toArray('.pulsar-reveal', root).forEach(function (el) {
-      if (el.classList.contains('is-visible')) return;
+      if (!claimInit(el, '_pulsarRevealInit') || el.classList.contains('is-visible')) return;
       gsap.fromTo(el,
         { opacity: 0, y: 28 },
         {
@@ -201,11 +279,12 @@
           y: 0,
           duration: 0.7,
           ease: 'power2.out',
+          onComplete: function () { resetAnimatedStyles(el); },
           scrollTrigger: {
             trigger: el,
             start: 'top 87%',
             once: true,
-            onEnter: function () { el.classList.add('is-visible'); }
+            onEnter: function () { addVisibleState(el); }
           }
         }
       );
@@ -233,11 +312,13 @@
     var partnerLogos = (root === document ? document : root).querySelectorAll('.pulsar-partners__logo-link');
     if (partnerLogos.length) {
       gsap.fromTo(partnerLogos,
-        { y: 20, opacity: 0 },
+        { y: 20, opacity: 0, filter: 'blur(8px)', scale: 0.96 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.55,
+          filter: 'blur(0px)',
+          scale: 1,
+          duration: 0.65,
           ease: 'power2.out',
           stagger: 0.12,
           scrollTrigger: {
@@ -250,7 +331,7 @@
     }
 
     var ctaHeading = (root === document ? document : root).querySelector('.pulsar-cta__heading');
-    if (ctaHeading) {
+    if (ctaHeading && claimInit(ctaHeading, '_pulsarCtaHeadingInit')) {
       gsap.fromTo(ctaHeading,
         { scale: 0.94, opacity: 0, y: 30 },
         {
@@ -259,7 +340,31 @@
           y: 0,
           duration: 0.9,
           ease: 'power2.out',
-          scrollTrigger: { trigger: ctaHeading, start: 'top 85%', once: true }
+          scrollTrigger: {
+            trigger: ctaHeading,
+            start: 'top 85%',
+            once: true,
+            onEnter: function () {
+              /* Char scramble — resolves to real text over ~1.6s */
+              var origHTML = ctaHeading.innerHTML;
+              var origText = (ctaHeading.innerText || ctaHeading.textContent || '').replace(/\s+/g, ' ').trim();
+              var SCHARS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!%';
+              var dur = 1600;
+              var t0  = Date.now();
+              ctaHeading.textContent = origText;
+              (function tick() {
+                var prog = Math.min((Date.now() - t0) / dur, 1);
+                var rev  = Math.floor(prog * prog * origText.length);
+                var out  = '';
+                for (var i = 0; i < origText.length; i++) {
+                  var c = origText[i];
+                  out += (c === ' ' || c === '\n') ? c : i < rev ? c : SCHARS[Math.floor(Math.random() * SCHARS.length)];
+                }
+                ctaHeading.textContent = out;
+                if (prog < 1) { requestAnimationFrame(tick); } else { ctaHeading.innerHTML = origHTML; }
+              })();
+            }
+          }
         }
       );
     }
@@ -281,6 +386,7 @@
     }
 
     // Phase 3 feature inits — scoped to root
+    initWordMaskReveal(root);
     initParallax(root);
     initHeroSlider(root);
     initCardTilt(root);
@@ -395,26 +501,34 @@
   function initSection(sectionEl) {
     if (!sectionEl) return;
 
-      if (prefersReducedMotion) {
-        sectionEl.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
-          el.style.opacity   = '1';
-          el.style.transform = 'none';
-          el.classList.add('is-visible');
-        });
-        initStatCountersIn(sectionEl);
+    if (prefersReducedMotion) {
+      finalizeVisibleSet(
+        sectionEl,
+        '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
+      );
+      sectionEl.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
+        el.style.transform = 'none';
+      });
+      initStatCountersIn(sectionEl);
       return;
     }
 
     if (window.gsap && window.ScrollTrigger) {
       initScrollAnimationsIn(sectionEl);
       initStatCountersIn(sectionEl);
-      } else {
-        sectionEl.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal').forEach(function (el) {
-          el.classList.add('is-visible');
-          el.style.opacity   = '1';
-          el.style.transform = 'none';
-        });
-      }
+      requestAnimationFrame(function () {
+        ScrollTrigger.refresh();
+      });
+    } else {
+      finalizeVisibleSet(
+        sectionEl,
+        '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
+      );
+      sectionEl.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
+        el.style.transform = 'none';
+      });
+      initStatCountersIn(sectionEl);
+    }
   }
 
   function destroySection(sectionEl) {
@@ -434,6 +548,28 @@
         ticker._pulsarTickerTween.kill();
         delete ticker._pulsarTickerTween;
       }
+    });
+
+    sectionEl.querySelectorAll('.pulsar-heading-reveal').forEach(function (el) {
+      delete el._pulsarHeadingRevealInit;
+    });
+
+    // Reset word mask reveal so it can re-split on section reload
+    sectionEl.querySelectorAll('.pulsar-word-reveal').forEach(function (el) {
+      delete el._pulsarWordRevealInit;
+    });
+
+    // Reset CTA heading scramble guard
+    sectionEl.querySelectorAll('.pulsar-cta__heading').forEach(function (el) {
+      delete el._pulsarCtaHeadingInit;
+    });
+
+    sectionEl.querySelectorAll('.pulsar-reveal').forEach(function (el) {
+      delete el._pulsarRevealInit;
+    });
+
+    sectionEl.querySelectorAll('.pulsar-stagger-group').forEach(function (group) {
+      delete group._pulsarStaggerInit;
     });
 
     // Reset counter init flags so they re-animate if section reloads
@@ -479,6 +615,59 @@
         delete s._pulsarEsportsMqHandler;
       });
     }
+
+  /* ------------------------------------------
+     6b. WORD MASK REVEAL
+     Owner: pulsar-animations.js.
+     Target: .pulsar-word-reveal
+     JS splits innerHTML into per-word overflow:hidden mask pairs, then
+     staggers GSAP yPercent 110 → 0 for a premium cinema-style heading reveal.
+     <br> tags are preserved. Safe fallback: if element also has
+     .pulsar-heading-reveal, CSS keeps it opacity:0 until JS runs.
+  ------------------------------------------ */
+  function initWordMaskReveal(root) {
+    root = root || document;
+    if (!window.gsap || !window.ScrollTrigger || prefersReducedMotion) return;
+    var scope = root === document ? document : root;
+
+    scope.querySelectorAll('.pulsar-word-reveal').forEach(function (el) {
+      if (!claimInit(el, '_pulsarWordRevealInit')) return;
+
+      // Tokenise: split on <br> first, then split each chunk on spaces
+      var raw    = el.innerHTML.trim();
+      var chunks = raw.split(/(<br\s*\/?>)/gi);
+      var rebuilt = chunks.map(function (chunk) {
+        if (/^<br/i.test(chunk)) return chunk; // preserve line breaks as-is
+        return chunk.split(/(\s+)/).map(function (part) {
+          if (!part || /^\s+$/.test(part)) return part;
+          return '<span class="pulsar-word-wrap" aria-hidden="false">' +
+                   '<span class="pulsar-word-inner">' + part + '</span>' +
+                 '</span>';
+        }).join('');
+      }).join('');
+      el.innerHTML = rebuilt;
+
+      var inners = el.querySelectorAll('.pulsar-word-inner');
+      // Pin words out-of-view immediately (before paint)
+      gsap.set(inners, { yPercent: 110 });
+      // Container was opacity:0 from .pulsar-heading-reveal CSS — reveal it now
+      el.style.opacity   = '1';
+      el.style.transform = 'none';
+
+      gsap.to(inners, {
+        yPercent: 0,
+        duration: 0.75,
+        ease: 'power3.out',
+        stagger: 0.065,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 82%',
+          once: true,
+          onEnter: function () { addVisibleState(el); }
+        }
+      });
+    });
+  }
 
   /* ------------------------------------------
      7. PARALLAX SCROLL
@@ -967,13 +1156,15 @@
      INIT
   ------------------------------------------ */
   function init() {
-      if (prefersReducedMotion) {
-        document.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
-          el.style.opacity   = '1';
-          el.style.transform = 'none';
-          el.classList.add('is-visible');
-        });
-        initStatCountersIn(document);
+    if (prefersReducedMotion) {
+      finalizeVisibleSet(
+        document,
+        '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
+      );
+      document.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
+        el.style.transform = 'none';
+      });
+      initStatCountersIn(document);
       return;
     }
 
@@ -985,6 +1176,9 @@
         initScrollAnimationsIn(document);
         initStatCountersIn(document);
         initPlayerDrawer(); // Global singleton — safe to call once here
+        requestAnimationFrame(function () {
+          ScrollTrigger.refresh();
+        });
       }
     );
 
@@ -992,11 +1186,10 @@
     setTimeout(function () {
       if (!window.gsap) {
         revealHero();
-          document.querySelectorAll('.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element]').forEach(function (el) {
-            el.classList.add('is-visible');
-            el.style.opacity   = '1';
-            el.style.transform = 'none';
-          });
+        finalizeVisibleSet(
+          document,
+          '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
+        );
         initStatCountersIn(document);
       }
     }, 5000);

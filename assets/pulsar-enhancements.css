@@ -923,3 +923,23 @@ product-information .button--primary:hover,
   color: var(--pulsar-gray2) !important;
   font-family: var(--font-body) !important;
 }
+
+
+/* ============================================
+   ANIMATION UTILITIES — Word Mask Reveal
+   Used by pulsar-animations.js initWordMaskReveal().
+   .pulsar-word-wrap  — overflow:hidden container per word
+   .pulsar-word-inner — the moving element GSAP animates
+   ============================================ */
+.pulsar-word-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Extra room for descenders (g, p, y) so they don't clip */
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.pulsar-word-inner {
+  display: inline-block;
+  /* transform set exclusively by GSAP — no CSS initial state */
+}
