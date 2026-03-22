@@ -35,12 +35,10 @@
     var lenis = new Lenis({
       duration: 1.2,
       easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-      direction: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false
+      orientation: 'vertical',
+      smoothWheel: true,
+      syncTouch: false,
+      touchMultiplier: 2
     });
 
     window.__pulsarLenis = lenis;

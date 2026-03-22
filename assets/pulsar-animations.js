@@ -394,25 +394,25 @@
     initEsportsTabs(root);
 
     /* Ticker / Member Ribbon — Infinite Seamless GSAP Loop */
+    if (prefersReducedMotion) return;
+
     var tickers = (root === document ? document : root).querySelectorAll('.pulsar-ticker-section');
     tickers.forEach(function (tickerSection) {
+      if (tickerSection._pulsarTickerTween) return; // guard against double-init
+
       var track = tickerSection.querySelector('.pulsar-ticker-track');
       var firstGroup = tickerSection.querySelector('.pulsar-ticker-group');
       if (!track || !firstGroup) return;
 
       var speedSetting = parseFloat(tickerSection.dataset.tickerSpeed) || 0.7;
-      var duration = 10 / speedSetting; // Base duration inversely proportional to speed
+      // Duration scales with content width so visual speed is consistent regardless of track length
+      var duration = firstGroup.offsetWidth / (speedSetting * 60);
 
       var tween = gsap.to(track, {
-        x: function() { return -firstGroup.offsetWidth; },
+        x: -firstGroup.offsetWidth,
         duration: duration,
         ease: 'none',
-        repeat: -1,
-        modifiers: {
-          x: gsap.utils.unitize(function(x) {
-            return parseFloat(x) % firstGroup.offsetWidth; // Seamless loop math
-          })
-        }
+        repeat: -1
       });
 
       // Store on element for cleanup later
