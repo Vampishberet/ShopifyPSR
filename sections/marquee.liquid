@@ -1,7 +1,7 @@
 {%- comment -%}
   Pulsar Member Ribbon
+  Built directly on the working marquee section structure.
   Depends on assets/marquee.js (custom element: marquee-component).
-  marquee.js reads data-speed-factor and sets --marquee-speed on the element at runtime.
 {%- endcomment -%}
 
 <script
@@ -11,33 +11,28 @@
 ></script>
 
 {%- liquid
+  assign gap_between_elements = section.settings.gap_between_elements
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
-  assign gap_between_elements = section.settings.gap_between_elements
 -%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
-<section
-  id="pulsar-member-ribbon-{{ section.id }}"
-  class="pulsar-member-ribbon color-{{ section.settings.color_scheme }}"
->
+<section class="pulsar-member-ribbon color-{{ section.settings.color_scheme }}">
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-member-ribbon__heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
   <marquee-component
-    class="pulsar-member-ribbon__marquee section spacing-style gap-style pulsar-reveal"
+    class="section spacing-style gap-style pulsar-reveal"
     style="
-      {%- render 'spacing-style', settings: section.settings %};
-      {% render 'gap-style', value: gap_between_elements, name: 'marquee-gap' %}
+      --marquee-gap: {{ gap_between_elements }}px;
       --marquee-direction: {{ section.settings.movement_direction }};
+      padding-top: {{ section.settings.padding_block_start }}px;
+      padding-bottom: {{ section.settings.padding_block_end }}px;
     "
     data-speed-factor="{{ section.settings.speed_factor }}"
     data-movement-direction="{{ section.settings.movement_direction }}"
-    {% if section.settings.pause_on_hover %}
-      data-pause-on-hover="true"
-    {% endif %}
   >
     <div
       class="marquee__wrapper"
@@ -47,28 +42,41 @@
         class="marquee__content"
         ref="content"
       >
-        {%- for i in (1..2) -%}
-          <div
-            class="marquee__repeated-items pulsar-member-ribbon__items"
-            ref="marqueeItems[]"
-            {% if i == 2 %}aria-hidden="true"{% endif %}
-          >
-            {%- for member in members -%}
-              {%- assign name = member | strip -%}
-              {%- if name != blank -%}
-                <span class="pulsar-member-ribbon__item">
-                  <span class="pulsar-member-ribbon__name">{{ name }}</span>
-                </span>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
-        {%- endfor -%}
+        <div
+          class="marquee__repeated-items pulsar-member-ribbon__items"
+          ref="marqueeItems[]"
+        >
+          {%- for member in members -%}
+            {%- assign name = member | strip -%}
+            {%- if name != blank -%}
+              <span class="pulsar-member-ribbon__item">
+                {{ name }}
+              </span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
       </div>
     </div>
   </marquee-component>
 </section>
 
 {% stylesheet %}
+  .pulsar-member-ribbon {
+    background: #000;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  .pulsar-member-ribbon__heading {
+    margin: 0 0 16px;
+    text-align: center;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground), 0.65);
+  }
+
   marquee-component {
     display: block;
     width: 100%;
@@ -80,7 +88,6 @@
     gap: var(--marquee-gap);
     width: fit-content;
     white-space: nowrap;
-    will-change: transform;
   }
 
   .marquee__content {
@@ -97,107 +104,39 @@
     justify-content: center;
   }
 
-  .marquee__repeated-items > * {
-    align-content: center;
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} {
-    position: relative;
-    overflow: hidden;
-    background: var(--pulsar-black);
-    border-top: 1px solid var(--pulsar-accent-purple-soft);
-    border-bottom: 1px solid var(--pulsar-accent-purple-soft);
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__heading {
-    margin: 0 0 16px;
-    text-align: center;
-    font-size: 0.65rem;
-    font-family: var(--font-body);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray1);
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__marquee {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent 0%,
-      black 8%,
-      black 92%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent 0%,
-      black 8%,
-      black 92%,
-      transparent 100%
-    );
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__items {
-    align-items: center;
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__item {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__name {
+  .pulsar-member-ribbon__item {
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    font-family: var(--font-secondary);
     font-size: 1.25rem;
-    font-weight: 400;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--pulsar-gray3);
+    color: rgb(var(--color-foreground));
   }
 
-  #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__name::after {
+  .pulsar-member-ribbon__item::after {
     content: "✦";
     margin-left: var(--marquee-gap);
-    color: var(--pulsar-white);
     font-size: 0.6rem;
     line-height: 1;
+    color: rgb(var(--color-foreground));
   }
 
-  {% if section.settings.pause_on_hover %}
-    #pulsar-member-ribbon-{{ section.id }} marquee-component:hover .marquee__wrapper {
-      animation-play-state: paused;
-    }
-  {% endif %}
-
   @media screen and (max-width: 767px) {
-    #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__heading {
+    .pulsar-member-ribbon__item {
+      font-size: 20px;
+    }
+
+    .pulsar-member-ribbon__heading {
       margin-bottom: 14px;
       font-size: 0.6rem;
-    }
-
-    #pulsar-member-ribbon-{{ section.id }} .pulsar-member-ribbon__name {
-      font-size: 20px;
     }
   }
 
   @media (prefers-reduced-motion: no-preference) {
     marquee-component:not([data-disabled]) .marquee__wrapper {
       animation: marquee-motion var(--marquee-speed) linear infinite var(--marquee-direction);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    marquee-component .marquee__wrapper {
-      animation: none !important;
-      transform: none !important;
     }
   }
 
@@ -225,7 +164,7 @@
       "type": "textarea",
       "id": "member_names",
       "label": "Member names",
-      "info": "Comma-separated list of member names.",
+      "info": "Comma-separated list of names.",
       "default": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster"
     },
     {
@@ -235,30 +174,14 @@
       "options": [
         {
           "value": "reverse",
-          "label": "Left to right"
+          "label": "Forward"
         },
         {
           "value": "normal",
-          "label": "Right to left"
+          "label": "Reverse"
         }
       ],
       "default": "normal"
-    },
-    {
-      "type": "range",
-      "id": "speed_factor",
-      "label": "Ticker speed",
-      "min": 5,
-      "max": 60,
-      "step": 1,
-      "default": 25,
-      "info": "Lower usually feels faster in JS-driven marquee systems like this one, depending on how marquee.js is written."
-    },
-    {
-      "type": "checkbox",
-      "id": "pause_on_hover",
-      "label": "Pause on hover",
-      "default": true
     },
     {
       "type": "color_scheme",
@@ -267,38 +190,43 @@
       "default": "scheme-1"
     },
     {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
       "type": "range",
-      "id": "padding-block-start",
+      "id": "padding_block_start",
       "label": "Top padding",
       "min": 0,
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 20
+      "default": 24
     },
     {
       "type": "range",
-      "id": "padding-block-end",
+      "id": "padding_block_end",
       "label": "Bottom padding",
       "min": 0,
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 20
+      "default": 24
     },
     {
       "type": "range",
       "id": "gap_between_elements",
-      "label": "Gap between names",
-      "min": 8,
-      "max": 64,
+      "label": "Gap",
+      "min": 0,
+      "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 20
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "speed_factor",
+      "label": "Speed factor",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "default": 25
     }
   ],
   "presets": [
