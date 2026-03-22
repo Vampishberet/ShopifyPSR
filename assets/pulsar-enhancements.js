@@ -7,6 +7,9 @@
 (function () {
   'use strict';
 
+  if (window.__pulsarEnhancementsBooted) return;
+  window.__pulsarEnhancementsBooted = true;
+
   /* ------------------------------------------
      UTILITY: poll until condition or timeout
   ------------------------------------------ */
@@ -31,6 +34,7 @@
   function initLenis() {
     if (typeof Lenis === 'undefined') return;
     if (window.innerWidth < 768) return;
+    if (window.__pulsarLenis) return;
 
     var lenis = new Lenis({
       duration: 1.2,
@@ -76,6 +80,7 @@
   function initHeaderScroll() {
     var headerGroup = document.getElementById('header-group');
     if (!headerGroup) return;
+    if (window.__pulsarHeaderObs || window.__pulsarHeaderSentinel) return;
 
     var sentinel = document.createElement('div');
     sentinel.setAttribute('aria-hidden', 'true');

@@ -55,6 +55,7 @@
   --pulsar-accent-purple1: #cdc2f5;
   --pulsar-accent-purple2: #bba8ff;
   --pulsar-accent-purple3: #c6b7fe;
+  --pulsar-accent-purple-soft: rgba(205, 194, 245, 0.16);
 
   /* === Motion === */
   --pulsar-ease-out:  cubic-bezier(0.16, 1, 0.30, 1);

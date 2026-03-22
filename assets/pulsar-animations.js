@@ -11,6 +11,7 @@
   'use strict';
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nativeRevealObserver = null;
 
   /* ------------------------------------------
      UTILITY: poll until condition or timeout
@@ -57,6 +58,185 @@
     if (!el || el[key]) return false;
     el[key] = true;
     return true;
+  }
+
+  function getScope(root) {
+    return root === document ? document : (root || document);
+  }
+
+  function ensureNativeRevealObserver() {
+    if (nativeRevealObserver) return nativeRevealObserver;
+
+    nativeRevealObserver = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        observer.unobserve(el);
+
+        if (typeof el._pulsarRevealCallback === 'function') {
+          el._pulsarRevealCallback();
+        } else {
+          finalizeVisibleState(el);
+        }
+
+        delete el._pulsarRevealCallback;
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    return nativeRevealObserver;
+  }
+
+  function observeNativeReveal(el, key, callback) {
+    if (!el || !claimInit(el, key)) return;
+
+    if (prefersReducedMotion) {
+      if (callback) {
+        callback();
+      } else {
+        finalizeVisibleState(el);
+      }
+      return;
+    }
+
+    el._pulsarRevealCallback = callback || function () {
+      finalizeVisibleState(el);
+    };
+    ensureNativeRevealObserver().observe(el);
+  }
+
+  function initNativeScrollAnimationsIn(root) {
+    var scope = getScope(root);
+
+    scope.querySelectorAll('.pulsar-heading-reveal').forEach(function (el) {
+      observeNativeReveal(el, '_pulsarHeadingRevealInit');
+    });
+
+    scope.querySelectorAll('.pulsar-stagger-group').forEach(function (group) {
+      if (!claimInit(group, '_pulsarStaggerInit')) return;
+      var items = group.querySelectorAll('.pulsar-stagger-item');
+      if (!items.length) return;
+
+      observeNativeReveal(group, '_pulsarStaggerRevealInit', function () {
+        items.forEach(function (item, index) {
+          setTimeout(function () {
+            finalizeVisibleState(item);
+          }, index * 90);
+        });
+      });
+    });
+
+    scope.querySelectorAll('.pulsar-reveal').forEach(function (el) {
+      observeNativeReveal(el, '_pulsarRevealInit');
+    });
+
+    var videoItems = scope.querySelectorAll('.pulsar-videos__item');
+    if (videoItems.length) {
+      observeNativeReveal(videoItems[0].closest('section') || videoItems[0], '_pulsarVideoRevealInit', function () {
+        videoItems.forEach(function (item, index) {
+          setTimeout(function () {
+            finalizeVisibleState(item);
+          }, index * 120);
+        });
+      });
+    }
+
+    var partnerLogos = scope.querySelectorAll('.pulsar-partners__logo-link');
+    if (partnerLogos.length) {
+      observeNativeReveal(partnerLogos[0].closest('section') || partnerLogos[0], '_pulsarPartnerRevealInit', function () {
+        partnerLogos.forEach(function (logo, index) {
+          setTimeout(function () {
+            finalizeVisibleState(logo);
+          }, index * 110);
+        });
+      });
+    }
+
+    scope.querySelectorAll('.pulsar-cta__heading').forEach(function (el) {
+      observeNativeReveal(el, '_pulsarCtaHeadingInit');
+    });
+
+    scope.querySelectorAll('.pulsar-esports-titles__tab').forEach(function (el) {
+      observeNativeReveal(el, '_pulsarEsportsTabRevealInit');
+    });
+  }
+
+  function initTickerIn(root) {
+    var scope = getScope(root);
+    var tickers;
+
+    if (root && root !== document && root.classList && root.classList.contains('pulsar-ticker-section')) {
+      tickers = [root];
+    } else {
+      tickers = Array.prototype.slice.call(scope.querySelectorAll('.pulsar-ticker-section'));
+    }
+
+    tickers.forEach(function (tickerSection) {
+      if (tickerSection._pulsarTickerTween || tickerSection._pulsarTickerAnimation) return;
+
+      var track = tickerSection.querySelector('.pulsar-ticker-track');
+      var firstGroup = tickerSection.querySelector('.pulsar-ticker-group');
+      if (!track || !firstGroup) return;
+
+      if (prefersReducedMotion) {
+        track.style.transform = 'translate3d(0, 0, 0)';
+        return;
+      }
+
+      var width = firstGroup.offsetWidth;
+      if (!width) {
+        requestAnimationFrame(function () {
+          initTickerIn(tickerSection);
+        });
+        return;
+      }
+
+      var speedSetting = parseFloat(tickerSection.dataset.tickerSpeed) || 0.7;
+      var duration = width / (speedSetting * 60);
+
+      if (window.gsap) {
+        tickerSection._pulsarTickerTween = gsap.to(track, {
+          x: -width,
+          duration: duration,
+          ease: 'none',
+          repeat: -1
+        });
+      } else if (typeof track.animate === 'function') {
+        tickerSection._pulsarTickerAnimation = track.animate(
+          [
+            { transform: 'translate3d(0, 0, 0)' },
+            { transform: 'translate3d(-' + width + 'px, 0, 0)' }
+          ],
+          {
+            duration: duration * 1000,
+            easing: 'linear',
+            iterations: Infinity
+          }
+        );
+      }
+
+      var motionHandle = tickerSection._pulsarTickerTween || tickerSection._pulsarTickerAnimation;
+      if (!motionHandle || tickerSection._pulsarTickerHoverBound || tickerSection.dataset.pauseOnHover === 'false') return;
+
+      tickerSection.addEventListener('mouseenter', function () {
+        if (motionHandle.pause) motionHandle.pause();
+      });
+      tickerSection.addEventListener('mouseleave', function () {
+        if (motionHandle.play) motionHandle.play();
+      });
+      tickerSection._pulsarTickerHoverBound = true;
+    });
+  }
+
+  function initInteractiveFeatures(root) {
+    initTickerIn(root);
+    initHeroSlider(root);
+    initCardTilt(root);
+    initQuickAddFeedback(root);
+    initEsportsTabs(root);
+    initPlayerDrawer();
   }
 
   /* ------------------------------------------
@@ -189,7 +369,11 @@
   ------------------------------------------ */
   function initScrollAnimationsIn(root) {
     root = root || document;
-    if (!window.gsap || !window.ScrollTrigger) return;
+    if (!window.gsap || !window.ScrollTrigger) {
+      initNativeScrollAnimationsIn(root);
+      initInteractiveFeatures(root);
+      return;
+    }
 
     gsap.utils.toArray('.pulsar-heading-reveal', root).forEach(function (el) {
       if (el.classList.contains('pulsar-word-reveal')) return; // owned by initWordMaskReveal
@@ -388,41 +572,7 @@
     // Phase 3 feature inits — scoped to root
     initWordMaskReveal(root);
     initParallax(root);
-    initHeroSlider(root);
-    initCardTilt(root);
-    initQuickAddFeedback(root);
-    initEsportsTabs(root);
-
-    /* Ticker / Member Ribbon — Infinite Seamless GSAP Loop */
-    if (prefersReducedMotion) return;
-
-    var tickers = (root === document ? document : root).querySelectorAll('.pulsar-ticker-section');
-    tickers.forEach(function (tickerSection) {
-      if (tickerSection._pulsarTickerTween) return; // guard against double-init
-
-      var track = tickerSection.querySelector('.pulsar-ticker-track');
-      var firstGroup = tickerSection.querySelector('.pulsar-ticker-group');
-      if (!track || !firstGroup) return;
-
-      var speedSetting = parseFloat(tickerSection.dataset.tickerSpeed) || 0.7;
-      // Duration scales with content width so visual speed is consistent regardless of track length
-      var duration = firstGroup.offsetWidth / (speedSetting * 60);
-
-      var tween = gsap.to(track, {
-        x: -firstGroup.offsetWidth,
-        duration: duration,
-        ease: 'none',
-        repeat: -1
-      });
-
-      // Store on element for cleanup later
-      tickerSection._pulsarTickerTween = tween;
-
-      if (tickerSection.dataset.pauseOnHover !== 'false') {
-        tickerSection.addEventListener('mouseenter', function() { tween.pause(); });
-        tickerSection.addEventListener('mouseleave', function() { tween.play(); });
-      }
-    });
+    initInteractiveFeatures(root);
   }
 
   /* ------------------------------------------
@@ -457,6 +607,8 @@
         el.textContent = format(target);
         return;
       }
+
+      el.textContent = format(0);
 
       var obs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -509,6 +661,7 @@
       sectionEl.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
         el.style.transform = 'none';
       });
+      initInteractiveFeatures(sectionEl);
       initStatCountersIn(sectionEl);
       return;
     }
@@ -520,13 +673,7 @@
         ScrollTrigger.refresh();
       });
     } else {
-      finalizeVisibleSet(
-        sectionEl,
-        '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
-      );
-      sectionEl.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
-        el.style.transform = 'none';
-      });
+      initScrollAnimationsIn(sectionEl);
       initStatCountersIn(sectionEl);
     }
   }
@@ -548,6 +695,11 @@
         ticker._pulsarTickerTween.kill();
         delete ticker._pulsarTickerTween;
       }
+      if (ticker._pulsarTickerAnimation) {
+        ticker._pulsarTickerAnimation.cancel();
+        delete ticker._pulsarTickerAnimation;
+      }
+      delete ticker._pulsarTickerHoverBound;
     });
 
     sectionEl.querySelectorAll('.pulsar-heading-reveal').forEach(function (el) {
@@ -573,7 +725,7 @@
     });
 
     // Reset counter init flags so they re-animate if section reloads
-    sectionEl.querySelectorAll('[data-pulsar-counter-init]').forEach(function (el) {
+    sectionEl.querySelectorAll('[data-pulsar-counter]').forEach(function (el) {
       delete el.dataset.pulsarCounterInit;
     });
 
@@ -1164,6 +1316,7 @@
       document.querySelectorAll('.pulsar-hero__mask-inner').forEach(function (el) {
         el.style.transform = 'none';
       });
+      initInteractiveFeatures(document);
       initStatCountersIn(document);
       return;
     }
@@ -1175,7 +1328,6 @@
         runPreloader();
         initScrollAnimationsIn(document);
         initStatCountersIn(document);
-        initPlayerDrawer(); // Global singleton — safe to call once here
         requestAnimationFrame(function () {
           ScrollTrigger.refresh();
         });
@@ -1184,12 +1336,9 @@
 
     // Emergency fallback: GSAP failed to load within 5s
     setTimeout(function () {
-      if (!window.gsap) {
+      if (!(window.gsap && window.ScrollTrigger)) {
         revealHero();
-        finalizeVisibleSet(
-          document,
-          '.pulsar-reveal, .pulsar-heading-reveal, [data-pulsar-hero-element], .pulsar-stagger-item, .pulsar-videos__item, .pulsar-partners__logo-link, .pulsar-esports-titles__tab, .pulsar-cta__heading'
-        );
+        initScrollAnimationsIn(document);
         initStatCountersIn(document);
       }
     }, 5000);
