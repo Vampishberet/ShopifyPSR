@@ -7,9 +7,9 @@
 
 <section
   class="pulsar-ticker-section"
-  id="pulsar-ticker-{{section.id}}"
-  data-ticker-speed="{{ticker_speed}}"
-  data-pause-on-hover="{{pause_on_hover}}"
+  id="pulsar-ticker-{{ section.id }}"
+  data-ticker-speed="{{ ticker_speed }}"
+  data-pause-on-hover="{{ pause_on_hover }}"
 >
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
@@ -18,15 +18,6 @@
   <div class="pulsar-ticker-viewport">
     <div class="pulsar-ticker-track">
       <div class="pulsar-ticker-group">
-        {%- for member in members -%}
-          {%- assign name = member | strip -%}
-          {%- if name != blank -%}
-            <span class="pulsar-ticker-item">{{ name }}</span>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-
-      <div class="pulsar-ticker-group" aria-hidden="true">
         {%- for member in members -%}
           {%- assign name = member | strip -%}
           {%- if name != blank -%}
@@ -153,26 +144,26 @@
     let lastTime = 0;
     let resizeFrameId = null;
 
-    const clearExtraGroups = () => {
+    const removeClones = () => {
       track.querySelectorAll('[data-ticker-clone="true"]').forEach((clone) => clone.remove());
     };
 
-    const fillViewport = () => {
-      clearExtraGroups();
+    const buildClones = () => {
+      removeClones();
 
-      const viewportWidth = viewport.getBoundingClientRect().width;
       groupWidth = baseGroup.getBoundingClientRect().width;
+      const viewportWidth = viewport.getBoundingClientRect().width;
 
-      if (!groupWidth) return;
+      if (!groupWidth || !viewportWidth) return;
 
-      let coveredWidth = track.scrollWidth;
+      let totalWidth = groupWidth;
 
-      while (coveredWidth < viewportWidth + groupWidth) {
+      while (totalWidth < viewportWidth + groupWidth * 2) {
         const clone = baseGroup.cloneNode(true);
         clone.setAttribute('aria-hidden', 'true');
-        clone.dataset.tickerClone = 'true';
+        clone.setAttribute('data-ticker-clone', 'true');
         track.appendChild(clone);
-        coveredWidth = track.scrollWidth;
+        totalWidth += groupWidth;
       }
     };
 
@@ -181,7 +172,7 @@
     };
 
     const measure = () => {
-      fillViewport();
+      buildClones();
 
       if (!groupWidth) return;
 
@@ -191,7 +182,7 @@
 
     const stop = () => {
       if (frameId) {
-        window.cancelAnimationFrame(frameId);
+        cancelAnimationFrame(frameId);
         frameId = null;
       }
     };
@@ -202,7 +193,7 @@
       lastTime = time;
 
       if (!paused && !reducedMotionQuery.matches && groupWidth) {
-        offset -= speed * (delta / (1000 / 60));
+        offset -= speed * (delta / 16.6667);
 
         if (Math.abs(offset) >= groupWidth) {
           offset += groupWidth;
@@ -211,7 +202,7 @@
         applyTransform();
       }
 
-      frameId = window.requestAnimationFrame(tick);
+      frameId = requestAnimationFrame(tick);
     };
 
     const start = () => {
@@ -223,15 +214,13 @@
       }
 
       lastTime = 0;
-      frameId = window.requestAnimationFrame(tick);
+      frameId = requestAnimationFrame(tick);
     };
 
     const onResize = () => {
-      if (resizeFrameId) {
-        window.cancelAnimationFrame(resizeFrameId);
-      }
+      if (resizeFrameId) cancelAnimationFrame(resizeFrameId);
 
-      resizeFrameId = window.requestAnimationFrame(() => {
+      resizeFrameId = requestAnimationFrame(() => {
         measure();
       });
     };
@@ -311,7 +300,7 @@
       "max": 3.0,
       "step": 0.1,
       "default": 0.7,
-      "info": "Pixels moved per animation frame. Higher = faster scroll."
+      "info": "Scroll speed. Higher = faster."
     },
     {
       "type": "checkbox",
