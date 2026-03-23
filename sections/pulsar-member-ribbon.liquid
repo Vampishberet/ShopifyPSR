@@ -1,54 +1,60 @@
 {%- liquid
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
+  assign gap_between_elements = section.settings.gap_between_elements | default: 24
+  assign movement_direction = section.settings.movement_direction | default: 'normal'
   assign ticker_duration = section.settings.ticker_duration | default: 30
   assign pause_on_hover = section.settings.pause_on_hover
 -%}
 
 <section
-  class="pulsar-ticker-section"
-  id="pulsar-ticker-{{ section.id }}"
+  class="pulsar-member-ribbon color-{{ section.settings.color_scheme }}"
+  id="pulsar-member-ribbon-{{ section.id }}"
+  style="
+    --marquee-gap: {{ gap_between_elements }}px;
+    --marquee-direction: {{ movement_direction }};
+    --marquee-speed: {{ ticker_duration }}s;
+  "
 >
   {%- if section.settings.heading != blank -%}
-    <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
+    <p class="pulsar-member-ribbon__heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
-  <div class="pulsar-ticker-viewport">
-    <div
-      class="pulsar-ticker-track{% if pause_on_hover %} pulsar-ticker-track--pause{% endif %}"
-      style="animation-duration: {{ ticker_duration }}s;"
-    >
-      <div class="pulsar-ticker-group">
-        {%- for member in members -%}
-          {%- assign name = member | strip -%}
-          {%- if name != blank -%}
-            <span class="pulsar-ticker-item">{{ name }}</span>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+  <div class="pulsar-member-ribbon__viewport">
+    <div class="pulsar-member-ribbon__wrapper{% if pause_on_hover %} pulsar-member-ribbon__wrapper--pause{% endif %}">
+      <div class="pulsar-member-ribbon__content">
+        <div class="pulsar-member-ribbon__group">
+          {%- for member in members -%}
+            {%- assign name = member | strip -%}
+            {%- if name != blank -%}
+              <span class="pulsar-member-ribbon__item">{{ name }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
 
-      <div class="pulsar-ticker-group" aria-hidden="true">
-        {%- for member in members -%}
-          {%- assign name = member | strip -%}
-          {%- if name != blank -%}
-            <span class="pulsar-ticker-item">{{ name }}</span>
-          {%- endif -%}
-        {%- endfor -%}
+        <div class="pulsar-member-ribbon__group" aria-hidden="true">
+          {%- for member in members -%}
+            {%- assign name = member | strip -%}
+            {%- if name != blank -%}
+              <span class="pulsar-member-ribbon__item">{{ name }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<style>
-  #pulsar-ticker-{{ section.id }} {
+{% stylesheet %}
+  .pulsar-member-ribbon {
     background: var(--pulsar-black, #000);
     border-top: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
     border-bottom: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
-    padding: 20px 0;
     overflow: hidden;
+    width: 100%;
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-heading {
+  .pulsar-member-ribbon__heading {
     margin: 0 0 16px;
     text-align: center;
     font-size: 0.65rem;
@@ -58,37 +64,51 @@
     color: var(--pulsar-gray1, #9a9a9a);
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
+  .pulsar-member-ribbon__viewport {
     width: 100%;
     overflow: hidden;
     position: relative;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
+  .pulsar-member-ribbon__wrapper {
     display: flex;
-    width: max-content;
+    width: fit-content;
+    white-space: nowrap;
     will-change: transform;
-    animation-name: pulsar-ticker-scroll-{{ section.id }};
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-fill-mode: both;
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track--pause:hover {
-    animation-play-state: paused;
-  }
-
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-group {
-    display: flex;
-    flex-shrink: 0;
+  .pulsar-member-ribbon__content {
     min-width: max-content;
-    align-items: center;
+    display: flex;
+    gap: var(--marquee-gap);
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+  .pulsar-member-ribbon__group {
+    min-width: max-content;
+    display: flex;
+    gap: var(--marquee-gap);
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pulsar-member-ribbon__item {
     display: inline-flex;
     align-items: center;
-    flex: 0 0 auto;
     white-space: nowrap;
     font-family: var(--font-secondary, sans-serif);
     font-size: 1.25rem;
@@ -97,43 +117,38 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--pulsar-gray3, #d8d8d8);
-    padding: 0 20px;
+    flex: 0 0 auto;
   }
 
-  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
+  .pulsar-member-ribbon__item::after {
     content: "✦";
-    margin-left: 20px;
+    margin-left: var(--marquee-gap);
     color: var(--pulsar-white, #fff);
     font-size: 0.6rem;
   }
 
-  @keyframes pulsar-ticker-scroll-{{ section.id }} {
-    from {
-      transform: translateX(0);
+  @media (prefers-reduced-motion: no-preference) {
+    .pulsar-member-ribbon__wrapper {
+      animation: pulsar-member-ribbon-marquee var(--marquee-speed) linear infinite var(--marquee-direction);
     }
+
+    .pulsar-member-ribbon__wrapper--pause:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes pulsar-member-ribbon-marquee {
     to {
-      transform: translateX(-50%);
+      transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
     }
   }
 
   @media screen and (max-width: 767px) {
-    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+    .pulsar-member-ribbon__item {
       font-size: 20px;
-      padding: 0 16px;
-    }
-
-    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
-      margin-left: 16px;
     }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
-      animation: none !important;
-      transform: none !important;
-    }
-  }
-</style>
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -149,8 +164,18 @@
       "type": "textarea",
       "id": "member_names",
       "label": "Member names",
-      "info": "Comma-separated list of member names. Each name scrolls in the ribbon.",
+      "info": "Comma-separated list of member names.",
       "default": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster"
+    },
+    {
+      "type": "select",
+      "id": "movement_direction",
+      "label": "Movement direction",
+      "options": [
+        { "value": "normal", "label": "Left" },
+        { "value": "reverse", "label": "Right" }
+      ],
+      "default": "normal"
     },
     {
       "type": "range",
@@ -159,14 +184,30 @@
       "min": 10,
       "max": 80,
       "step": 1,
-      "default": 30,
-      "unit": "s"
+      "unit": "s",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "gap_between_elements",
+      "label": "Gap between names",
+      "min": 8,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 24
     },
     {
       "type": "checkbox",
       "id": "pause_on_hover",
       "label": "Pause on hover",
       "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ],
   "presets": [
