@@ -11,14 +11,19 @@
     </div>
 
     <div class="pulsar-twitter__embed-wrap pulsar-reveal">
-      <a
-        class="twitter-timeline"
-        data-theme="dark"
-        data-chrome="nofooter noborders transparent"
-        data-tweet-limit="{{ section.settings.tweet_limit | default: 3 }}"
-        data-width="100%"
-        href="https://twitter.com/{{ section.settings.twitter_handle | default: 'PulsarLLC' }}"
-      >Tweets by @{{ section.settings.twitter_handle | default: 'PulsarLLC' }}</a>
+      <div class="pulsar-twitter__tweets">
+        <div class="pulsar-twitter__tweet-item">
+          <blockquote class="twitter-tweet" data-theme="dark">
+            <p lang="en" dir="ltr">Powered by <a href="https://twitter.com/DropMazter?ref_src=twsrc%5Etfw">@DropMazter</a> &amp; <a href="https://twitter.com/OBSBOT_Official?ref_src=twsrc%5Etfw">@OBSBOT_Official</a> <a href="https://t.co/IRhAOYcz3k">pic.twitter.com/IRhAOYcz3k</a></p>&mdash; Team Pulsar (@PulsarLLC) <a href="https://twitter.com/PulsarLLC/status/2021705816437342359?ref_src=twsrc%5Etfw">February 11, 2026</a>
+          </blockquote>
+        </div>
+        
+        <div class="pulsar-twitter__tweet-item">
+          <blockquote class="twitter-tweet" data-theme="dark">
+            <p lang="en" dir="ltr">MATCH DAY ⚡<br><br>Our VALORANT squad hits the server today in the Funhavers Wild//West LAN Qualifier #3.<br><br>🏆 RO32<br>⚔️ vs <a href="https://twitter.com/ShopifyRebels?ref_src=twsrc%5Etfw">@ShopifyRebels</a> Gold<a href="https://twitter.com/PulsarLLC?ref_src=twsrc%5Etfw">@PulsarLLC</a> <a href="https://t.co/ZiZXzEos2c">pic.twitter.com/ZiZXzEos2c</a></p>&mdash; Pulsar Valorant (@PulsarValo) <a href="https://twitter.com/PulsarValo/status/2030344567355068723?ref_src=twsrc%5Etfw">March 7, 2026</a>
+          </blockquote>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -32,7 +37,7 @@
     border-top: 1px solid var(--pulsar-dark3);
   }
   .pulsar-twitter__inner {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--pulsar-space-lg);
     display: flex;
@@ -74,15 +79,29 @@
 
   .pulsar-twitter__embed-wrap {
     width: 100%;
-    max-width: 600px;
-    background-color: var(--pulsar-dark2);
-    border: 1px solid var(--pulsar-dark3);
+    background-color: transparent;
+    border: none;
     border-radius: 0;
-    overflow: hidden;
-    min-height: 300px;
+    overflow: visible;
+    min-height: auto;
   }
-  /* Override Twitter widget background */
-  .pulsar-twitter__embed-wrap .twitter-timeline { color-scheme: dark; }
+  .pulsar-twitter__tweets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    align-items: flex-start;
+  }
+  .pulsar-twitter__tweet-item {
+    flex: 1;
+    min-width: 320px;
+    max-width: 550px; /* Standard Twitter embed max width */
+    width: 100%;
+  }
+  .pulsar-twitter__tweets .twitter-tweet {
+    margin: 0 auto !important;
+  }
 
   @media (max-width: 767px) {
     .pulsar-twitter { padding: var(--pulsar-space-xl) 0; }
