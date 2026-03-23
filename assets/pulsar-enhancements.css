@@ -19,27 +19,15 @@
   --pulsar-light1: #E8E8EC;
   --pulsar-white:  #FFFFFF;
 
-  /* Legacy aliases — backward compat with theme overrides */
-  --c-black:      var(--pulsar-black);
-  --c-dark-1:     var(--pulsar-dark1);
-  --c-dark-2:     var(--pulsar-dark2);
-  --c-dark-3:     var(--pulsar-dark3);
-  --c-silver-dim: var(--pulsar-gray1);
-  --c-silver-mid: var(--pulsar-gray2);
-  --c-silver:     var(--pulsar-gray3);
-  --c-chrome-1:   var(--pulsar-light1);
-  --c-white:      var(--pulsar-white);
-
   /* === Gradients & Glows === */
   --pulsar-gradient-chrome: linear-gradient(135deg, #E8E8EC 0%, #8A8A8F 40%, #C8C8CC 70%, #505055 100%);
   --pulsar-glow-sm:  rgba(200, 200, 204, 0.06);
   --pulsar-glow-md:  rgba(200, 200, 204, 0.12);
-  --c-glow-silver:   var(--pulsar-glow-sm);
 
   /* === Typography (rendered by pulsar-fonts.liquid + Google Fonts) === */
   --font-display:   'Monument Extended', 'Arial Narrow', sans-serif;
   --font-secondary: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-accent:    var(--font-secondary);
+  --font-accent:    var(--font-secondary); /* live — used in pulsar-about-founders.liquid */
   --font-body:      'Inter', system-ui, -apple-system, sans-serif;
 
   /* === Spacing === */
@@ -51,6 +39,10 @@
   --pulsar-space-xxl: 7.5rem;    /* 120px */
   --pulsar-section-gap: var(--pulsar-space-xxl);
 
+  /* === Preloader-specific tokens === */
+  --pulsar-preloader-track-bg:    rgba(255, 255, 255, 0.1);
+  --pulsar-preloader-label-color: rgba(255, 255, 255, 0.3);
+
   /* === Purple Legacy Accents — use sparingly & deliberately === */
   --pulsar-accent-purple1: #cdc2f5;
   --pulsar-accent-purple2: #bba8ff;
@@ -58,11 +50,9 @@
   --pulsar-accent-purple-soft: rgba(205, 194, 245, 0.16);
 
   /* === Motion === */
-  --pulsar-ease-out:  cubic-bezier(0.16, 1, 0.30, 1);
-  --pulsar-ease-in:   cubic-bezier(0.70, 0, 0.84, 0);
-  --pulsar-ease-std:  cubic-bezier(0.37, 0, 0.63, 1);
-  --ease-out-expo:    var(--pulsar-ease-out);
-  --ease-standard:    var(--pulsar-ease-std);
+  --pulsar-ease-out: cubic-bezier(0.16, 1, 0.30, 1);
+  --pulsar-ease-in:  cubic-bezier(0.70, 0, 0.84, 0);
+  --pulsar-ease-std: cubic-bezier(0.37, 0, 0.63, 1);
 }
 
 
@@ -490,19 +480,38 @@ header-component [popover] a:hover,
   .pulsar-reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition:
-      opacity 0.8s var(--pulsar-ease-out),
-      transform 0.8s var(--pulsar-ease-out);
   }
   .pulsar-reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
-  .pulsar-reveal:nth-child(2) { transition-delay: 0.1s; }
-  .pulsar-reveal:nth-child(3) { transition-delay: 0.2s; }
-  .pulsar-reveal:nth-child(4) { transition-delay: 0.3s; }
-  .pulsar-reveal:nth-child(5) { transition-delay: 0.4s; }
-  .pulsar-reveal:nth-child(6) { transition-delay: 0.5s; }
+
+  html.pulsar-native-motion .pulsar-reveal {
+    transition:
+      opacity 0.8s var(--pulsar-ease-out),
+      transform 0.8s var(--pulsar-ease-out);
+  }
+  html.pulsar-native-motion .pulsar-reveal:nth-child(2) { transition-delay: 0.1s; }
+  html.pulsar-native-motion .pulsar-reveal:nth-child(3) { transition-delay: 0.2s; }
+  html.pulsar-native-motion .pulsar-reveal:nth-child(4) { transition-delay: 0.3s; }
+  html.pulsar-native-motion .pulsar-reveal:nth-child(5) { transition-delay: 0.4s; }
+  html.pulsar-native-motion .pulsar-reveal:nth-child(6) { transition-delay: 0.5s; }
+
+  /* Hidden state stays global so GSAP can own motion without CSS races.
+     The transition itself is enabled only for the native IntersectionObserver fallback. */
+  .pulsar-heading-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .pulsar-heading-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  html.pulsar-native-motion .pulsar-heading-reveal {
+    transition:
+      opacity  0.75s var(--pulsar-ease-out),
+      transform 0.75s var(--pulsar-ease-out);
+  }
 }
 
 
@@ -789,7 +798,8 @@ header-component [popover] a:hover,
     scroll-behavior: auto !important;
   }
   body::before { animation: none; }
-  .pulsar-reveal { opacity: 1 !important; transform: none !important; }
+  .pulsar-reveal,
+  .pulsar-heading-reveal { opacity: 1 !important; transform: none !important; }
   #pulsar-preloader { display: none !important; }
 }
 

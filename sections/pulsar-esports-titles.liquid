@@ -104,12 +104,12 @@
 
       <!-- ==================== VALORANT ==================== -->
       <div
-        class="pulsar-esports-titles__panel"
+        class="pulsar-esports-titles__panel is-hidden"
         id="panel-valorant"
         role="tabpanel"
         aria-labelledby="tab-valorant"
+        aria-hidden="true"
         data-panel="valorant"
-        hidden
       >
         <!-- Mobile accordion header -->
         <button
@@ -187,12 +187,12 @@
 
       <!-- ==================== APEX LEGENDS ==================== -->
       <div
-        class="pulsar-esports-titles__panel"
+        class="pulsar-esports-titles__panel is-hidden"
         id="panel-apex"
         role="tabpanel"
         aria-labelledby="tab-apex"
+        aria-hidden="true"
         data-panel="apex"
-        hidden
       >
         <!-- Mobile accordion header -->
         <button
@@ -404,7 +404,7 @@
   .pulsar-esports-titles__panels { position: relative; }
   .pulsar-esports-titles__panel { display: none; }
   .pulsar-esports-titles__panel.is-active { display: block; }
-  .pulsar-esports-titles__panel[hidden] { display: none !important; }
+  .pulsar-esports-titles__panel.is-hidden { display: none; }
   .pulsar-esports-titles__panel-body[hidden] { display: none !important; }
 
   /* Panel header — 2-col: meta + video */
@@ -701,7 +701,6 @@
       display: block !important;
       border-bottom: 1px solid var(--pulsar-dark3);
     }
-    .pulsar-esports-titles__panel[hidden] { display: block !important; }
     .pulsar-esports-titles__panel.is-active .pulsar-esports-titles__panel-body { display: block; }
 
     .pulsar-esports-titles__panel-header { grid-template-columns: 1fr; }

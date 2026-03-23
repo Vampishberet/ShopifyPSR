@@ -1,11 +1,13 @@
 {% comment %}
   Pulsar Preloader Snippet
   - Displays on initial page load (skipped after first visit via sessionStorage)
+  - Skipped in design mode (Shopify editor) for frictionless section editing
   - Video: 3d animation for preloader.mp4 (547KB)
   - Progress bar animates 0 → 100% via pulsar-animations.js
   - Exit: GSAP slide-up transition revealing hero underneath
 {% endcomment %}
 
+{% unless request.design_mode %}
 <div id="pulsar-preloader" role="status" aria-label="Loading Team Pulsar" aria-live="polite">
   <p class="pulsar-preloader__label" aria-hidden="true">0%</p>
 
@@ -34,3 +36,4 @@
     }
   })();
 </script>
+{% endunless %}

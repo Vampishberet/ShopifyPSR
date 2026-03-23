@@ -28,6 +28,8 @@
                   {%- if product.featured_image -%}
                     <img
                       src="{{ product.featured_image | image_url: width: 600 }}"
+                      srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 600 }} 600w, {{ product.featured_image | image_url: width: 900 }} 900w"
+                      sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
                       class="pulsar-merch__card-image pulsar-merch__card-image--primary"
                       width="600"
@@ -37,6 +39,8 @@
                     {%- if product.images[1] != blank -%}
                       <img
                         src="{{ product.images[1] | image_url: width: 600 }}"
+                        srcset="{{ product.images[1] | image_url: width: 400 }} 400w, {{ product.images[1] | image_url: width: 600 }} 600w, {{ product.images[1] | image_url: width: 900 }} 900w"
+                        sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
                         alt="{{ product.images[1].alt | default: product.title | escape }}"
                         class="pulsar-merch__card-image pulsar-merch__card-image--secondary"
                         width="600"

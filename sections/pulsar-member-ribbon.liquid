@@ -1,73 +1,68 @@
 {%- liquid
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
-  assign gap_between_elements = section.settings.gap_between_elements | default: 24
-  assign movement_direction = section.settings.movement_direction | default: 'normal'
-  assign ticker_duration = section.settings.ticker_duration | default: 30
+  assign ticker_speed = section.settings.ticker_speed | default: 60
   assign pause_on_hover = section.settings.pause_on_hover
+  assign ticker_css_seconds = 12000 | divided_by: ticker_speed | round
 -%}
 
 <section
-  class="pulsar-member-ribbon color-{{ section.settings.color_scheme }}"
-  id="pulsar-member-ribbon-{{ section.id }}"
-  style="
-    --marquee-gap: {{ gap_between_elements }}px;
-    --marquee-direction: {{ movement_direction }};
-    --marquee-speed: {{ ticker_duration }}s;
-  "
+  class="pulsar-ticker-section"
+  id="pulsar-ticker-{{ section.id }}"
+  data-ticker-speed="{{ ticker_speed }}"
+  data-pause-on-hover="{{ pause_on_hover }}"
 >
   {%- if section.settings.heading != blank -%}
-    <p class="pulsar-member-ribbon__heading">{{ section.settings.heading }}</p>
+    <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
-  <div class="pulsar-member-ribbon__viewport">
-    <div class="pulsar-member-ribbon__wrapper{% if pause_on_hover %} pulsar-member-ribbon__wrapper--pause{% endif %}">
-      <div class="pulsar-member-ribbon__content">
-        <div class="pulsar-member-ribbon__group">
-          {%- for member in members -%}
-            {%- assign name = member | strip -%}
-            {%- if name != blank -%}
-              <span class="pulsar-member-ribbon__item">{{ name }}</span>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+  <div class="pulsar-ticker-viewport">
+    <div class="pulsar-ticker-track">
+      <div class="pulsar-ticker-group">
+        {%- for member in members -%}
+          {%- assign name = member | strip -%}
+          {%- if name != blank -%}
+            <span class="pulsar-ticker-item">{{ name }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
 
-        <div class="pulsar-member-ribbon__group" aria-hidden="true">
-          {%- for member in members -%}
-            {%- assign name = member | strip -%}
-            {%- if name != blank -%}
-              <span class="pulsar-member-ribbon__item">{{ name }}</span>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+      <div class="pulsar-ticker-group" aria-hidden="true">
+        {%- for member in members -%}
+          {%- assign name = member | strip -%}
+          {%- if name != blank -%}
+            <span class="pulsar-ticker-item">{{ name }}</span>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
     </div>
   </div>
 </section>
 
-{% stylesheet %}
-  .pulsar-member-ribbon {
-    background: var(--pulsar-black, #000);
-    border-top: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
-    border-bottom: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
+<style>
+  #pulsar-ticker-{{ section.id }} {
+    background: var(--pulsar-black);
+    border-top: 1px solid var(--pulsar-accent-purple-soft);
+    border-bottom: 1px solid var(--pulsar-accent-purple-soft);
+    padding: 0;
     overflow: hidden;
-    width: 100%;
   }
 
-  .pulsar-member-ribbon__heading {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-heading {
     margin: 0 0 16px;
     text-align: center;
     font-size: 0.65rem;
-    font-family: var(--font-body, sans-serif);
+    font-family: var(--font-body);
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--pulsar-gray1, #9a9a9a);
+    color: var(--pulsar-gray1);
   }
 
-  .pulsar-member-ribbon__viewport {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
     width: 100%;
     overflow: hidden;
     position: relative;
+    /* Soft fade at both edges — masks scrolling content without hard clips */
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0%,
@@ -84,71 +79,72 @@
     );
   }
 
-  .pulsar-member-ribbon__wrapper {
+  @keyframes pulsar-ticker-scroll-{{ section.id }} {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* -50% works because the track holds two identical groups (200% total width).
+     Moving by -50% of track width = scrolling exactly one group off-screen.
+     JS (GSAP) overrides this animation with exact pixel math when available. */
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
     display: flex;
-    width: fit-content;
-    white-space: nowrap;
+    width: max-content;
     will-change: transform;
+    animation: pulsar-ticker-scroll-{{ section.id }} {{ ticker_css_seconds }}s linear infinite;
   }
 
-  .pulsar-member-ribbon__content {
-    min-width: max-content;
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-group {
     display: flex;
-    gap: var(--marquee-gap);
-  }
-
-  .pulsar-member-ribbon__group {
-    min-width: max-content;
-    display: flex;
-    gap: var(--marquee-gap);
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
+    min-width: max-content;
+    align-items: center;
   }
 
-  .pulsar-member-ribbon__item {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
     display: inline-flex;
     align-items: center;
+    flex: 0 0 auto;
     white-space: nowrap;
-    font-family: var(--font-secondary, sans-serif);
-    font-size: 1.25rem;
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
     font-weight: 400;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--pulsar-gray3, #d8d8d8);
-    flex: 0 0 auto;
+    color: var(--pulsar-gray3);
+    padding: 14px 24px;
   }
 
-  .pulsar-member-ribbon__item::after {
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
     content: "✦";
-    margin-left: var(--marquee-gap);
-    color: var(--pulsar-white, #fff);
-    font-size: 0.6rem;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .pulsar-member-ribbon__wrapper {
-      animation: pulsar-member-ribbon-marquee var(--marquee-speed) linear infinite var(--marquee-direction);
-    }
-
-    .pulsar-member-ribbon__wrapper--pause:hover {
-      animation-play-state: paused;
-    }
-  }
-
-  @keyframes pulsar-member-ribbon-marquee {
-    to {
-      transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
-    }
+    margin-left: 24px;
+    color: var(--pulsar-accent-purple2);
+    font-size: 0.55rem;
+    opacity: 0.7;
   }
 
   @media screen and (max-width: 767px) {
-    .pulsar-member-ribbon__item {
-      font-size: 20px;
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
+      font-size: 1.25rem;
+      padding: 12px 18px;
+    }
+
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
+      margin-left: 18px;
     }
   }
-{% endstylesheet %}
+
+  @media (prefers-reduced-motion: reduce) {
+    #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
+      /* Ticker intentionally keeps scrolling under reduced-motion — brand-essential feature.
+         Speed is halved via animation-duration override instead of stopping entirely. */
+      animation-duration: {{ ticker_css_seconds | times: 3 }}s;
+    }
+  }
+</style>
+
+
 
 {% schema %}
 {
@@ -164,50 +160,24 @@
       "type": "textarea",
       "id": "member_names",
       "label": "Member names",
-      "info": "Comma-separated list of member names.",
+      "info": "Comma-separated list of member names. Each name scrolls in the ribbon.",
       "default": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster"
     },
     {
-      "type": "select",
-      "id": "movement_direction",
-      "label": "Movement direction",
-      "options": [
-        { "value": "normal", "label": "Left" },
-        { "value": "reverse", "label": "Right" }
-      ],
-      "default": "normal"
-    },
-    {
       "type": "range",
-      "id": "ticker_duration",
-      "label": "Ticker duration",
-      "min": 10,
-      "max": 80,
-      "step": 1,
-      "unit": "s",
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "gap_between_elements",
-      "label": "Gap between names",
-      "min": 8,
-      "max": 64,
-      "step": 2,
-      "unit": "px",
-      "default": 24
+      "id": "ticker_speed",
+      "label": "Ticker speed (px/s)",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "default": 60,
+      "info": "Scroll speed in pixels per second. Higher = faster."
     },
     {
       "type": "checkbox",
       "id": "pause_on_hover",
       "label": "Pause on hover",
       "default": true
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
     }
   ],
   "presets": [

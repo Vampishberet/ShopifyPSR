@@ -16,7 +16,6 @@
         "heading": "We Are Pulsar.",
         "tagline": "Competitive esports. Creator culture. Community first.",
         "bg_video": "",
-        "slide_interval": 5000,
         "primary_cta_label": "Shop Merch",
         "primary_cta_url": "/collections/all",
         "secondary_cta_label": "Our Esports",
@@ -35,12 +34,14 @@
     },
     "pulsar-stats-counter": {
       "type": "pulsar-stats-counter",
+      "settings": {
+        "label": "By the numbers"
+      },
       "blocks": {
         "stat-reach": {
           "type": "stat",
           "settings": {
             "value": 2,
-            "prefix": "",
             "suffix": "M+",
             "label": "Combined Reach",
             "decimals": 0,
@@ -62,7 +63,6 @@
           "type": "stat",
           "settings": {
             "value": 60,
-            "prefix": "",
             "suffix": "+",
             "label": "Members",
             "decimals": 0,
@@ -70,21 +70,14 @@
           }
         }
       },
-      "block_order": [
-        "stat-reach",
-        "stat-earnings",
-        "stat-members"
-      ],
-      "settings": {
-        "label": "By the numbers"
-      }
+      "block_order": ["stat-reach", "stat-earnings", "stat-members"]
     },
     "pulsar-member-ribbon": {
       "type": "pulsar-member-ribbon",
       "settings": {
         "heading": "The People who make it happen",
         "member_names": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Kaz,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster",
-        "ticker_speed": 0.7,
+        "ticker_speed": 60,
         "pause_on_hover": true
       }
     },
@@ -105,25 +98,11 @@
     },
     "pulsar-video-showcase": {
       "type": "pulsar-video-showcase",
-      "settings": {
-        "overline": "Content",
-        "heading": "WATCH",
-        "video_1_url": "https://www.youtube.com/embed/MoZfg__UPRo",
-        "video_1_title": "Pulsar Fortnite Montage",
-        "video_1_tag": "Fortnite",
-        "video_2_url": "https://www.youtube.com/embed/3Po08NzKqlc",
-        "video_2_title": "Pulsar Valorant Montage",
-        "video_2_tag": "Valorant"
-      }
+      "settings": {}
     },
     "pulsar-twitter-feed": {
       "type": "pulsar-twitter-feed",
-      "settings": {
-        "overline": "Latest",
-        "heading": "FOLLOW THE ACTION",
-        "twitter_handle": "PulsarLLC",
-        "tweet_limit": 3
-      }
+      "settings": {}
     },
     "pulsar-partners": {
       "type": "pulsar-partners",
