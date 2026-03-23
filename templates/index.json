@@ -103,6 +103,16 @@
       "type": "pulsar-esports-titles",
       "settings": {}
     },
+    "pulsar-twitter-feed": {
+      "type": "pulsar-twitter-feed",
+      "custom_css": [],
+      "settings": {
+        "overline": "Latest",
+        "heading": "FOLLOW THE ACTION",
+        "twitter_handle": "PulsarLLC",
+        "tweet_limit": 3
+      }
+    },
     "pulsar-video-showcase": {
       "type": "pulsar-video-showcase",
       "settings": {
@@ -114,15 +124,6 @@
         "video_2_url": "https://www.youtube.com/embed/3Po08NzKqlc",
         "video_2_title": "Pulsar Valorant Montage",
         "video_2_tag": "Valorant"
-      }
-    },
-    "pulsar-twitter-feed": {
-      "type": "pulsar-twitter-feed",
-      "settings": {
-        "overline": "Latest",
-        "heading": "FOLLOW THE ACTION",
-        "twitter_handle": "PulsarLLC",
-        "tweet_limit": 3
       }
     },
     "pulsar-partners": {
