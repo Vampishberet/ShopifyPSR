@@ -90,6 +90,10 @@ body {
 .shopify-section { border-bottom: 1px solid var(--pulsar-accent-purple-soft); }
 .shopify-section:last-child { border-bottom: none; }
 
+/* content-visibility:auto was removed — it caused scroll position jumps when off-screen
+   sections rendered and their real heights differed from the contain-intrinsic-size estimate.
+   Lenis inertia scroll would land at an unintended scroll position on every viewport entry. */
+
 /* Film grain noise overlay — premium texture */
 body::before {
   content: '';
@@ -209,7 +213,7 @@ body a:focus-visible {
   line-height: 1.4;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--pulsar-gray1);
+  color: var(--pulsar-gray3);
 }
 .nav-label {
   font-family: var(--font-secondary);
@@ -225,7 +229,7 @@ body a:focus-visible {
   text-transform: uppercase;
   letter-spacing: 0.3em;
   font-size: 0.7rem;
-  color: var(--pulsar-gray2);
+  color: var(--pulsar-gray3);
 }
 
 
@@ -377,18 +381,38 @@ header-component [popover] a:hover,
   padding: 1rem 2.5rem;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  /* box-shadow removed from transition — non-composited (triggers repaint every frame).
+     Glow is handled by ::before pseudo-element opacity transition instead. */
   transition:
     transform 0.2s var(--pulsar-ease-out),
-    box-shadow 0.2s var(--pulsar-ease-out),
     background-color 0.2s var(--pulsar-ease-std),
     color 0.2s var(--pulsar-ease-std);
+}
+/* Glow layer — opacity is composited. Avoids repainting box-shadow on every frame. */
+.pulsar-btn::before,
+.pulsar-btn--primary::before,
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 32px rgba(187, 168, 255, 0.28), 0 0 8px rgba(187, 168, 255, 0.12);
+  opacity: 0;
+  transition: opacity 0.2s var(--pulsar-ease-out);
+  pointer-events: none;
+  z-index: 0;
 }
 .pulsar-btn:hover,
 .pulsar-btn--primary:hover,
 .btn:hover,
 .product-form__submit:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 32px rgba(187, 168, 255, 0.28), 0 0 8px rgba(187, 168, 255, 0.12);
+}
+.pulsar-btn:hover::before,
+.pulsar-btn--primary:hover::before,
+.btn:hover::before {
+  opacity: 1;
 }
 .pulsar-btn:focus-visible,
 .pulsar-btn--primary:focus-visible,
@@ -413,17 +437,30 @@ header-component [popover] a:hover,
   padding: 1rem 2.5rem;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  /* box-shadow and border-color removed from transition — both are non-composited.
+     Glow handled by ::before opacity. Background handled by opacity on a fill layer. */
   transition:
-    border-color 0.2s var(--pulsar-ease-std),
-    background-color 0.2s var(--pulsar-ease-std),
-    box-shadow 0.2s var(--pulsar-ease-std),
     transform 0.2s var(--pulsar-ease-out);
 }
-.pulsar-btn--ghost:hover {
-  border-color: var(--pulsar-accent-purple2);
-  background-color: rgba(187, 168, 255, 0.07);
+/* Glow + fill layer — opacity is composited. */
+.pulsar-btn--ghost::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(187, 168, 255, 0.07);
   box-shadow: 0 0 24px rgba(187, 168, 255, 0.22), 0 0 6px rgba(187, 168, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.2s var(--pulsar-ease-std);
+  pointer-events: none;
+  z-index: 0;
+}
+.pulsar-btn--ghost:hover {
   transform: scale(1.02);
+}
+.pulsar-btn--ghost:hover::before {
+  opacity: 1;
 }
 .pulsar-btn--ghost:focus-visible {
   outline: 2px solid var(--pulsar-accent-purple2);
@@ -439,17 +476,32 @@ header-component [popover] a:hover,
 .card-wrapper {
   background-color: var(--pulsar-dark2);
   border: 1px solid transparent;
-  transition:
-    transform 0.35s var(--pulsar-ease-out),
-    border-color 0.35s var(--pulsar-ease-std),
-    box-shadow 0.35s var(--pulsar-ease-out);
+  position: relative;
+  /* transform only — border-color and box-shadow are non-composited. */
+  transition: transform 0.35s var(--pulsar-ease-out);
+}
+/* Shadow lift layer — opacity on pseudo-element keeps shadow off the compositor repaint path. */
+.card::after,
+.product-card-wrapper::after,
+.card-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.35s var(--pulsar-ease-out);
+  pointer-events: none;
+  z-index: 0;
 }
 .card:hover,
 .product-card-wrapper:hover,
 .card-wrapper:hover {
   transform: translateY(-4px) scale(1.01);
-  border-color: var(--pulsar-dark3);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.card:hover::after,
+.product-card-wrapper:hover::after,
+.card-wrapper:hover::after {
+  opacity: 1;
 }
 
 .card__media img,
@@ -579,23 +631,30 @@ header-component [popover] a:hover,
   border: 1px solid var(--pulsar-gray1);
   background: transparent;
   color: var(--pulsar-gray3);
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
-    background-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.2s ease, outline-color 0.2s ease;
 }
-.pulsar-cookie__btn:hover { border-color: var(--pulsar-white); color: var(--pulsar-white); }
+/* Border color swap via outline avoids non-composited border-color repaint */
+.pulsar-cookie__btn:hover { outline: 1px solid var(--pulsar-white); outline-offset: -1px; color: var(--pulsar-white); }
 .pulsar-cookie__btn:focus-visible { outline: 2px solid var(--pulsar-white); outline-offset: 3px; }
 .pulsar-cookie__btn--accept {
   background: var(--pulsar-white);
   border-color: var(--pulsar-white);
   color: var(--pulsar-black);
 }
-.pulsar-cookie__btn--accept:hover {
+/* Accept button hover: ::before glow fades in — opacity is composited, background-color is not */
+.pulsar-cookie__btn--accept::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--pulsar-light1);
-  border-color: var(--pulsar-light1);
-  color: var(--pulsar-black);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
+.pulsar-cookie__btn--accept:hover::before { opacity: 1; }
+.pulsar-cookie__btn--accept:hover { color: var(--pulsar-black); outline: none; }
 @media (max-width: 767px) {
   #pulsar-cookie-consent { flex-direction: column; align-items: flex-start; padding: var(--pulsar-space-md); }
   .pulsar-cookie__actions { width: 100%; }
@@ -717,10 +776,14 @@ header-component [popover] a:hover,
   position: absolute;
   bottom: 0.25rem;
   left: 0;
-  width: 0;
+  /* Full width at all times — transform: scaleX() handles reveal.
+     scaleX animates on compositor thread. width: 0 → 100% triggers layout. */
+  width: 100%;
   height: 1px;
   background: var(--pulsar-accent-purple2);
-  transition: width 0.25s var(--pulsar-ease-out);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s var(--pulsar-ease-out);
 }
 
 .pulsar-footer-bar__nav-link:hover {
@@ -728,7 +791,7 @@ header-component [popover] a:hover,
 }
 
 .pulsar-footer-bar__nav-link:hover::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
 /* ── Col 3: Partners + Socials ── */
@@ -847,8 +910,10 @@ header-component [popover] a:hover,
   font-size: 0.8rem;
   letter-spacing: 0.1em;
   padding: 0.9rem 1.25rem;
-  outline: none;
-  transition: border-color 0.2s ease;
+  /* outline replaces border-color transition — outline is composited, border-color triggers repaint */
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color 0.2s ease;
 }
 
 .pulsar-footer-bar__newsletter-input::placeholder {
@@ -858,7 +923,7 @@ header-component [popover] a:hover,
 }
 
 .pulsar-footer-bar__newsletter-input:focus {
-  border-color: var(--pulsar-accent-purple2);
+  outline-color: var(--pulsar-accent-purple2);
 }
 
 .pulsar-footer-bar__newsletter-btn {
@@ -875,14 +940,28 @@ header-component [popover] a:hover,
   padding: 0.9rem 1.5rem;
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  /* background-color transition kept — this button has no GSAP conflict.
+     box-shadow removed from transition (non-composited). Glow via ::before opacity. */
+  transition: background-color 0.2s ease;
+}
+.pulsar-footer-bar__newsletter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 20px rgba(187, 168, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .pulsar-footer-bar__newsletter-btn:hover {
   background: var(--pulsar-light1);
-  box-shadow: 0 0 20px rgba(187, 168, 255, 0.2);
+}
+.pulsar-footer-bar__newsletter-btn:hover::before {
+  opacity: 1;
 }
 
 .pulsar-footer-bar__newsletter-btn:focus-visible {
@@ -1003,6 +1082,12 @@ header-component [popover] a:hover,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* Ticker is brand-essential — keep it running under reduce-motion.
+     Override the global !important above with a more specific rule. */
+  .pulsar-ticker-track {
+    animation-duration: var(--pulsar-ticker-duration, 200s) !important;
+    animation-iteration-count: infinite !important;
+  }
   body::before { animation: none; }
   .pulsar-reveal,
   .pulsar-heading-reveal { opacity: 1 !important; transform: none !important; }
@@ -1101,12 +1186,32 @@ product-information [name="add"],
   text-transform: uppercase !important;
   border: none !important;
   border-radius: 0 !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  /* transform only — box-shadow is non-composited and triggers repaint every frame */
+  transition: transform 0.2s ease !important;
+}
+/* Glow pseudo-element — opacity transition is composited. Avoids box-shadow repaint. */
+product-information .button--primary::before,
+product-information [name="add"]::before,
+.product-form__submit::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-shadow: 0 0 28px rgba(187, 168, 255, 0.28) !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
 }
 product-information .button--primary:hover,
 .product-form__submit:hover {
   transform: scale(1.02) !important;
-  box-shadow: 0 0 24px rgba(255,255,255,0.12) !important;
+}
+product-information .button--primary:hover::before,
+product-information [name="add"]:hover::before,
+.product-form__submit:hover::before {
+  opacity: 1 !important;
 }
 
 /* Size guide trigger placement */

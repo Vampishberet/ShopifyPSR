@@ -91,6 +91,7 @@
     display: flex;
     width: max-content;
     will-change: transform;
+    --pulsar-ticker-duration: {{ ticker_css_seconds }}s;
     animation: pulsar-ticker-scroll-{{ section.id }} {{ ticker_css_seconds }}s linear infinite;
   }
 

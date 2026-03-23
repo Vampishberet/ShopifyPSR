@@ -13,7 +13,6 @@
 
   <video
     class="pulsar-preloader__video"
-    src="{{ '3d animation for preloader.mp4' | asset_url }}"
     autoplay
     muted
     loop
@@ -27,12 +26,21 @@
 </div>
 
 <script>
-  // Immediately hide preloader if already seen this session
-  // Runs synchronously so there's no flash
+  // Runs synchronously to avoid flash. Only fetches video on first visit.
   (function () {
+    var preloader = document.getElementById('pulsar-preloader');
+    if (!preloader) return;
+
     if (sessionStorage.getItem('pulsarPreloaderSeen')) {
-      var el = document.getElementById('pulsar-preloader');
-      if (el) el.style.display = 'none';
+      preloader.style.display = 'none';
+      return;
+    }
+
+    // Only set video src if preloader will actually show — prevents 547KB download on return visits
+    var video = preloader.querySelector('.pulsar-preloader__video');
+    if (video) {
+      video.src = {{ '3d animation for preloader.mp4' | asset_url | json }};
+      video.load();
     }
   })();
 </script>

@@ -33,52 +33,6 @@
         "cta_url": "/pages/about"
       }
     },
-    "pulsar-stats-counter": {
-      "type": "pulsar-stats-counter",
-      "blocks": {
-        "stat-reach": {
-          "type": "stat",
-          "settings": {
-            "value": 2,
-            "prefix": "",
-            "suffix": "M+",
-            "label": "Combined Reach",
-            "decimals": 0,
-            "duration": 2000
-          }
-        },
-        "stat-earnings": {
-          "type": "stat",
-          "settings": {
-            "value": 125,
-            "prefix": "$",
-            "suffix": "K+",
-            "label": "Prize Earnings",
-            "decimals": 0,
-            "duration": 2200
-          }
-        },
-        "stat-members": {
-          "type": "stat",
-          "settings": {
-            "value": 60,
-            "prefix": "",
-            "suffix": "+",
-            "label": "Members",
-            "decimals": 0,
-            "duration": 1800
-          }
-        }
-      },
-      "block_order": [
-        "stat-reach",
-        "stat-earnings",
-        "stat-members"
-      ],
-      "settings": {
-        "label": "By the numbers"
-      }
-    },
     "pulsar-member-ribbon": {
       "type": "pulsar-member-ribbon",
       "settings": {
@@ -101,7 +55,375 @@
     },
     "pulsar-esports-titles": {
       "type": "pulsar-esports-titles",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "player-chimp": {
+          "type": "player",
+          "settings": {
+            "name": "Chimp",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-gary": {
+          "type": "player",
+          "settings": {
+            "name": "Gary",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-light": {
+          "type": "player",
+          "settings": {
+            "name": "Light",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-zire": {
+          "type": "player",
+          "settings": {
+            "name": "Zire",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-tuhronto": {
+          "type": "player",
+          "settings": {
+            "name": "Tuhronto",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-channce": {
+          "type": "player",
+          "settings": {
+            "name": "Channce",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-vero": {
+          "type": "player",
+          "settings": {
+            "name": "Vero",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-ryiax": {
+          "type": "player",
+          "settings": {
+            "name": "Ryiax",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-cecenuggets": {
+          "type": "player",
+          "settings": {
+            "name": "CeceNuggets",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-gazingnicole": {
+          "type": "player",
+          "settings": {
+            "name": "GazingNicole",
+            "game": "Fortnite",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-mikey": {
+          "type": "player",
+          "settings": {
+            "name": "Mikey",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-moe": {
+          "type": "player",
+          "settings": {
+            "name": "Moe",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-psych": {
+          "type": "player",
+          "settings": {
+            "name": "Psych",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-indra": {
+          "type": "player",
+          "settings": {
+            "name": "Indra",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-klamran": {
+          "type": "player",
+          "settings": {
+            "name": "Klamran",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-dag": {
+          "type": "player",
+          "settings": {
+            "name": "Dag",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-ian": {
+          "type": "player",
+          "settings": {
+            "name": "Ian",
+            "game": "Valorant",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-cafe": {
+          "type": "player",
+          "settings": {
+            "name": "Cafe",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-jid": {
+          "type": "player",
+          "settings": {
+            "name": "Jid",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-mei": {
+          "type": "player",
+          "settings": {
+            "name": "Mei",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-rina": {
+          "type": "player",
+          "settings": {
+            "name": "Rina",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-staryu": {
+          "type": "player",
+          "settings": {
+            "name": "Staryu",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-vienna": {
+          "type": "player",
+          "settings": {
+            "name": "Vienna",
+            "game": "Valorant GC",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-acsidius": {
+          "type": "player",
+          "settings": {
+            "name": "Acsidius",
+            "game": "Apex Legends",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-zgato": {
+          "type": "player",
+          "settings": {
+            "name": "zGato",
+            "game": "Apex Legends",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        },
+        "player-igoma": {
+          "type": "player",
+          "settings": {
+            "name": "iGOMA",
+            "game": "Apex Legends",
+            "pfp_url": "",
+            "twitter_url": "",
+            "twitch_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "instagram_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "player-chimp",
+        "player-gary",
+        "player-light",
+        "player-zire",
+        "player-tuhronto",
+        "player-channce",
+        "player-vero",
+        "player-ryiax",
+        "player-cecenuggets",
+        "player-gazingnicole",
+        "player-mikey",
+        "player-moe",
+        "player-psych",
+        "player-indra",
+        "player-klamran",
+        "player-dag",
+        "player-ian",
+        "player-cafe",
+        "player-jid",
+        "player-mei",
+        "player-rina",
+        "player-staryu",
+        "player-vienna",
+        "player-acsidius",
+        "player-zgato",
+        "player-igoma"
+      ]
     },
     "pulsar-twitter-feed": {
       "type": "pulsar-twitter-feed",
@@ -156,7 +478,6 @@
   "order": [
     "pulsar-hero",
     "pulsar-brand-statement",
-    "pulsar-stats-counter",
     "pulsar-member-ribbon",
     "pulsar-featured-merch",
     "pulsar-esports-titles",

@@ -39,9 +39,10 @@
 
     {% comment %} ── Pulsar Foundation ── {% endcomment %}
     {%- render 'pulsar-fonts' -%}
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{ 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap' | stylesheet_tag: preload: true }}
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"></noscript>
     {{ 'pulsar-preloader.css' | asset_url | stylesheet_tag }}
     {{ 'pulsar-enhancements.css' | asset_url | stylesheet_tag }}
     {%- render 'pulsar-og-meta' -%}

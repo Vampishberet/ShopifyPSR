@@ -1224,17 +1224,78 @@
 
   function _getDrawerEls() {
     return {
-      drawer: document.getElementById('pulsar-player-drawer'),
-      nameEl: document.getElementById('pulsar-drawer-name'),
-      gameEl: document.getElementById('pulsar-drawer-game')
+      drawer:    document.getElementById('pulsar-player-drawer'),
+      nameEl:    document.getElementById('pulsar-drawer-name'),
+      gameEl:    document.getElementById('pulsar-drawer-game'),
+      pfpEl:     document.getElementById('pulsar-drawer-pfp'),
+      initialsEl:document.getElementById('pulsar-drawer-pfp-initials'),
+      socialsEl: document.getElementById('pulsar-drawer-socials')
     };
   }
 
-  function _openDrawer(playerName, game) {
+  var _socialPlatforms = [
+    { key: 'twitter',   label: 'Twitter / X'  },
+    { key: 'twitch',    label: 'Twitch'        },
+    { key: 'youtube',   label: 'YouTube'       },
+    { key: 'tiktok',    label: 'TikTok'        },
+    { key: 'instagram', label: 'Instagram'     }
+  ];
+
+  function _openDrawer(playerName, game, pfpUrl, socials) {
     var els = _getDrawerEls();
     if (!els.drawer) return;
+
+    // Name + game
     els.nameEl.textContent = 'PSR ' + playerName;
     els.gameEl.textContent = game.toUpperCase();
+
+    // PFP — swap image or fall back to initials
+    if (els.pfpEl) {
+      var existingImg = els.pfpEl.querySelector('img');
+      if (existingImg) existingImg.remove();
+      if (pfpUrl) {
+        var img = document.createElement('img');
+        img.src = pfpUrl;
+        img.alt = 'PSR ' + playerName;
+        img.className = 'pulsar-player-drawer__pfp-img';
+        img.width = 72;
+        img.height = 72;
+        els.pfpEl.insertBefore(img, els.pfpEl.firstChild);
+        if (els.initialsEl) els.initialsEl.style.display = 'none';
+      } else {
+        if (els.initialsEl) {
+          els.initialsEl.style.display = '';
+          els.initialsEl.textContent = playerName.slice(0, 2).toUpperCase();
+        }
+      }
+    }
+
+    // Socials — build link list dynamically
+    if (els.socialsEl) {
+      els.socialsEl.innerHTML = '';
+      var hasAny = false;
+      _socialPlatforms.forEach(function (p) {
+        var url = socials && socials[p.key];
+        if (!url) return;
+        hasAny = true;
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'pulsar-player-drawer__social';
+        a.innerHTML =
+          '<span class="pulsar-player-drawer__social-platform">' + p.label + '</span>' +
+          '<span class="pulsar-player-drawer__social-arrow">↗</span>';
+        els.socialsEl.appendChild(a);
+      });
+      if (!hasAny) {
+        var fallback = document.createElement('p');
+        fallback.className = 'pulsar-player-drawer__no-socials';
+        fallback.textContent = 'Social links coming soon.';
+        els.socialsEl.appendChild(fallback);
+      }
+    }
+
     els.drawer.removeAttribute('hidden');
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -1265,9 +1326,25 @@
     if (_drawerDocListenersAdded) return;
     _drawerDocListenersAdded = true;
 
+    function _openCardDrawer(card) {
+      var d = card.dataset;
+      _openDrawer(
+        d.pulsarPlayer || '',
+        d.pulsarGame   || '',
+        d.pulsarPfp    || '',
+        {
+          twitter:   d.pulsarTwitter   || '',
+          twitch:    d.pulsarTwitch    || '',
+          youtube:   d.pulsarYoutube   || '',
+          tiktok:    d.pulsarTiktok    || '',
+          instagram: d.pulsarInstagram || ''
+        }
+      );
+    }
+
     document.addEventListener('click', function (e) {
       var card = e.target.closest('[data-pulsar-player]');
-      if (card) { _drawerFocusPrev = card; _openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || ''); return; }
+      if (card) { _drawerFocusPrev = card; _openCardDrawer(card); return; }
       if (e.target.closest('.pulsar-player-drawer__close') || e.target.id === 'pulsar-drawer-backdrop') {
         _closeDrawer();
       }
@@ -1276,7 +1353,7 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         var card = e.target.closest('[data-pulsar-player]');
-        if (card) { e.preventDefault(); _drawerFocusPrev = card; _openDrawer(card.dataset.pulsarPlayer, card.dataset.pulsarGame || ''); }
+        if (card) { e.preventDefault(); _drawerFocusPrev = card; _openCardDrawer(card); }
       }
       if (e.key === 'Escape') { _closeDrawer(); }
     });
@@ -1316,9 +1393,21 @@
       function () {
         if (forceNativeMotion) return;
         gsap.registerPlugin(ScrollTrigger);
+
+        // Critical: preloader runs immediately — it owns the first visible frame.
         runPreloader();
-        initScrollAnimationsIn(document);
-        initStatCountersIn(document);
+
+        // Yield after preloader so the browser can paint the preloader exit frame
+        // before we block the main thread with ScrollTrigger setup (~30-60ms).
+        // Each setTimeout(fn, 0) creates a separate task, reducing TBT.
+        setTimeout(function () {
+          initScrollAnimationsIn(document);
+        }, 0);
+
+        setTimeout(function () {
+          initStatCountersIn(document);
+        }, 0);
+
         // Defer ScrollTrigger.refresh() to browser idle time — it forces layout on every trigger element.
         // Running it inside rAF blocks the main thread during initial paint. Idle callback defers it safely.
         (window.requestIdleCallback || setTimeout)(function () { ScrollTrigger.refresh(); });

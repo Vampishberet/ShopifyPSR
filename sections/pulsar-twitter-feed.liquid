@@ -28,7 +28,27 @@
   </div>
 </section>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+(function() {
+  var section = document.currentScript.closest('section, div[class*="pulsar-twitter"]') || document.querySelector('.pulsar-twitter');
+  if (!section) return;
+
+  var loaded = false;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !loaded) {
+      loaded = true;
+      observer.disconnect();
+      var s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.async = true;
+      s.charset = 'utf-8';
+      document.body.appendChild(s);
+    }
+  }, { rootMargin: '200px' });
+
+  observer.observe(section);
+})();
+</script>
 
 {% stylesheet %}
   .pulsar-twitter {
