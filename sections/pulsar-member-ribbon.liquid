@@ -1,4 +1,4 @@
-%- liquid
+{%- liquid
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
   assign ticker_speed = section.settings.ticker_speed | default: 0.7
