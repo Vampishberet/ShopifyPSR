@@ -1,21 +1,23 @@
 {%- liquid
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
-  assign ticker_speed = section.settings.ticker_speed | default: 0.7
+  assign ticker_duration = section.settings.ticker_duration | default: 30
   assign pause_on_hover = section.settings.pause_on_hover
 -%}
 
 <section
   class="pulsar-ticker-section"
   id="pulsar-ticker-{{ section.id }}"
-  style="--ticker-speed-multiplier: {{ ticker_speed }};"
 >
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
   <div class="pulsar-ticker-viewport">
-    <div class="pulsar-ticker-track{% if pause_on_hover %} pulsar-ticker-track--pause{% endif %}">
+    <div
+      class="pulsar-ticker-track{% if pause_on_hover %} pulsar-ticker-track--pause{% endif %}"
+      style="animation-duration: {{ ticker_duration }}s;"
+    >
       <div class="pulsar-ticker-group">
         {%- for member in members -%}
           {%- assign name = member | strip -%}
@@ -40,8 +42,8 @@
 <style>
   #pulsar-ticker-{{ section.id }} {
     background: var(--pulsar-black, #000);
-    border-top: 1px solid var(--pulsar-accent-purple-soft, rgba(255,255,255,0.15));
-    border-bottom: 1px solid var(--pulsar-accent-purple-soft, rgba(255,255,255,0.15));
+    border-top: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
+    border-bottom: 1px solid var(--pulsar-accent-purple-soft, rgba(255, 255, 255, 0.15));
     padding: 20px 0;
     overflow: hidden;
   }
@@ -53,7 +55,7 @@
     font-family: var(--font-body, sans-serif);
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--pulsar-gray1, #999);
+    color: var(--pulsar-gray1, #9a9a9a);
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
@@ -66,7 +68,10 @@
     display: flex;
     width: max-content;
     will-change: transform;
-    animation: pulsarTickerScroll-{{ section.id }} calc(30s / var(--ticker-speed-multiplier)) linear infinite;
+    animation-name: pulsar-ticker-scroll-{{ section.id }};
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-track--pause:hover {
@@ -91,7 +96,7 @@
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--pulsar-gray3, #ddd);
+    color: var(--pulsar-gray3, #d8d8d8);
     padding: 0 20px;
   }
 
@@ -102,12 +107,12 @@
     font-size: 0.6rem;
   }
 
-  @keyframes pulsarTickerScroll-{{ section.id }} {
+  @keyframes pulsar-ticker-scroll-{{ section.id }} {
     from {
-      transform: translate3d(0, 0, 0);
+      transform: translateX(0);
     }
     to {
-      transform: translate3d(-50%, 0, 0);
+      transform: translateX(-50%);
     }
   }
 
@@ -124,8 +129,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
-      animation: none;
-      transform: translate3d(0, 0, 0);
+      animation: none !important;
+      transform: none !important;
     }
   }
 </style>
@@ -149,13 +154,13 @@
     },
     {
       "type": "range",
-      "id": "ticker_speed",
-      "label": "Ticker speed",
-      "min": 0.2,
-      "max": 3.0,
-      "step": 0.1,
-      "default": 0.7,
-      "info": "Higher = faster."
+      "id": "ticker_duration",
+      "label": "Ticker duration",
+      "min": 10,
+      "max": 80,
+      "step": 1,
+      "default": 30,
+      "unit": "s"
     },
     {
       "type": "checkbox",
