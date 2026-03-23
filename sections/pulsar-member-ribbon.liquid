@@ -1,23 +1,31 @@
 {%- liquid
   assign member_names = section.settings.member_names | strip
   assign members = member_names | split: ','
-  assign ticker_speed = section.settings.ticker_speed | default: 0.7
+  assign ticker_speed = section.settings.ticker_speed | default: 30
   assign pause_on_hover = section.settings.pause_on_hover
 -%}
 
 <section
   class="pulsar-ticker-section"
   id="pulsar-ticker-{{ section.id }}"
-  data-ticker-speed="{{ ticker_speed }}"
-  data-pause-on-hover="{{ pause_on_hover }}"
+  style="--ticker-duration: {{ ticker_speed }}s;"
 >
   {%- if section.settings.heading != blank -%}
     <p class="pulsar-ticker-heading">{{ section.settings.heading }}</p>
   {%- endif -%}
 
   <div class="pulsar-ticker-viewport">
-    <div class="pulsar-ticker-track">
-      <div class="pulsar-ticker-group">
+    <div class="pulsar-ticker-track{% if pause_on_hover %} pulsar-ticker-track--pause{% endif %}">
+      <div class="pulsar-ticker-group" aria-label="Member names">
+        {%- for member in members -%}
+          {%- assign name = member | strip -%}
+          {%- if name != blank -%}
+            <span class="pulsar-ticker-item">{{ name }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="pulsar-ticker-group" aria-hidden="true">
         {%- for member in members -%}
           {%- assign name = member | strip -%}
           {%- if name != blank -%}
@@ -31,9 +39,9 @@
 
 <style>
   #pulsar-ticker-{{ section.id }} {
-    background: var(--pulsar-black);
-    border-top: 1px solid var(--pulsar-accent-purple-soft);
-    border-bottom: 1px solid var(--pulsar-accent-purple-soft);
+    background: var(--pulsar-black, #000);
+    border-top: 1px solid var(--pulsar-accent-purple-soft, rgba(255,255,255,0.15));
+    border-bottom: 1px solid var(--pulsar-accent-purple-soft, rgba(255,255,255,0.15));
     padding: 20px 0;
     overflow: hidden;
   }
@@ -42,10 +50,10 @@
     margin: 0 0 16px;
     text-align: center;
     font-size: 0.65rem;
-    font-family: var(--font-body);
+    font-family: var(--font-body, sans-serif);
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--pulsar-gray1);
+    color: var(--pulsar-gray1, #999);
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-viewport {
@@ -71,15 +79,19 @@
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
     display: flex;
     width: max-content;
+    animation: pulsarTickerScroll-{{ section.id }} var(--ticker-duration) linear infinite;
     will-change: transform;
-    transform: translate3d(0, 0, 0);
+  }
+
+  #pulsar-ticker-{{ section.id }} .pulsar-ticker-track--pause:hover {
+    animation-play-state: paused;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-group {
     display: flex;
     flex-shrink: 0;
-    min-width: max-content;
     align-items: center;
+    min-width: max-content;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-item {
@@ -87,21 +99,30 @@
     align-items: center;
     flex: 0 0 auto;
     white-space: nowrap;
-    font-family: var(--font-secondary);
+    font-family: var(--font-secondary, sans-serif);
     font-size: 1.25rem;
     font-weight: 400;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--pulsar-gray3);
+    color: var(--pulsar-gray3, #ddd);
     padding: 0 20px;
   }
 
   #pulsar-ticker-{{ section.id }} .pulsar-ticker-item::after {
     content: "✦";
     margin-left: 20px;
-    color: var(--pulsar-white);
+    color: var(--pulsar-white, #fff);
     font-size: 0.6rem;
+  }
+
+  @keyframes pulsarTickerScroll-{{ section.id }} {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
   }
 
   @media screen and (max-width: 767px) {
@@ -117,163 +138,11 @@
 
   @media (prefers-reduced-motion: reduce) {
     #pulsar-ticker-{{ section.id }} .pulsar-ticker-track {
-      transform: none !important;
+      animation: none;
+      transform: translate3d(0, 0, 0);
     }
   }
 </style>
-
-<script>
-  (() => {
-    const root = document.getElementById('pulsar-ticker-{{ section.id }}');
-    if (!root) return;
-
-    const viewport = root.querySelector('.pulsar-ticker-viewport');
-    const track = root.querySelector('.pulsar-ticker-track');
-    const baseGroup = track?.querySelector('.pulsar-ticker-group');
-
-    if (!viewport || !track || !baseGroup) return;
-
-    const speed = parseFloat(root.dataset.tickerSpeed) || 0.7;
-    const pauseOnHover = root.dataset.pauseOnHover === 'true';
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    let groupWidth = 0;
-    let offset = 0;
-    let paused = false;
-    let frameId = null;
-    let lastTime = 0;
-    let resizeFrameId = null;
-
-    const removeClones = () => {
-      track.querySelectorAll('[data-ticker-clone="true"]').forEach((clone) => clone.remove());
-    };
-
-    const buildClones = () => {
-      removeClones();
-
-      groupWidth = baseGroup.getBoundingClientRect().width;
-      const viewportWidth = viewport.getBoundingClientRect().width;
-
-      if (!groupWidth || !viewportWidth) return;
-
-      let totalWidth = groupWidth;
-
-      while (totalWidth < viewportWidth + groupWidth * 2) {
-        const clone = baseGroup.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        clone.setAttribute('data-ticker-clone', 'true');
-        track.appendChild(clone);
-        totalWidth += groupWidth;
-      }
-    };
-
-    const applyTransform = () => {
-      track.style.transform = `translate3d(${offset}px, 0, 0)`;
-    };
-
-    const measure = () => {
-      buildClones();
-
-      if (!groupWidth) return;
-
-      offset = -((Math.abs(offset)) % groupWidth);
-      applyTransform();
-    };
-
-    const stop = () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-        frameId = null;
-      }
-    };
-
-    const tick = (time) => {
-      if (!lastTime) lastTime = time;
-      const delta = time - lastTime;
-      lastTime = time;
-
-      if (!paused && !reducedMotionQuery.matches && groupWidth) {
-        offset -= speed * (delta / 16.6667);
-
-        if (Math.abs(offset) >= groupWidth) {
-          offset += groupWidth;
-        }
-
-        applyTransform();
-      }
-
-      frameId = requestAnimationFrame(tick);
-    };
-
-    const start = () => {
-      stop();
-
-      if (reducedMotionQuery.matches) {
-        track.style.transform = 'none';
-        return;
-      }
-
-      lastTime = 0;
-      frameId = requestAnimationFrame(tick);
-    };
-
-    const onResize = () => {
-      if (resizeFrameId) cancelAnimationFrame(resizeFrameId);
-
-      resizeFrameId = requestAnimationFrame(() => {
-        measure();
-      });
-    };
-
-    const onMotionChange = () => {
-      measure();
-      start();
-    };
-
-    const onMouseEnter = () => {
-      if (pauseOnHover) paused = true;
-    };
-
-    const onMouseLeave = () => {
-      paused = false;
-    };
-
-    const onSectionUnload = (event) => {
-      if (event.detail?.sectionId !== '{{ section.id }}') return;
-
-      stop();
-      window.removeEventListener('resize', onResize);
-      root.removeEventListener('mouseenter', onMouseEnter);
-      root.removeEventListener('mouseleave', onMouseLeave);
-
-      if (reducedMotionQuery.removeEventListener) {
-        reducedMotionQuery.removeEventListener('change', onMotionChange);
-      } else if (reducedMotionQuery.removeListener) {
-        reducedMotionQuery.removeListener(onMotionChange);
-      }
-
-      document.removeEventListener('shopify:section:unload', onSectionUnload);
-    };
-
-    measure();
-    start();
-
-    window.addEventListener('resize', onResize);
-
-    if (pauseOnHover) {
-      root.addEventListener('mouseenter', onMouseEnter);
-      root.addEventListener('mouseleave', onMouseLeave);
-    }
-
-    if (reducedMotionQuery.addEventListener) {
-      reducedMotionQuery.addEventListener('change', onMotionChange);
-    } else if (reducedMotionQuery.addListener) {
-      reducedMotionQuery.addListener(onMotionChange);
-    }
-
-    document.addEventListener('shopify:section:unload', onSectionUnload);
-  })();
-</script>
 
 {% schema %}
 {
@@ -295,12 +164,12 @@
     {
       "type": "range",
       "id": "ticker_speed",
-      "label": "Ticker speed",
-      "min": 0.2,
-      "max": 3.0,
-      "step": 0.1,
-      "default": 0.7,
-      "info": "Scroll speed. Higher = faster."
+      "label": "Ticker duration",
+      "min": 10,
+      "max": 80,
+      "step": 2,
+      "default": 30,
+      "info": "Lower = faster. This controls how many seconds one full loop takes."
     },
     {
       "type": "checkbox",
