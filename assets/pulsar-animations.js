@@ -1319,9 +1319,9 @@
         runPreloader();
         initScrollAnimationsIn(document);
         initStatCountersIn(document);
-        requestAnimationFrame(function () {
-          ScrollTrigger.refresh();
-        });
+        // Defer ScrollTrigger.refresh() to browser idle time — it forces layout on every trigger element.
+        // Running it inside rAF blocks the main thread during initial paint. Idle callback defers it safely.
+        (window.requestIdleCallback || setTimeout)(function () { ScrollTrigger.refresh(); });
       }
     );
 

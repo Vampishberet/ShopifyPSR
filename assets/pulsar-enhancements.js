@@ -114,10 +114,14 @@
       initGSAP
     );
 
-    waitFor(
-      function () { return typeof Lenis !== 'undefined'; },
-      initLenis
-    );
+    // Delay Lenis to window load — its RAF loop competes with initial render if started at DOMContentLoaded.
+    if (document.readyState === 'complete') {
+      waitFor(function () { return typeof Lenis !== 'undefined'; }, initLenis);
+    } else {
+      window.addEventListener('load', function () {
+        waitFor(function () { return typeof Lenis !== 'undefined'; }, initLenis);
+      }, { once: true });
+    }
   }
 
   if (document.readyState === 'loading') {

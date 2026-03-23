@@ -236,19 +236,24 @@ header[role="banner"] {
   top: 0;
   z-index: 1000;
   background-color: transparent !important;
-  transition:
-    background-color 0.4s var(--pulsar-ease-std),
-    backdrop-filter 0.4s var(--pulsar-ease-std),
-    border-color 0.4s var(--pulsar-ease-std);
-  border-bottom: 1px solid transparent;
 }
 
-/* Header on scroll — solid background, no blur (blur forces GPU composite every scroll frame) */
-#header-group.pulsar-header--scrolled .header-section,
-#header-group.pulsar-header--scrolled header-component,
-#header-group.pulsar-header--scrolled {
-  background-color: rgba(10, 10, 12, 0.97) !important;
-  border-bottom-color: var(--pulsar-dark3);
+/* Composited header background — opacity transition on pseudo-element avoids paint on scroll.
+   background-color and border-color transitions are non-composited and cause repaint every frame. */
+#header-group::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(10, 10, 12, 0.97);
+  border-bottom: 1px solid var(--pulsar-dark3);
+  opacity: 0;
+  transition: opacity 0.35s var(--pulsar-ease-std);
+  pointer-events: none;
+}
+
+#header-group.pulsar-header--scrolled::before {
+  opacity: 1;
 }
 
 /* Header nav link font */
