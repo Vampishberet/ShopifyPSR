@@ -1,17 +1,17 @@
 <section class="pulsar-cta" data-pulsar-section="cta">
   <div class="pulsar-cta__inner">
-    <p class="pulsar-cta__overline pulsar-reveal">{{ section.settings.overline | default: 'Ready?' }}</p>
-    <h2 class="pulsar-cta__heading pulsar-heading-reveal">
+    <p class="pulsar-cta__overline">{{ section.settings.overline | default: 'Ready?' }}</p>
+    <h2 class="pulsar-cta__heading">
       {%- if section.settings.heading != blank -%}
         {{ section.settings.heading | newline_to_br }}
       {%- else -%}
         THIS IS<br>YOUR ORG.
       {%- endif -%}
     </h2>
-    <p class="pulsar-cta__body pulsar-reveal">
+    <p class="pulsar-cta__body">
       {{ section.settings.body | default: 'Join the movement. Wear the name. Compete at the highest level.' }}
     </p>
-    <div class="pulsar-cta__actions pulsar-reveal">
+    <div class="pulsar-cta__actions">
       <a
         href="{{ section.settings.primary_url | default: '/collections/all' }}"
         class="pulsar-btn pulsar-btn--primary"
@@ -21,7 +21,7 @@
         class="pulsar-btn pulsar-btn--ghost"
       >{{ section.settings.secondary_label | default: 'Join Us' }}</a>
     </div>
-    <p class="pulsar-cta__tagline pulsar-reveal">Excellence. Community. Intent.</p>
+    <p class="pulsar-cta__tagline">Excellence. Community. Intent.</p>
   </div>
 </section>
 
