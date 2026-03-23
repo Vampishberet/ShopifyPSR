@@ -243,13 +243,11 @@ header[role="banner"] {
   border-bottom: 1px solid transparent;
 }
 
-/* Glassmorphism on scroll */
+/* Header on scroll — solid background, no blur (blur forces GPU composite every scroll frame) */
 #header-group.pulsar-header--scrolled .header-section,
 #header-group.pulsar-header--scrolled header-component,
 #header-group.pulsar-header--scrolled {
-  background-color: rgba(10, 10, 12, 0.85) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background-color: rgba(10, 10, 12, 0.97) !important;
   border-bottom-color: var(--pulsar-dark3);
 }
 

@@ -223,58 +223,24 @@
     }
 
     tickers.forEach(function (tickerSection) {
-      if (tickerSection._pulsarTickerTween || tickerSection._pulsarTickerAnimation) return;
+      // CSS @keyframes animation owns the ticker — runs on compositor thread (GPU),
+      // immune to main-thread blocking from stat counters or other JS work.
+      // JS only manages hover pause state.
+      if (tickerSection._pulsarTickerHoverBound) return;
 
       var track = tickerSection.querySelector('.pulsar-ticker-track');
-      var firstGroup = tickerSection.querySelector('.pulsar-ticker-group');
-      if (!track || !firstGroup) return;
+      if (!track) return;
 
-      var width = firstGroup.offsetWidth;
-      if (!width) {
-        requestAnimationFrame(function () {
-          initTickerIn(tickerSection);
-        });
+      if (tickerSection.dataset.pauseOnHover === 'false') {
+        tickerSection._pulsarTickerHoverBound = true;
         return;
       }
 
-      var speedSetting = parseFloat(tickerSection.dataset.tickerSpeed) || 60;
-      var duration = width / speedSetting; // speedSetting is px/s, duration in seconds
-
-      if (window.gsap) {
-        tickerSection._pulsarTickerTween = gsap.to(track, {
-          x: -width,
-          duration: duration,
-          ease: 'none',
-          repeat: -1
-        });
-      } else if (typeof track.animate === 'function') {
-        tickerSection._pulsarTickerAnimation = track.animate(
-          [
-            { transform: 'translate3d(0, 0, 0)' },
-            { transform: 'translate3d(-' + width + 'px, 0, 0)' }
-          ],
-          {
-            duration: duration * 1000,
-            easing: 'linear',
-            iterations: Infinity
-          }
-        );
-      }
-
-      // Only kill the CSS fallback once JS has confirmed ownership.
-      // If neither GSAP nor Web Animations took over, keep CSS running — it's the last line of defence.
-      if (tickerSection._pulsarTickerTween || tickerSection._pulsarTickerAnimation) {
-        track.style.animation = 'none';
-      }
-
-      var motionHandle = tickerSection._pulsarTickerTween || tickerSection._pulsarTickerAnimation;
-      if (!motionHandle || tickerSection._pulsarTickerHoverBound || tickerSection.dataset.pauseOnHover === 'false') return;
-
       tickerSection._pulsarTickerMouseenter = function () {
-        if (motionHandle.pause) motionHandle.pause();
+        track.style.animationPlayState = 'paused';
       };
       tickerSection._pulsarTickerMouseleave = function () {
-        if (motionHandle.play) motionHandle.play();
+        track.style.animationPlayState = 'running';
       };
       tickerSection.addEventListener('mouseenter', tickerSection._pulsarTickerMouseenter);
       tickerSection.addEventListener('mouseleave', tickerSection._pulsarTickerMouseleave);
@@ -317,7 +283,7 @@
     var fill       = preloader.querySelector('.pulsar-preloader__progress-fill');
     var label      = preloader.querySelector('.pulsar-preloader__label');
     var startTime  = Date.now();
-    var minDuration = 2600;
+    var minDuration = 1600;
     var currentProgress = 0;
 
     function setProgress(p) {
@@ -327,10 +293,10 @@
     }
 
     var phase1 = { p: 0 };
-    gsap.to(phase1, { p: 80, duration: 1.6, ease: 'power2.out', onUpdate: function () { setProgress(phase1.p); } });
+    gsap.to(phase1, { p: 80, duration: 1.0, ease: 'power2.out', onUpdate: function () { setProgress(phase1.p); } });
 
     var phase2 = { p: 80 };
-    gsap.to(phase2, { p: 95, duration: 0.8, delay: 1.6, ease: 'power1.out', onUpdate: function () { setProgress(phase2.p); } });
+    gsap.to(phase2, { p: 95, duration: 0.5, delay: 1.0, ease: 'power1.out', onUpdate: function () { setProgress(phase2.p); } });
 
     function completePreloader() {
       var elapsed   = Date.now() - startTime;
@@ -607,11 +573,17 @@
 
           if (window.gsap) {
             var obj = { val: 0 };
+            var frame = 0;
             gsap.to(obj, {
               val: target,
               duration: durationS,
               ease: 'power1.out',
-              onUpdate: function () { el.textContent = format(obj.val); },
+              onUpdate: function () {
+                // Update DOM every 3rd frame (20fps) — reduces layout recalc pressure
+                // while counter tween still runs at full 60fps internally.
+                if (++frame % 3 !== 0) return;
+                el.textContent = format(obj.val);
+              },
               onComplete: function () { el.textContent = format(target); }
             });
           } else {
@@ -696,9 +668,9 @@
         delete ticker._pulsarTickerMouseleave;
       }
       delete ticker._pulsarTickerHoverBound;
-      // Restore CSS fallback animation so ticker keeps scrolling during section reload
+      // Restore CSS animation state so ticker resumes scrolling after section reload
       var tkTrack = ticker.querySelector('.pulsar-ticker-track');
-      if (tkTrack) tkTrack.style.animation = '';
+      if (tkTrack) { tkTrack.style.animation = ''; tkTrack.style.animationPlayState = ''; }
     });
 
     sectionEl.querySelectorAll('.pulsar-heading-reveal').forEach(function (el) {
