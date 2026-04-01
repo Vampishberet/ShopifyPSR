@@ -86,10 +86,211 @@
           href="mailto:{{ section.settings.contact_email | default: 'pulsarclanggs@gmail.com' }}"
         >GET IN TOUCH</a>
       </div>
+
+      {%- comment -%}── APPLICATION FORM ──{%- endcomment -%}
+      <div class="pulsar-careers__form-section pulsar-reveal">
+        <div class="pulsar-careers__roles-header">
+          <span class="pulsar-careers__section-label">APPLY NOW</span>
+          <span class="pulsar-careers__section-line" aria-hidden="true"></span>
+        </div>
+
+        <div class="pulsar-careers__form-wrap" id="pulsar-form-wrap-{{ section.id }}">
+          <form class="pulsar-careers__form" id="pulsar-careers-form-{{ section.id }}" novalidate>
+
+            <div class="pulsar-careers__field-row">
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-name-{{ section.id }}">Full Name <span aria-hidden="true">*</span></label>
+                <input
+                  class="pulsar-careers__input"
+                  type="text"
+                  id="pcf-name-{{ section.id }}"
+                  name="name"
+                  placeholder="Your full name"
+                  required
+                  autocomplete="name"
+                >
+              </div>
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-email-{{ section.id }}">Email <span aria-hidden="true">*</span></label>
+                <input
+                  class="pulsar-careers__input"
+                  type="email"
+                  id="pcf-email-{{ section.id }}"
+                  name="email"
+                  placeholder="your@email.com"
+                  required
+                  autocomplete="email"
+                >
+              </div>
+            </div>
+
+            <div class="pulsar-careers__field-row">
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-discord-{{ section.id }}">Discord Handle <span aria-hidden="true">*</span></label>
+                <input
+                  class="pulsar-careers__input"
+                  type="text"
+                  id="pcf-discord-{{ section.id }}"
+                  name="discord"
+                  placeholder="username"
+                  required
+                >
+              </div>
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-role-{{ section.id }}">Role Applying For <span aria-hidden="true">*</span></label>
+                <select class="pulsar-careers__input pulsar-careers__select" id="pcf-role-{{ section.id }}" name="role" required>
+                  <option value="" disabled selected>Select a role</option>
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'role' and block.settings.title != blank -%}
+                      <option value="{{ block.settings.title | escape }}">{{ block.settings.title }}</option>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  <option value="General Interest">General Interest</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="pulsar-careers__field">
+              <label class="pulsar-careers__label" for="pcf-experience-{{ section.id }}">Previous Experience <span aria-hidden="true">*</span></label>
+              <textarea
+                class="pulsar-careers__input pulsar-careers__textarea"
+                id="pcf-experience-{{ section.id }}"
+                name="experience"
+                placeholder="Tell us about your relevant experience — previous orgs, roles, projects..."
+                required
+                rows="4"
+              ></textarea>
+            </div>
+
+            <div class="pulsar-careers__field">
+              <label class="pulsar-careers__label" for="pcf-why-{{ section.id }}">Why Pulsar? <span aria-hidden="true">*</span></label>
+              <textarea
+                class="pulsar-careers__input pulsar-careers__textarea"
+                id="pcf-why-{{ section.id }}"
+                name="whyPulsar"
+                placeholder="Why do you want to join Team Pulsar specifically?"
+                required
+                rows="4"
+              ></textarea>
+            </div>
+
+            <div class="pulsar-careers__field-row">
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-portfolio-{{ section.id }}">Portfolio / Past Work <span class="pulsar-careers__optional">(optional)</span></label>
+                <input
+                  class="pulsar-careers__input"
+                  type="url"
+                  id="pcf-portfolio-{{ section.id }}"
+                  name="portfolio"
+                  placeholder="https://..."
+                >
+              </div>
+              <div class="pulsar-careers__field">
+                <label class="pulsar-careers__label" for="pcf-socials-{{ section.id }}">Social Media Links <span class="pulsar-careers__optional">(optional)</span></label>
+                <input
+                  class="pulsar-careers__input"
+                  type="text"
+                  id="pcf-socials-{{ section.id }}"
+                  name="socials"
+                  placeholder="Twitter, LinkedIn, etc."
+                >
+              </div>
+            </div>
+
+            <div class="pulsar-careers__form-footer">
+              <p class="pulsar-careers__form-note">Fields marked <span aria-hidden="true">*</span> are required.</p>
+              <button
+                class="pulsar-btn pulsar-btn--primary pulsar-careers__submit"
+                type="submit"
+                id="pcf-submit-{{ section.id }}"
+              >SUBMIT APPLICATION</button>
+            </div>
+
+            <p class="pulsar-careers__form-error" id="pcf-error-{{ section.id }}" role="alert" aria-live="polite" hidden>
+              Something went wrong. Please try again or email us at <a href="mailto:{{ section.settings.contact_email | default: 'pulsarclanggs@gmail.com' }}">{{ section.settings.contact_email | default: 'pulsarclanggs@gmail.com' }}</a>.
+            </p>
+
+          </form>
+
+          <div class="pulsar-careers__success" id="pcf-success-{{ section.id }}" hidden>
+            <p class="pulsar-careers__success-heading">APPLICATION RECEIVED.</p>
+            <p class="pulsar-careers__success-text">We'll review your application and reach out via Discord or email if you're a fit. Thanks for your interest in Team Pulsar.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
 </section>
+
+<script>
+(function() {
+  var SECTION_ID = '{{ section.id }}';
+  var GAS_ENDPOINT = {{ section.settings.gas_endpoint | default: '' | json }};
+
+  function initForm() {
+    var form = document.getElementById('pulsar-careers-form-' + SECTION_ID);
+    var submitBtn = document.getElementById('pcf-submit-' + SECTION_ID);
+    var errorEl = document.getElementById('pcf-error-' + SECTION_ID);
+    var successEl = document.getElementById('pcf-success-' + SECTION_ID);
+    var formWrap = document.getElementById('pulsar-form-wrap-' + SECTION_ID);
+
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (!GAS_ENDPOINT) {
+        errorEl.hidden = false;
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'SENDING...';
+      errorEl.hidden = true;
+
+      var data = {
+        name:       form.querySelector('[name="name"]').value.trim(),
+        email:      form.querySelector('[name="email"]').value.trim(),
+        discord:    form.querySelector('[name="discord"]').value.trim(),
+        role:       form.querySelector('[name="role"]').value,
+        experience: form.querySelector('[name="experience"]').value.trim(),
+        whyPulsar:  form.querySelector('[name="whyPulsar"]').value.trim(),
+        portfolio:  form.querySelector('[name="portfolio"]').value.trim(),
+        socials:    form.querySelector('[name="socials"]').value.trim()
+      };
+
+      fetch(GAS_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(json) {
+        if (json.success) {
+          form.hidden = true;
+          successEl.hidden = false;
+        } else {
+          throw new Error(json.error || 'Unknown error');
+        }
+      })
+      .catch(function() {
+        errorEl.hidden = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SUBMIT APPLICATION';
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initForm);
+
+  document.addEventListener('shopify:section:load', function(e) {
+    if (e.target.querySelector('[data-pulsar-section]')) {
+      initForm();
+    }
+  });
+})();
+</script>
 
 <style>
 /* ── Hero ── */
@@ -327,6 +528,142 @@
   .pulsar-careers__hero { min-height: 55vh; }
   .pulsar-careers__cta { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── Application Form ── */
+.pulsar-careers__form-section {
+  margin-top: var(--pulsar-space-xxl);
+}
+
+.pulsar-careers__field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pulsar-space-md);
+}
+
+.pulsar-careers__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: var(--pulsar-space-md);
+}
+
+.pulsar-careers__label {
+  font: 500 0.75rem/1 var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pulsar-gray2);
+}
+
+.pulsar-careers__label span[aria-hidden] {
+  color: var(--pulsar-accent-purple2);
+  margin-left: 0.15em;
+}
+
+.pulsar-careers__optional {
+  color: var(--pulsar-gray1);
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-weight: 400;
+}
+
+.pulsar-careers__input {
+  background: var(--pulsar-dark3);
+  border: 1px solid var(--pulsar-gray1);
+  color: var(--pulsar-white);
+  font: 400 0.9375rem/1.5 var(--font-body);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pulsar-careers__input::placeholder {
+  color: var(--pulsar-gray1);
+}
+
+.pulsar-careers__input:focus {
+  border-color: var(--pulsar-accent-purple2);
+  box-shadow: 0 0 0 3px rgba(187, 168, 255, 0.12);
+}
+
+.pulsar-careers__select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8A8F' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.pulsar-careers__select option {
+  background: var(--pulsar-dark2);
+  color: var(--pulsar-white);
+}
+
+.pulsar-careers__textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.pulsar-careers__form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pulsar-space-md);
+  margin-top: var(--pulsar-space-lg);
+  flex-wrap: wrap;
+}
+
+.pulsar-careers__form-note {
+  font: 400 0.8125rem/1.5 var(--font-body);
+  color: var(--pulsar-gray1);
+  margin: 0;
+}
+
+.pulsar-careers__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pulsar-careers__form-error {
+  margin-top: var(--pulsar-space-md);
+  font: 400 0.875rem/1.6 var(--font-body);
+  color: #ff6b6b;
+}
+
+.pulsar-careers__form-error a {
+  color: var(--pulsar-accent-purple2);
+  text-decoration: underline;
+}
+
+/* ── Success state ── */
+.pulsar-careers__success {
+  padding: var(--pulsar-space-xxl) 0;
+  text-align: center;
+}
+
+.pulsar-careers__success-heading {
+  font: 900 clamp(1.75rem, 4vw, 3rem)/1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--pulsar-white);
+  margin: 0 0 var(--pulsar-space-md);
+}
+
+.pulsar-careers__success-text {
+  font: 400 1rem/1.7 var(--font-body);
+  color: var(--pulsar-gray3);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .pulsar-careers__field-row { grid-template-columns: 1fr; }
+  .pulsar-careers__form-footer { flex-direction: column; align-items: flex-start; }
+}
 </style>
 
 {% schema %}
@@ -355,6 +692,12 @@
       "id": "contact_email",
       "label": "Contact email",
       "default": "pulsarclanggs@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "gas_endpoint",
+      "label": "Application Endpoint URL",
+      "info": "Paste your Google Apps Script Web App URL here. Applications will be sent to your Google Sheet."
     },
     {
       "type": "text",

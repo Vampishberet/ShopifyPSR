@@ -45,15 +45,13 @@
             {% endunless %}
             {{ block.shopify_attributes }}
           >
-            <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
+            <p class="pulsar-hero__eyebrow">
               {{ block.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
             </p>
-            <div class="pulsar-hero__mask" aria-hidden="false">
-              <h1 class="pulsar-hero__heading pulsar-hero__mask-inner">
-                {{ block.settings.heading | default: 'TEAM PULSAR' }}
-              </h1>
-            </div>
-            <p class="pulsar-hero__tagline" data-pulsar-hero-element>
+            <h1 class="pulsar-hero__heading">
+              {{ block.settings.heading | default: 'TEAM PULSAR' }}
+            </h1>
+            <p class="pulsar-hero__tagline">
               {{ block.settings.tagline | default: 'Move With Intent.' }}
             </p>
           </div>
@@ -61,27 +59,25 @@
       {%- else -%}
         {%- comment -%} Fallback: single slide from section settings {%- endcomment -%}
         <div class="pulsar-hero__slide is-active" role="group" aria-label="Hero">
-          <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
+          <p class="pulsar-hero__eyebrow">
             {{ section.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
           </p>
-          <div class="pulsar-hero__mask">
-            <h1 class="pulsar-hero__heading pulsar-hero__mask-inner">
-              {%- if section.settings.heading != blank -%}
-                {{ section.settings.heading }}
-              {%- else -%}
-                TEAM<br>
-                PULSAR
-              {%- endif -%}
-            </h1>
-          </div>
-          <p class="pulsar-hero__tagline" data-pulsar-hero-element>
+          <h1 class="pulsar-hero__heading">
+            {%- if section.settings.heading != blank -%}
+              {{ section.settings.heading }}
+            {%- else -%}
+              TEAM<br>
+              PULSAR
+            {%- endif -%}
+          </h1>
+          <p class="pulsar-hero__tagline">
             {{ section.settings.tagline | default: 'Move With Intent.' }}
           </p>
         </div>
       {%- endif -%}
     </div>
 
-    <div class="pulsar-hero__actions" data-pulsar-hero-element>
+    <div class="pulsar-hero__actions">
       <a
         href="{{ section.settings.primary_cta_url | default: '/collections/all' }}"
         class="pulsar-btn pulsar-btn--primary"
@@ -97,7 +93,7 @@
     </div>
   </div>
 
-  <div class="pulsar-hero__scroll-indicator" data-pulsar-hero-element aria-hidden="true">
+  <div class="pulsar-hero__scroll-indicator" aria-hidden="true">
     <span class="pulsar-hero__scroll-label">Scroll</span>
     <div class="pulsar-hero__scroll-line"></div>
   </div>
@@ -184,17 +180,6 @@
     pointer-events: auto;
   }
 
-  /* Text mask reveal — heading clips inside overflow:hidden wrapper */
-  .pulsar-hero__mask {
-    overflow: hidden;
-    display: block;
-    line-height: 1;
-  }
-  .pulsar-hero__mask-inner {
-    display: block;
-    /* Progressive enhancement: visible if GSAP fails */
-  }
-
   .pulsar-hero__eyebrow {
     font-family: var(--font-body);
     font-size: 0.7rem;
@@ -202,7 +187,6 @@
     text-transform: uppercase;
     color: var(--pulsar-gray2);
     margin: 0;
-    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   .pulsar-hero__heading {
@@ -224,14 +208,12 @@
     text-transform: uppercase;
     color: var(--pulsar-gray3);
     margin: 0;
-    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   .pulsar-hero__actions {
     display: flex;
     gap: var(--pulsar-space-md);
     margin-top: var(--pulsar-space-sm);
-    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
 
   /* Scroll indicator */
@@ -245,7 +227,6 @@
     align-items: center;
     gap: var(--pulsar-space-xs);
     z-index: 1;
-    opacity: 0; /* Managed by [data-pulsar-hero-element] / revealHero() */
   }
   .pulsar-hero__scroll-label {
     font-family: var(--font-body);

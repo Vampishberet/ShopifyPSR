@@ -38,8 +38,7 @@
     '.pulsar-stagger-item',
     '.pulsar-videos__item',
     '.pulsar-partners__logo-link',
-    '.pulsar-esports-titles__tab',
-    '.pulsar-cta__heading'
+    '.pulsar-esports-titles__tab'
   ].join(', ');
 
   /* ------------------------------------------
@@ -496,21 +495,6 @@
         { y: 20, opacity: 0, filter: 'blur(8px)', scale: 0.96 },
         { y: 0, opacity: 1, filter: 'blur(0px)', scale: 1, duration: 0.65, ease: EASE.out },
         { trigger: partnerLogos[0].closest('section') || partnerLogos[0], start: 'top 82%', stagger: 0.12 }
-      );
-    }
-
-    // ── CTA heading — scale entrance + char scramble on enter
-    var ctaHeading = scope.querySelector('.pulsar-cta__heading');
-    if (ctaHeading && claimInit(ctaHeading, '_pulsarCtaHeadingInit')) {
-      gsap.fromTo(ctaHeading,
-        { scale: 0.94, opacity: 0, y: 30 },
-        {
-          scale: 1, opacity: 1, y: 0, duration: 0.9, ease: EASE.out,
-          scrollTrigger: {
-            trigger: ctaHeading, start: 'top 85%', once: true,
-            onEnter: function () { startCharScramble(ctaHeading); }
-          }
-        }
       );
     }
 
