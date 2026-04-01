@@ -1,1 +1,28 @@
-{"sections":{"pulsar-careers":{"type":"pulsar-careers","settings":{"heading":"JOIN THE TEAM.","subtext":"We are always looking for dedicated players, creators, and operators who share our vision. If you have what it takes, we want to hear from you.","contact_email":"pulsarclanggs@gmail.com","empty_text":"No open positions right now. Check back soon or reach out directly.","cta_text":"Don't see your role? We hire on merit. Send us your portfolio."}}},"order":["pulsar-careers"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pulsar-careers": {
+      "type": "pulsar-careers",
+      "settings": {
+        "heading": "JOIN THE TEAM.",
+        "subtext": "We are always looking for dedicated players, creators, and operators who share our vision. If you have what it takes, we want to hear from you.",
+        "default_apply_url": "",
+        "contact_email": "pulsarclanggs@gmail.com",
+        "gas_endpoint": "https://script.google.com/macros/s/AKfycbyAdNIyU2slDk34AywrwTbGQnWmNXRZw-_StmuOevAzKLjiiP42RWg1uJ4wbiygGLfH/exec",
+        "empty_text": "No open positions right now. Check back soon or reach out directly.",
+        "cta_text": "Don't see your role? We hire on merit. Send us your portfolio."
+      }
+    }
+  },
+  "order": [
+    "pulsar-careers"
+  ]
+}
