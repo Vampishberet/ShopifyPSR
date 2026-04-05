@@ -1,0 +1,201 @@
+<section id="pulsar-section-{{ section.id }}" class="pulsar-cobe-globe">
+  <div class="pulsar-cobe-globe__wrapper">
+    <div class="pulsar-cobe-globe__text">
+      <p class="pulsar-cobe-globe__overline pulsar-reveal">{{ section.settings.overline }}</p>
+      <h2 class="pulsar-cobe-globe__heading pulsar-heading-reveal">{{ section.settings.heading }}</h2>
+      <p class="pulsar-cobe-globe__description pulsar-reveal">{{ section.settings.description }}</p>
+    </div>
+    <div class="pulsar-cobe-globe__canvas-wrapper">
+      <canvas id="pulsar-globe-canvas-{{ section.id }}" width="600" height="600"></canvas>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var canvasId = 'pulsar-globe-canvas-{{ section.id }}';
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+
+  var phi = 1.2;
+  var theta = 0.3;
+  var globeInstance;
+
+  function tryInit() {
+    if (typeof createGlobe === 'undefined') {
+      setTimeout(tryInit, 100);
+      return;
+    }
+    globeInstance = createGlobe(canvas, {
+      devicePixelRatio: window.devicePixelRatio || 1,
+      width: canvas.clientWidth * 2,
+      height: canvas.clientHeight * 2,
+      phi: phi,
+      theta: theta,
+      dark: 1,
+      scale: 1.1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.12, 0.1, 0.15],
+      markerColor: [0.8, 0.65, 1.0],
+      glowColor: [0.86, 0.66, 1.0],
+      markers: [
+        { location: [40.7, -74.0], size: 0.08 },
+        { location: [34.0, -118.2], size: 0.06 },
+        { location: [43.6, -79.3], size: 0.05 },
+        { location: [51.5, -0.1], size: 0.05 }
+      ],
+      onRender: function(state) {
+        phi += 0.005;
+        state.phi = phi;
+        state.theta = theta;
+      }
+    });
+  }
+
+  canvas.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    theta = 0.3 + ((e.clientY - rect.top) / rect.height - 0.5) * 0.5;
+  });
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      tryInit();
+      observer.disconnect();
+    }
+  }, { rootMargin: '200px' });
+  observer.observe(canvas);
+
+  document.addEventListener('shopify:section:unload', function(e) {
+    if (e.target.id === 'pulsar-section-{{ section.id }}') {
+      if (globeInstance && typeof globeInstance.destroy === 'function') globeInstance.destroy();
+    }
+  });
+  document.addEventListener('shopify:section:load', function(e) {
+    if (e.target.id === 'pulsar-section-{{ section.id }}') {
+      tryInit();
+    }
+  });
+})();
+</script>
+
+{% stylesheet %}
+  #pulsar-section-{{ section.id }} {
+    background-color: var(--pulsar-black);
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+
+  .pulsar-cobe-globe__wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--pulsar-space-xxl);
+    align-items: center;
+  }
+
+  .pulsar-cobe-globe__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-md);
+  }
+
+  .pulsar-cobe-globe__overline {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    margin: 0;
+  }
+
+  .pulsar-cobe-globe__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .pulsar-cobe-globe__description {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--pulsar-gray3);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  .pulsar-cobe-globe__canvas-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  #pulsar-globe-canvas-{{ section.id }} {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @media (max-width: 1023px) {
+    .pulsar-cobe-globe__wrapper {
+      grid-template-columns: 1fr;
+      gap: var(--pulsar-space-lg);
+    }
+  }
+
+  @media (max-width: 767px) {
+    #pulsar-section-{{ section.id }} {
+      padding: var(--pulsar-space-xl) 0;
+    }
+    .pulsar-cobe-globe__wrapper {
+      padding: 0 var(--pulsar-space-md);
+    }
+    .pulsar-cobe-globe__heading {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Cobe Globe",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Global Presence"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're Going Global"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Team Pulsar members compete across North America and beyond. Our network of competitors, creators, and partners continues to grow."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Cobe Globe",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

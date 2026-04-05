@@ -21,7 +21,7 @@
     <div class="pulsar-merch__grid pulsar-stagger-group">
       {%- if merch_collection.products.size > 0 -%}
         {%- for product in merch_collection.products limit: product_limit -%}
-          <div class="pulsar-merch__card pulsar-stagger-item" data-pulsar-tilt>
+          <div class="pulsar-merch__card pulsar-stagger-item" data-pulsar-tilt data-spotlight>
             <div class="pulsar-merch__card-surface">
               <a href="{{ product.url }}" class="pulsar-merch__card-link" aria-label="{{ product.title }}">
                 <div class="pulsar-merch__card-image-wrap">
@@ -97,7 +97,7 @@
           {%- endif -%}
         {%- endfor -%}
         {%- unless has_pro_jersey -%}
-          <div class="pulsar-merch__card pulsar-merch__card--og pulsar-stagger-item">
+          <div class="pulsar-merch__card pulsar-merch__card--og pulsar-stagger-item" data-spotlight>
             <div class="pulsar-merch__card-link" aria-label="Pulsa PRO Jersey — OG Edition">
               <div class="pulsar-merch__card-image-wrap">
                 <div class="pulsar-merch__card-placeholder pulsar-merch__card-placeholder--og" aria-hidden="true">
@@ -116,7 +116,7 @@
       {%- else -%}
         {%- comment -%} Placeholder cards when no collection is set {%- endcomment -%}
         {%- for i in (1..6) -%}
-          <div class="pulsar-merch__card pulsar-merch__card--placeholder pulsar-stagger-item">
+          <div class="pulsar-merch__card pulsar-merch__card--placeholder pulsar-stagger-item" data-spotlight>
             <div class="pulsar-merch__card-image-wrap">
               <div class="pulsar-merch__card-placeholder" aria-hidden="true">
                 <span>PSR</span>
@@ -191,6 +191,7 @@
 
   /* Card */
   .pulsar-merch__card {
+    position: relative;
     background-color: var(--pulsar-dark2);
     border: 1px solid var(--pulsar-dark3);
     transition:

@@ -55,6 +55,7 @@
       gtag('js', new Date());
       gtag('config', 'G-6585D0D1XJ');
     </script>
+  <script src="https://unpkg.com/cobe@0.6.3/dist/index.umd.js" defer></script>
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
@@ -158,6 +159,7 @@
     <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer="defer"></script>
     <script src="{{ 'pulsar-enhancements.js' | asset_url }}" defer></script>
     <script src="{{ 'pulsar-animations.js' | asset_url }}" defer></script>
+    <script src="{{ 'pulsar-spotlight.js' | asset_url }}" defer></script>
 
     {% comment %} ── Pulsar Components ── {% endcomment %}
     {%- render 'pulsar-preloader' -%}

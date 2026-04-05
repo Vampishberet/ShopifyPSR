@@ -1,0 +1,380 @@
+<section id="pulsar-section-{{ section.id }}" class="pulsar-twitter-collage">
+  <div class="twitter-collage__wrapper">
+
+    <div class="twitter-collage__text">
+      <p class="twitter-collage__overline pulsar-reveal">{{ section.settings.overline }}</p>
+      <h2 class="twitter-collage__heading pulsar-heading-reveal">{{ section.settings.heading }}</h2>
+      <p class="twitter-collage__description pulsar-reveal">{{ section.settings.description }}</p>
+      <a href="https://x.com/PulsarLLC" target="_blank" rel="noopener noreferrer" class="twitter-collage__cta pulsar-reveal">
+        Follow @PulsarLLC →
+      </a>
+    </div>
+
+    <div class="twitter-collage__masonry">
+
+      <div class="twitter-collage__tweet" data-tweet="1">
+        <blockquote class="twitter-tweet" data-theme="dark" data-width="100%">
+          <p lang="en" dir="ltr">Who had the GREATEST prime in Fortnite history? 🏆 <a href="https://t.co/9xPhWo6rLz">pic.twitter.com/9xPhWo6rLz</a></p>&mdash; Team Pulsar (@PulsarLLC) <a href="https://twitter.com/PulsarLLC/status/2040175399041118641?ref_src=twsrc%5Etfw">April 3, 2026</a>
+        </blockquote>
+      </div>
+
+      <div class="twitter-collage__tweet" data-tweet="2">
+        <blockquote class="twitter-tweet" data-theme="dark" data-width="100%">
+          <p lang="en" dir="ltr">Welcome <a href="https://twitter.com/yoplori?ref_src=twsrc%5Etfw">@yoplori</a> to the team 💪💫 <br><br>Great things to come <a href="https://t.co/IG53mRQ9Hq">pic.twitter.com/IG53mRQ9Hq</a></p>&mdash; Team Pulsar (@PulsarLLC) <a href="https://twitter.com/PulsarLLC/status/2032578483117826287?ref_src=twsrc%5Etfw">March 13, 2026</a>
+        </blockquote>
+      </div>
+
+      <div class="twitter-collage__tweet" data-tweet="3">
+        <blockquote class="twitter-tweet" data-theme="dark" data-width="100%">
+          <p lang="en" dir="ltr">The boys take on Day 2 of <a href="https://twitter.com/Funhavergg?ref_src=twsrc%5Etfw">@Funhavergg</a> Wild//West LAN Qualifier #7! 🔥<a href="https://t.co/T5uGyI5mXB">pic.twitter.com/T5uGyI5mXB</a></p>&mdash; Pulsar Valorant (@PulsarValo) <a href="https://twitter.com/PulsarValo/status/2040172493005320664?ref_src=twsrc%5Etfw">April 3, 2026</a>
+        </blockquote>
+      </div>
+
+      <div class="twitter-collage__tweet" data-tweet="4">
+        <blockquote class="twitter-tweet" data-theme="dark" data-width="100%">
+          <p lang="en" dir="ltr">Better late than never 🙈 <br><br>Our boys are taking on <a href="https://twitter.com/TheROSEorg?ref_src=twsrc%5Etfw">@TheROSEorg</a> in a Bo5! <a href="https://t.co/tt7LHKaMBY">pic.twitter.com/tt7LHKaMBY</a></p>&mdash; Pulsar Valorant (@PulsarValo) <a href="https://twitter.com/PulsarValo/status/2032190867562250366?ref_src=twsrc%5Etfw">March 12, 2026</a>
+        </blockquote>
+      </div>
+
+      <div class="twitter-collage__tweet" data-tweet="5">
+        <blockquote class="twitter-tweet" data-theme="dark" data-width="100%">
+          <p lang="en" dir="ltr">Powered by <a href="https://twitter.com/DropMazter?ref_src=twsrc%5Etfw">@DropMazter</a> &amp; <a href="https://twitter.com/OBSBOT_Official?ref_src=twsrc%5Etfw">@OBSBOT_Official</a> 🚀 <a href="https://t.co/IRhAOYcz3k">pic.twitter.com/IRhAOYcz3k</a></p>&mdash; Team Pulsar (@PulsarLLC) <a href="https://twitter.com/PulsarLLC/status/2021705816437342359?ref_src=twsrc%5Etfw">February 11, 2026</a>
+        </blockquote>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var sectionEl = document.getElementById('pulsar-section-{{ section.id }}');
+  if (!sectionEl) return;
+  var loaded = false;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !loaded) {
+      loaded = true;
+      observer.disconnect();
+      var s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.async = true;
+      s.charset = 'utf-8';
+      document.body.appendChild(s);
+    }
+  }, { rootMargin: '200px' });
+  observer.observe(sectionEl);
+
+  document.addEventListener('shopify:section:load', function(e) {
+    if (e.target.id === 'pulsar-section-{{ section.id }}') {
+      loaded = false;
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load(e.target);
+      }
+    }
+  });
+})();
+</script>
+
+{% stylesheet %}
+  #pulsar-section-{{ section.id }} {
+    background: #000000;
+    padding: var(--pulsar-space-xxl) 0;
+    border-top: 1px solid var(--pulsar-dark3);
+  }
+
+  .twitter-collage__wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.9fr 1.5fr;
+    gap: 100px;
+    align-items: flex-start;
+    padding: 20px var(--pulsar-space-lg) 0;
+  }
+
+  .twitter-collage__text {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: sticky;
+    top: 60px;
+  }
+
+  .twitter-collage__overline {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--pulsar-gray1);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .twitter-collage__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 400;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    margin: 0;
+  }
+
+  .twitter-collage__description {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--pulsar-gray3);
+    max-width: 48ch;
+    margin: 0;
+  }
+
+  .twitter-collage__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 28px;
+    background: var(--pulsar-accent-purple2);
+    color: #000000;
+    font-family: var(--font-secondary);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: box-shadow 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    width: fit-content;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .twitter-collage__cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--pulsar-white);
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    z-index: 0;
+  }
+
+  .twitter-collage__cta:hover {
+    box-shadow: 0 16px 48px rgba(187, 168, 255, 0.35);
+    transform: translateY(-3px);
+  }
+
+  .twitter-collage__cta:hover::before {
+    transform: translateX(0);
+  }
+
+  .twitter-collage__cta span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .twitter-collage__masonry {
+    position: relative;
+    height: 1100px;
+    overflow: visible;
+  }
+
+  .twitter-collage__tweet {
+    position: absolute;
+    max-width: 360px;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform, filter;
+    filter: drop-shadow(0 10px 32px rgba(0, 0, 0, 0.6));
+    backface-visibility: hidden;
+  }
+
+  .twitter-collage__tweet:hover {
+    z-index: 100 !important;
+    filter: drop-shadow(0 20px 60px rgba(187, 168, 255, 0.3));
+  }
+
+  /* Tweet 1 — top left, largest */
+  .twitter-collage__tweet[data-tweet="1"] {
+    width: 380px;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    transform: rotate(-2.1deg);
+    animation: twitter-collage-float-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  }
+  .twitter-collage__tweet[data-tweet="1"]:hover {
+    transform: rotate(0deg) scale(1.05) translateY(-8px);
+  }
+
+  /* Tweet 2 — top right */
+  .twitter-collage__tweet[data-tweet="2"] {
+    width: 320px;
+    top: 60px;
+    right: 0;
+    z-index: 45;
+    transform: rotate(2.6deg);
+    animation: twitter-collage-float-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+  }
+  .twitter-collage__tweet[data-tweet="2"]:hover {
+    transform: rotate(0deg) scale(1.06) translateY(-8px);
+  }
+
+  /* Tweet 3 — middle */
+  .twitter-collage__tweet[data-tweet="3"] {
+    width: 340px;
+    top: 380px;
+    left: 120px;
+    z-index: 35;
+    transform: rotate(-1.8deg);
+    animation: twitter-collage-float-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+  }
+  .twitter-collage__tweet[data-tweet="3"]:hover {
+    transform: rotate(0deg) scale(1.05) translateY(-8px);
+  }
+
+  /* Tweet 4 — above tweet 5, offset left */
+  .twitter-collage__tweet[data-tweet="4"] {
+    width: 300px;
+    bottom: 280px;
+    left: 350px;
+    z-index: 40;
+    transform: rotate(2.2deg);
+    animation: twitter-collage-float-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+  }
+  .twitter-collage__tweet[data-tweet="4"]:hover {
+    transform: rotate(0deg) scale(1.07) translateY(-8px);
+  }
+
+  /* Tweet 5 — bottom */
+  .twitter-collage__tweet[data-tweet="5"] {
+    width: 330px;
+    bottom: 60px;
+    left: 455px;
+    z-index: 30;
+    transform: rotate(-2.4deg);
+    animation: twitter-collage-float-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+  }
+  .twitter-collage__tweet[data-tweet="5"]:hover {
+    transform: rotate(0deg) scale(1.06) translateY(-8px);
+  }
+
+  .twitter-collage__tweet iframe {
+    width: 100%;
+    display: block;
+    border-radius: 8px !important;
+  }
+
+  @keyframes twitter-collage-float-in {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+      filter: blur(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  /* Tablet */
+  @media (max-width: 1200px) {
+    .twitter-collage__wrapper {
+      grid-template-columns: 1fr;
+      gap: 60px;
+    }
+    .twitter-collage__text {
+      position: static;
+    }
+    .twitter-collage__masonry {
+      height: 1100px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    #pulsar-section-{{ section.id }} {
+      padding: var(--pulsar-space-xl) 0;
+    }
+    .twitter-collage__wrapper {
+      gap: 40px;
+      padding: 0 var(--pulsar-space-md);
+    }
+    .twitter-collage__heading {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+    .twitter-collage__description {
+      font-size: 14px;
+    }
+    .twitter-collage__masonry {
+      height: auto;
+    }
+    .twitter-collage__tweet {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: 100% !important;
+      max-width: 100%;
+      margin-bottom: 16px;
+      transform: rotate(0deg) !important;
+      animation: none !important;
+      display: block;
+    }
+    .twitter-collage__tweet:hover {
+      transform: scale(1.02) translateY(-4px) !important;
+    }
+    .twitter-collage__cta {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .twitter-collage__heading {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+    }
+    .twitter-collage__description {
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pulsar Twitter Collage",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Latest"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in the Loop"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Everything Pulsar unfolds live on X. Match days, roster moves, partnerships, and the raw moments that define our culture. Follow for the full story."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Twitter Collage",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

@@ -1265,3 +1265,33 @@ product-information [name="add"]:hover::before,
   display: inline-block;
   /* transform set exclusively by GSAP — no CSS initial state */
 }
+
+
+/* ================================
+   Spotlight Effect — Merch Cards
+   ================================ */
+[data-spotlight] {
+  --spotlight-x: 50%;
+  --spotlight-y: 50%;
+  --spotlight-opacity: 0;
+}
+
+.pulsar-spotlight__glow {
+  position: absolute;
+  top: var(--spotlight-y, 50%);
+  left: var(--spotlight-x, 50%);
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(187, 168, 255, 0.2) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: var(--spotlight-opacity, 0);
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .pulsar-spotlight__glow { display: none; }
+}

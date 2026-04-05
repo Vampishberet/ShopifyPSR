@@ -45,13 +45,17 @@
             {% endunless %}
             {{ block.shopify_attributes }}
           >
-            <p class="pulsar-hero__eyebrow">
+            <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
               {{ block.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
             </p>
-            <h1 class="pulsar-hero__heading">
-              {{ block.settings.heading | default: 'TEAM PULSAR' }}
-            </h1>
-            <p class="pulsar-hero__tagline">
+            <div class="pulsar-hero__mask">
+              <h1 class="pulsar-hero__heading">
+                <span class="pulsar-hero__mask-inner">
+                  {{ block.settings.heading | default: 'TEAM PULSAR' }}
+                </span>
+              </h1>
+            </div>
+            <p class="pulsar-hero__tagline" data-pulsar-hero-element>
               {{ block.settings.tagline | default: 'Move With Intent.' }}
             </p>
           </div>
@@ -59,25 +63,29 @@
       {%- else -%}
         {%- comment -%} Fallback: single slide from section settings {%- endcomment -%}
         <div class="pulsar-hero__slide is-active" role="group" aria-label="Hero">
-          <p class="pulsar-hero__eyebrow">
+          <p class="pulsar-hero__eyebrow" data-pulsar-hero-element>
             {{ section.settings.eyebrow | default: 'EST. 2020 · NORTH AMERICA' }}
           </p>
-          <h1 class="pulsar-hero__heading">
-            {%- if section.settings.heading != blank -%}
-              {{ section.settings.heading }}
-            {%- else -%}
-              TEAM<br>
-              PULSAR
-            {%- endif -%}
-          </h1>
-          <p class="pulsar-hero__tagline">
+          <div class="pulsar-hero__mask">
+            <h1 class="pulsar-hero__heading">
+              <span class="pulsar-hero__mask-inner">
+                {%- if section.settings.heading != blank -%}
+                  {{ section.settings.heading }}
+                {%- else -%}
+                  TEAM<br>
+                  PULSAR
+                {%- endif -%}
+              </span>
+            </h1>
+          </div>
+          <p class="pulsar-hero__tagline" data-pulsar-hero-element>
             {{ section.settings.tagline | default: 'Move With Intent.' }}
           </p>
         </div>
       {%- endif -%}
     </div>
 
-    <div class="pulsar-hero__actions">
+    <div class="pulsar-hero__actions" data-pulsar-hero-element>
       <a
         href="{{ section.settings.primary_cta_url | default: '/collections/all' }}"
         class="pulsar-btn pulsar-btn--primary"
@@ -93,10 +101,6 @@
     </div>
   </div>
 
-  <div class="pulsar-hero__scroll-indicator" aria-hidden="true">
-    <span class="pulsar-hero__scroll-label">Scroll</span>
-    <div class="pulsar-hero__scroll-line"></div>
-  </div>
 </section>
 
 {% stylesheet %}
@@ -189,6 +193,14 @@
     margin: 0;
   }
 
+  .pulsar-hero__mask {
+    overflow: hidden;
+  }
+
+  .pulsar-hero__mask-inner {
+    display: block;
+  }
+
   .pulsar-hero__heading {
     font-family: var(--font-display);
     font-weight: 400;
@@ -198,7 +210,7 @@
     text-transform: uppercase;
     color: var(--pulsar-white);
     margin: 0;
-    /* No opacity:0 — mask clip via .pulsar-hero__mask handles initial hide */
+    /* Mask clip via .pulsar-hero__mask; inner element revealed via JS animation */
   }
 
   .pulsar-hero__tagline {
@@ -214,43 +226,6 @@
     display: flex;
     gap: var(--pulsar-space-md);
     margin-top: var(--pulsar-space-sm);
-  }
-
-  /* Scroll indicator */
-  .pulsar-hero__scroll-indicator {
-    position: absolute;
-    bottom: var(--pulsar-space-lg);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--pulsar-space-xs);
-    z-index: 1;
-  }
-  .pulsar-hero__scroll-label {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray1);
-  }
-  .pulsar-hero__scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--pulsar-gray1), transparent);
-    animation: pulsar-scroll-pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulsar-scroll-pulse {
-    0%,
-    100% {
-      opacity: 0.3;
-      transform: scaleY(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scaleY(0.6);
-    }
   }
 
   /* Responsive */
