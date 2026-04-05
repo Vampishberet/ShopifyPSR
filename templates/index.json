@@ -36,7 +36,7 @@
     "pulsar-member-ribbon": {
       "type": "pulsar-member-ribbon",
       "settings": {
-        "heading": "The People who make it happen",
+        "heading": "",
         "member_names": "PSR Waffle,PSR Vienna,PSR Chimp,PSR Psych,PSR Rev,PSR Dag,PSR Guppy,PSR Blazify,PSR Casper,PSR Cafe,PSR Acsidius,PSR Yum,PSR Nodaz,PSR Light,PSR Zire,PSR Moxi,PSR Ruin,PSR Staryu,PSR Tuhronto,PSR Hapa,PSR Midniii,PSR Channce,PSR Murlo,PSR Rkei,PSR Molly,PSR GazingNicole,PSR Magnus,PSR Ian,PSR Mika,PSR Njuu,PSR Thunder,PSR CeceNuggets,PSR Devox,PSR Klamran,PSR Priince,PSR Ryiax,PSR Gards,PSR Sjay,PSR Adrenaleen,PSR Jid,PSR h6rmed,PSR EXR,PSR Korea,PSR Josh,PSR Prioxy,PSR Fancy,PSR Indra,PSR Mei,PSR Volty,PSR Aminz,PSR Rina,PSR Recrim,PSR Teasers,PSR Vampish,PSR Sieon,PSR Mikey,PSR Ache,PSR iGOMA,PSR Gary,PSR Lunar,PSR Twunti,PSR Thibaut,PSR Monster",
         "ticker_speed": 60,
         "pause_on_hover": true
