@@ -45,12 +45,19 @@
       <!-- Repulse — Merch Partner -->
       <a
         href="{{ section.settings.partner_3_url | default: '#' }}"
-        class="pulsar-partners__logo-link pulsar-partners__logo-link--wordmark pulsar-stagger-item"
+        class="pulsar-partners__logo-link pulsar-stagger-item"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Repulse — Pulsar merch partner"
       >
-        <span class="pulsar-partners__wordmark">REPULSE</span>
+        <img
+          src="{{ 'repulse.jpg' | asset_url }}"
+          alt="Repulse"
+          class="pulsar-partners__logo"
+          width="200"
+          height="60"
+          loading="lazy"
+        >
       </a>
     </div>
 
@@ -130,24 +137,10 @@
     object-fit: contain;
     filter: none;
   }
+  .pulsar-partners__logo:nth-child(3) {
+    height: 60px;
+  }
   .pulsar-partners__logo--invert { filter: invert(1); }
-
-  /* Repulse wordmark treatment */
-  .pulsar-partners__logo-link--wordmark {
-    padding: 0.5rem 0;
-  }
-  .pulsar-partners__wordmark {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 1.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--pulsar-gray3);
-    transition: color 0.25s ease;
-  }
-  .pulsar-partners__logo-link--wordmark:hover .pulsar-partners__wordmark {
-    color: var(--pulsar-white);
-  }
 
   /* CTA */
   .pulsar-partners__cta {

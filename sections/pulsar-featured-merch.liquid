@@ -106,7 +106,7 @@
                 <div class="pulsar-merch__card-badge">OG</div>
               </div>
               <div class="pulsar-merch__card-info">
-                <h3 class="pulsar-merch__card-title">Pulsa PRO Jersey</h3>
+                <h3 class="pulsar-merch__card-title">OG Pulsar Pro Jersey</h3>
                 <p class="pulsar-merch__card-price pulsar-merch__card-price--og">Legacy Edition</p>
               </div>
             </div>
@@ -192,8 +192,8 @@
   /* Card */
   .pulsar-merch__card {
     position: relative;
-    background-color: var(--pulsar-dark2);
-    border: 1px solid var(--pulsar-dark3);
+    background-color: transparent;
+    border: none;
     transition:
       transform 0.35s var(--pulsar-ease-out),
       border-color 0.35s ease,
@@ -202,13 +202,14 @@
   }
   .pulsar-merch__card:hover {
     transform: translateY(-6px);
-    border-color: var(--pulsar-gray1);
+  }
+  .pulsar-merch__card:hover .pulsar-merch__card-image-wrap {
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    border-color: var(--pulsar-gray1);
   }
   /* GSAP tilt active: strip CSS transform transition so GSAP owns it */
   .pulsar-merch__card.has-pulsar-tilt {
     transition:
-      border-color 0.35s ease,
       box-shadow 0.35s var(--pulsar-ease-out);
   }
   .pulsar-merch__card.has-pulsar-tilt:hover {
@@ -228,7 +229,8 @@
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background-color: var(--pulsar-dark3);
+    background-color: #F5F5F5;
+    border: 1px solid #EBEBEB;
   }
   .pulsar-merch__card-image {
     position: absolute;
@@ -255,12 +257,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--pulsar-dark3);
+    background-color: #E8E8E8;
   }
   .pulsar-merch__card-placeholder span {
     font-family: var(--font-display);
     font-size: 3rem;
-    color: var(--pulsar-dark1);
+    color: #999999;
     letter-spacing: -0.02em;
     text-transform: uppercase;
   }
@@ -291,6 +293,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--pulsar-space-xs);
+    background-color: transparent;
   }
   .pulsar-merch__quick-add-form {
     padding: 0 var(--pulsar-space-md) var(--pulsar-space-md);
@@ -298,7 +301,7 @@
   }
   .pulsar-merch__card-title {
     font-family: var(--font-secondary);
-    font-size: 0.95rem;
+    font-size: 1.1875rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--pulsar-white);
@@ -313,7 +316,7 @@
   .pulsar-merch__card-price--sale { color: var(--pulsar-white); margin-right: 0.5rem; }
   .pulsar-merch__card-price--was {
     text-decoration: line-through;
-    color: var(--pulsar-gray1);
+    color: var(--pulsar-gray2);
     font-size: 0.8rem;
   }
 
@@ -322,7 +325,7 @@
     display: block;
     width: 100%;
     background: none;
-    border: 1px solid var(--pulsar-dark3);
+    border: 1px solid var(--pulsar-gray2);
     color: var(--pulsar-gray2);
     font-family: var(--font-secondary);
     font-size: 0.75rem;
@@ -333,7 +336,7 @@
     transition: border-color 0.2s ease, color 0.2s ease;
   }
   .pulsar-merch__quick-add:hover {
-    border-color: var(--pulsar-gray2);
+    border-color: var(--pulsar-white);
     color: var(--pulsar-white);
   }
   .pulsar-merch__quick-add[disabled] {
@@ -349,7 +352,7 @@
   .pulsar-merch__footer { display: flex; justify-content: center; }
 
   /* OG Jersey card */
-  .pulsar-merch__card--og { border-color: var(--pulsar-gray1); cursor: default; }
+  .pulsar-merch__card--og { border: none; cursor: default; }
   .pulsar-merch__card-placeholder--og {
     background: linear-gradient(135deg, var(--pulsar-dark3) 0%, var(--pulsar-dark2) 100%);
     border: 1px solid var(--pulsar-dark3);
