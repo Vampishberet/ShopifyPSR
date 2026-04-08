@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pulsar-shop-hero": {
+      "type": "pulsar-shop-hero",
+      "settings": {
+        "overline": "Official Merch",
+        "heading": "THE DROP",
+        "subtext": "Premium esports apparel. Limited runs. Wear the name.",
+        "show_scroll_indicator": true
+      }
+    },
+    "pulsar-featured-merch": {
+      "type": "pulsar-featured-merch",
+      "settings": {
+        "collection": "all",
+        "product_limit": 6
+      }
+    }
+  },
+  "order": ["pulsar-shop-hero", "pulsar-featured-merch"]
+}
