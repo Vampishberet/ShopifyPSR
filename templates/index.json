@@ -45,12 +45,13 @@
     "pulsar-featured-merch": {
       "type": "pulsar-featured-merch",
       "settings": {
-        "overline": "Official Merch",
-        "heading": "Gear Up",
+        "display_mode": "full",
+        "overline": "Official Gear",
+        "heading": "GEAR UP",
         "collection": "all",
-        "product_limit": 6,
-        "cta_label": "Shop All",
-        "shop_url": "/collections/all"
+        "product_limit": 3,
+        "cta_label": "View All Drops",
+        "shop_url": "/pages/merchandise"
       }
     },
     "twitter": {

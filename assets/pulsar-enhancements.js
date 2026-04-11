@@ -99,6 +99,14 @@
     // Store refs for potential cleanup
     window.__pulsarHeaderObs      = obs;
     window.__pulsarHeaderSentinel = sentinel;
+
+    // Clean up on page unload (back/forward cache, tab close, navigation)
+    window.addEventListener('pagehide', function () {
+      obs.disconnect();
+      sentinel.remove();
+      delete window.__pulsarHeaderObs;
+      delete window.__pulsarHeaderSentinel;
+    }, { once: true });
   }
 
   /* ------------------------------------------
@@ -109,18 +117,27 @@
   function init() {
     initHeaderScroll();
 
-    waitFor(
-      function () { return window.gsap && window.ScrollTrigger; },
-      initGSAP
-    );
+    function onGsapReady(fn) {
+      if (window.gsap && window.ScrollTrigger) { fn(); return; }
+      var st = document.getElementById('gsap-st');
+      if (st) { st.addEventListener('load', fn, { once: true }); }
+      else { waitFor(function () { return window.gsap && window.ScrollTrigger; }, fn); }
+    }
+
+    function onLenisReady(fn) {
+      if (typeof Lenis !== 'undefined') { fn(); return; }
+      var lenisCdn = document.getElementById('lenis-cdn');
+      if (lenisCdn) { lenisCdn.addEventListener('load', fn, { once: true }); }
+      else { waitFor(function () { return typeof Lenis !== 'undefined'; }, fn); }
+    }
+
+    onGsapReady(initGSAP);
 
     // Delay Lenis to window load — its RAF loop competes with initial render if started at DOMContentLoaded.
     if (document.readyState === 'complete') {
-      waitFor(function () { return typeof Lenis !== 'undefined'; }, initLenis);
+      onLenisReady(initLenis);
     } else {
-      window.addEventListener('load', function () {
-        waitFor(function () { return typeof Lenis !== 'undefined'; }, initLenis);
-      }, { once: true });
+      window.addEventListener('load', function () { onLenisReady(initLenis); }, { once: true });
     }
   }
 

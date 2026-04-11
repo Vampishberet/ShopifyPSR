@@ -492,8 +492,8 @@
     var partnerLogos = scope.querySelectorAll('.pulsar-partners__logo-link');
     if (partnerLogos.length) {
       createScrollReveal(partnerLogos,
-        { y: 20, opacity: 0, filter: 'blur(8px)', scale: 0.96 },
-        { y: 0, opacity: 1, filter: 'blur(0px)', scale: 1, duration: 0.65, ease: EASE.out },
+        { y: 20, opacity: 0, scale: 0.94 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: EASE.out },
         { trigger: partnerLogos[0].closest('section') || partnerLogos[0], start: 'top 82%', stagger: 0.12 }
       );
     }
@@ -528,66 +528,74 @@
     var counters = root.querySelectorAll('[data-pulsar-counter]');
     if (!counters.length) return;
 
-    counters.forEach(function (el) {
-      if (el.dataset.pulsarCounterInit) return;
-      el.dataset.pulsarCounterInit = '1';
+    var doInit = function() {
+      counters.forEach(function (el) {
+        if (el.dataset.pulsarCounterInit) return;
+        el.dataset.pulsarCounterInit = '1';
 
-      var target     = parseFloat(el.dataset.pulsarCounter || '0');
-      var decimals   = parseInt(el.dataset.pulsarDecimals  || '0', 10);
-      var prefix     = el.dataset.pulsarPrefix  || '';
-      var suffix     = el.dataset.pulsarSuffix  || '';
-      var durationMs = parseInt(el.dataset.pulsarDuration  || '2000', 10);
-      var durationS  = durationMs / 1000;
+        var target     = parseFloat(el.dataset.pulsarCounter || '0');
+        var decimals   = parseInt(el.dataset.pulsarDecimals  || '0', 10);
+        var prefix     = el.dataset.pulsarPrefix  || '';
+        var suffix     = el.dataset.pulsarSuffix  || '';
+        var durationMs = parseInt(el.dataset.pulsarDuration  || '2000', 10);
+        var durationS  = durationMs / 1000;
 
-      function format(val) {
-        return prefix + (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
-      }
+        function format(val) {
+          return prefix + (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
+        }
 
-      if (prefersReducedMotion) {
-        el.textContent = format(target);
-        return;
-      }
+        if (prefersReducedMotion) {
+          el.textContent = format(target);
+          return;
+        }
 
-      el.textContent = format(0);
+        el.textContent = format(0);
 
-      el._pulsarCounterObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          el._pulsarCounterObs.unobserve(el);
+        el._pulsarCounterObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            el._pulsarCounterObs.unobserve(el);
 
-          if (window.gsap) {
-            var obj = { val: 0 };
-            var frame = 0;
-            gsap.to(obj, {
-              val: target,
-              duration: durationS,
-              ease: 'power1.out',
-              onUpdate: function () {
-                // Update DOM every 3rd frame (20fps) — reduces layout recalc pressure
-                // while counter tween still runs at full 60fps internally.
-                if (++frame % 3 !== 0) return;
-                el.textContent = format(obj.val);
-              },
-              onComplete: function () { el.textContent = format(target); }
-            });
-          } else {
-            var startTime = Date.now();
-            (function tick() {
-              var p     = Math.min((Date.now() - startTime) / durationMs, 1);
-              var eased = 1 - Math.pow(1 - p, 3);
-              el.textContent = format(target * eased);
-              if (p < 1) {
-                requestAnimationFrame(tick);
-              } else {
-                el.textContent = format(target);
-              }
-            })();
-          }
-        });
-      }, { threshold: 0.1 });
+            if (window.gsap) {
+              var obj = { val: 0 };
+              var frame = 0;
+              gsap.to(obj, {
+                val: target,
+                duration: durationS,
+                ease: 'power1.out',
+                onUpdate: function () {
+                  // Update DOM every 3rd frame (20fps) — reduces layout recalc pressure
+                  // while counter tween still runs at full 60fps internally.
+                  if (++frame % 3 !== 0) return;
+                  el.textContent = format(obj.val);
+                },
+                onComplete: function () { el.textContent = format(target); }
+              });
+            } else {
+              var startTime = Date.now();
+              (function tick() {
+                var p     = Math.min((Date.now() - startTime) / durationMs, 1);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = format(target * eased);
+                if (p < 1) {
+                  requestAnimationFrame(tick);
+                } else {
+                  el.textContent = format(target);
+                }
+              })();
+            }
+          });
+        }, { threshold: 0.1 });
 
-      el._pulsarCounterObs.observe(el);
-    });
+        el._pulsarCounterObs.observe(el);
+      });
+    };
+
+    if (window.requestIdleCallback) {
+      requestIdleCallback(doInit, { timeout: 2000 });
+    } else {
+      setTimeout(doInit, 200);
+    }
   }
 
   /* ------------------------------------------
@@ -1372,31 +1380,35 @@
       return;
     }
 
-    waitFor(
-      function () { return window.gsap && window.ScrollTrigger; },
-      function () {
-        if (forceNativeMotion) return;
-        gsap.registerPlugin(ScrollTrigger);
+    function onGsapReady(fn) {
+      if (window.gsap && window.ScrollTrigger) { fn(); return; }
+      var st = document.getElementById('gsap-st');
+      if (st) { st.addEventListener('load', fn, { once: true }); }
+      else { waitFor(function () { return window.gsap && window.ScrollTrigger; }, fn); }
+    }
 
-        // Critical: preloader runs immediately — it owns the first visible frame.
-        runPreloader();
+    onGsapReady(function () {
+      if (forceNativeMotion) return;
+      gsap.registerPlugin(ScrollTrigger);
 
-        // Yield after preloader so the browser can paint the preloader exit frame
-        // before we block the main thread with ScrollTrigger setup (~30-60ms).
-        // Each setTimeout(fn, 0) creates a separate task, reducing TBT.
-        setTimeout(function () {
-          initScrollAnimationsIn(document);
-        }, 0);
+      // Critical: preloader runs immediately — it owns the first visible frame.
+      runPreloader();
 
-        setTimeout(function () {
-          initStatCountersIn(document);
-        }, 0);
+      // Yield after preloader so the browser can paint the preloader exit frame
+      // before we block the main thread with ScrollTrigger setup (~30-60ms).
+      // Each setTimeout(fn, 0) creates a separate task, reducing TBT.
+      setTimeout(function () {
+        initScrollAnimationsIn(document);
+      }, 0);
 
-        // Defer ScrollTrigger.refresh() to browser idle time — it forces layout on every trigger element.
-        // Running it inside rAF blocks the main thread during initial paint. Idle callback defers it safely.
-        (window.requestIdleCallback || setTimeout)(function () { ScrollTrigger.refresh(); });
-      }
-    );
+      setTimeout(function () {
+        initStatCountersIn(document);
+      }, 0);
+
+      // Defer ScrollTrigger.refresh() to browser idle time — it forces layout on every trigger element.
+      // Running it inside rAF blocks the main thread during initial paint. Idle callback defers it safely.
+      (window.requestIdleCallback || setTimeout)(function () { ScrollTrigger.refresh(); });
+    });
 
     // Emergency fallback: GSAP failed to load within 2.5s — hide preloader and proceed
     var _pulsarFallbackTimeoutId = setTimeout(function () {

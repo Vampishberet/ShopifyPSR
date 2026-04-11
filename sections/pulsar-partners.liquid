@@ -50,14 +50,18 @@
         rel="noopener noreferrer"
         aria-label="Repulse — Pulsar merch partner"
       >
-        <img
-          src="{{ 'repulse.jpg' | asset_url }}"
-          alt="Repulse"
-          class="pulsar-partners__logo"
-          width="200"
-          height="60"
-          loading="lazy"
-        >
+        <picture>
+          <source srcset="{{ 'repulse.webp' | asset_url }}" type="image/webp">
+          <img
+            src="{{ 'repulse.jpg' | asset_url }}"
+            alt="Repulse"
+            class="pulsar-partners__logo"
+            width="200"
+            height="60"
+            loading="lazy"
+            decoding="async"
+          >
+        </picture>
       </a>
     </div>
 

@@ -1,0 +1,581 @@
+{%- liquid
+  assign merch_collection = collections[section.settings.collection]
+  if merch_collection == blank
+    assign merch_collection = collections.all
+  endif
+  assign product_limit = section.settings.product_limit | default: 6
+-%}
+
+<div class="pulsar-merch-full" id="pulsar-merch-full-{{ section.id }}">
+  <div class="pulsar-merch-full__inner">
+
+    {%- if merch_collection.products.size > 0 -%}
+
+      <div class="pulsar-merch-full__grid pulsar-stagger-group">
+        {%- for product in merch_collection.products limit: product_limit -%}
+
+          {%- liquid
+            assign is_sold_out = true
+            for variant in product.variants
+              if variant.available
+                assign is_sold_out = false
+                break
+              endif
+            endfor
+            assign has_new_tag = false
+            assign has_limited_tag = false
+            for tag in product.tags
+              if tag == 'new'
+                assign has_new_tag = true
+              endif
+              if tag == 'limited'
+                assign has_limited_tag = true
+              endif
+            endfor
+            assign first_available_variant = product.selected_or_first_available_variant
+            assign show_stock_warning = false
+            if first_available_variant.inventory_management == 'shopify' and first_available_variant.inventory_policy == 'deny' and first_available_variant.inventory_quantity > 0 and first_available_variant.inventory_quantity < 10
+              assign show_stock_warning = true
+            endif
+            assign has_sizes = false
+            if product.options.size > 0 and product.options[0] != blank
+              assign has_sizes = true
+            endif
+          -%}
+
+          <div
+            class="pulsar-merch-full__card pulsar-stagger-item{% if is_sold_out %} pulsar-merch-full__card--sold-out{% endif %}"
+            data-pulsar-tilt
+            data-spotlight
+          >
+            <div class="pulsar-merch-full__card-surface">
+
+              <a href="{{ product.url }}" class="pulsar-merch-full__card-image-link" aria-label="{{ product.title | escape }}">
+                <div class="pulsar-merch-full__card-image-wrap">
+                  {%- if product.featured_image -%}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 600 }}"
+                      srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 600 }} 600w, {{ product.featured_image | image_url: width: 900 }} 900w"
+                      sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                      class="pulsar-merch-full__card-image pulsar-merch-full__card-image--primary"
+                      width="600"
+                      height="600"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                    {%- if product.images[1] != blank -%}
+                      <img
+                        src="{{ product.images[1] | image_url: width: 600 }}"
+                        srcset="{{ product.images[1] | image_url: width: 400 }} 400w, {{ product.images[1] | image_url: width: 600 }} 600w, {{ product.images[1] | image_url: width: 900 }} 900w"
+                        sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        alt="{{ product.images[1].alt | default: product.title | escape }}"
+                        class="pulsar-merch-full__card-image pulsar-merch-full__card-image--secondary"
+                        width="600"
+                        height="600"
+                        loading="lazy"
+                        decoding="async"
+                      >
+                    {%- endif -%}
+                  {%- else -%}
+                    <div class="pulsar-merch-full__card-placeholder" aria-hidden="true">
+                      <span>{{ product.title | slice: 0 }}</span>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if is_sold_out -%}
+                    <span class="pulsar-merch-full__badge pulsar-merch-full__badge--sold-out">Sold Out</span>
+                  {%- elsif has_new_tag -%}
+                    <span class="pulsar-merch-full__badge pulsar-merch-full__badge--new">New</span>
+                  {%- elsif has_limited_tag -%}
+                    <span class="pulsar-merch-full__badge pulsar-merch-full__badge--limited">Limited</span>
+                  {%- endif -%}
+
+                  <div class="pulsar-merch-full__card-overlay" aria-hidden="true">
+                    <span class="pulsar-merch-full__card-view">View Product</span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="pulsar-merch-full__card-info">
+                <h3 class="pulsar-merch-full__card-title">
+                  <a href="{{ product.url }}" class="pulsar-merch-full__card-title-link">{{ product.title }}</a>
+                </h3>
+                <p class="pulsar-merch-full__card-price">
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="pulsar-merch-full__price-sale">{{ product.price | money }}</span>
+                    <span class="pulsar-merch-full__price-was">{{ product.compare_at_price | money }}</span>
+                  {%- else -%}
+                    <span class="pulsar-merch-full__price-regular">{{ product.price | money }}</span>
+                  {%- endif -%}
+                </p>
+
+                {%- if show_stock_warning -%}
+                  <p class="pulsar-merch-full__stock-warning">
+                    <span class="pulsar-merch-full__stock-dot" aria-hidden="true"></span>
+                    Only {{ first_available_variant.inventory_quantity }} left
+                  </p>
+                {%- endif -%}
+              </div>
+
+              {%- unless is_sold_out -%}
+                {%- form 'product', product, class: 'pulsar-merch-full__form', id: 'merch-full-form-{{ product.id }}-{{ section.id }}' -%}
+                  <div class="pulsar-merch-full__form-inner">
+                    <input
+                      type="hidden"
+                      name="id"
+                      class="pulsar-merch-full__variant-input"
+                      value="{{ product.selected_or_first_available_variant.id }}"
+                    >
+
+                    {%- if has_sizes and product.variants.size > 1 -%}
+                      <div
+                        class="pulsar-merch-full__size-pills"
+                        data-product-id="{{ product.id }}"
+                        data-section-id="{{ section.id }}"
+                      >
+                        {%- for variant in product.variants -%}
+                          <button
+                            type="button"
+                            class="pulsar-merch-full__size-pill{% unless variant.available %} pulsar-merch-full__size-pill--unavailable{% endunless %}{% if forloop.first %} pulsar-merch-full__size-pill--selected{% endif %}"
+                            data-variant-id="{{ variant.id }}"
+                            data-available="{{ variant.available }}"
+                            aria-label="{{ variant.title }}"
+                            {% unless variant.available %}disabled{% endunless %}
+                          >
+                            {{ variant.title }}
+                          </button>
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+
+                    <button
+                      type="submit"
+                      class="pulsar-merch-full__quick-add"
+                      aria-label="Quick add {{ product.title | escape }} to cart"
+                    >
+                      Quick Add
+                    </button>
+                  </div>
+                {%- endform -%}
+              {%- else -%}
+                <div class="pulsar-merch-full__form-inner">
+                  <button type="button" class="pulsar-merch-full__quick-add pulsar-merch-full__quick-add--sold-out" disabled>
+                    Sold Out
+                  </button>
+                </div>
+              {%- endunless -%}
+
+            </div>
+          </div>
+
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      <p class="pulsar-merch-full__empty">No products available.</p>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .pulsar-merch-full {
+    background-color: var(--pulsar-dark1);
+    padding: var(--pulsar-space-xxl) 0;
+  }
+
+  .pulsar-merch-full__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--pulsar-space-lg);
+  }
+
+  .pulsar-merch-full__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--pulsar-space-lg);
+  }
+
+  .pulsar-merch-full__card {
+    position: relative;
+    transition: transform 0.35s var(--pulsar-ease-out), box-shadow 0.35s var(--pulsar-ease-out);
+    transform-style: preserve-3d;
+  }
+
+  .pulsar-merch-full__card:hover {
+    transform: translateY(-6px);
+  }
+
+  .pulsar-merch-full__card.has-pulsar-tilt:hover {
+    transform: none;
+  }
+
+  .pulsar-merch-full__card--sold-out .pulsar-merch-full__card-image-wrap {
+    opacity: 0.55;
+    filter: grayscale(0.6);
+  }
+
+  .pulsar-merch-full__card-surface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .pulsar-merch-full__card-image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .pulsar-merch-full__card-image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #F5F5F5;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  .pulsar-merch-full__card:hover .pulsar-merch-full__card-image-wrap {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .pulsar-merch-full__card-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--pulsar-ease-out), opacity 0.4s ease;
+  }
+
+  .pulsar-merch-full__card-image--secondary {
+    opacity: 0;
+  }
+
+  .pulsar-merch-full__card:hover .pulsar-merch-full__card-image--primary {
+    transform: scale(1.04);
+    opacity: 0;
+  }
+
+  .pulsar-merch-full__card:hover .pulsar-merch-full__card-image--secondary {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .pulsar-merch-full__card-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pulsar-dark3);
+  }
+
+  .pulsar-merch-full__card-placeholder span {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--pulsar-gray1);
+    text-transform: uppercase;
+  }
+
+  .pulsar-merch-full__card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .pulsar-merch-full__card:hover .pulsar-merch-full__card-overlay {
+    opacity: 1;
+  }
+
+  .pulsar-merch-full__card-view {
+    font-family: var(--font-secondary);
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    padding: 0.6rem 1.25rem;
+  }
+
+  .pulsar-merch-full__badge {
+    position: absolute;
+    top: var(--pulsar-space-sm);
+    left: var(--pulsar-space-sm);
+    z-index: 2;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25em 0.65em;
+    border-radius: 2px;
+  }
+
+  .pulsar-merch-full__badge--new {
+    background-color: var(--pulsar-accent-purple2);
+    color: #0A0A0C;
+  }
+
+  .pulsar-merch-full__badge--limited {
+    background-color: transparent;
+    border: 1px solid var(--pulsar-accent-purple2);
+    color: var(--pulsar-accent-purple2);
+  }
+
+  .pulsar-merch-full__badge--sold-out {
+    background-color: transparent;
+    border: 1px solid var(--pulsar-gray1);
+    color: var(--pulsar-gray2);
+  }
+
+  .pulsar-merch-full__card-info {
+    padding: var(--pulsar-space-md) 0 var(--pulsar-space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .pulsar-merch-full__card-title {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pulsar-white);
+  }
+
+  .pulsar-merch-full__card-title-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .pulsar-merch-full__card-price {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .pulsar-merch-full__price-regular,
+  .pulsar-merch-full__price-sale {
+    color: var(--pulsar-white);
+    font-weight: 600;
+  }
+
+  .pulsar-merch-full__price-was {
+    color: var(--pulsar-gray2);
+    text-decoration: line-through;
+    font-size: 0.8rem;
+  }
+
+  .pulsar-merch-full__stock-warning {
+    margin: 0.1rem 0 0;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--pulsar-accent-purple1);
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .pulsar-merch-full__stock-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--pulsar-accent-purple1);
+    flex-shrink: 0;
+  }
+
+  .pulsar-merch-full__form,
+  .pulsar-merch-full__form-inner {
+    margin-top: auto;
+    padding-top: var(--pulsar-space-sm);
+  }
+
+  .pulsar-merch-full__form-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pulsar-space-sm);
+  }
+
+  .pulsar-merch-full__size-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .pulsar-merch-full__size-pill {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--pulsar-gray3);
+    background: transparent;
+    border: 1px solid var(--pulsar-gray1);
+    padding: 0.25em 0.6em;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .pulsar-merch-full__size-pill:hover:not(:disabled) {
+    border-color: var(--pulsar-gray3);
+    color: var(--pulsar-white);
+  }
+
+  .pulsar-merch-full__size-pill--selected {
+    border-color: var(--pulsar-accent-purple2);
+    color: var(--pulsar-accent-purple2);
+    background-color: rgba(187, 168, 255, 0.08);
+  }
+
+  .pulsar-merch-full__size-pill--unavailable {
+    opacity: 0.3;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+
+  .pulsar-merch-full__quick-add {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(187, 168, 255, 0.4);
+    color: var(--pulsar-accent-purple2);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.65rem 0;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .pulsar-merch-full__quick-add:hover {
+    background-color: rgba(187, 168, 255, 0.12);
+    border-color: var(--pulsar-accent-purple2);
+    box-shadow: 0 0 20px rgba(187, 168, 255, 0.22);
+  }
+
+  .pulsar-merch-full__quick-add:focus-visible {
+    outline: 2px solid var(--pulsar-accent-purple2);
+    outline-offset: 2px;
+  }
+
+  .pulsar-merch-full__quick-add--sold-out {
+    border-color: var(--pulsar-gray1);
+    color: var(--pulsar-gray1);
+    cursor: not-allowed;
+  }
+
+  .pulsar-merch-full__quick-add--sold-out:hover {
+    background-color: transparent;
+    border-color: var(--pulsar-gray1);
+    box-shadow: none;
+  }
+
+  .pulsar-merch-full__empty {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--pulsar-gray2);
+    padding: var(--pulsar-space-xxl) 0;
+  }
+
+  @media (max-width: 1199px) {
+    .pulsar-merch-full__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pulsar-merch-full__inner {
+      padding: 0 var(--pulsar-space-md);
+    }
+    .pulsar-merch-full__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--pulsar-space-md);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pulsar-merch-full__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    function initMerchFullPills(sectionEl) {
+      var pillGroups = sectionEl.querySelectorAll('.pulsar-merch-full__size-pills');
+      pillGroups.forEach(function(group) {
+        var pills = group.querySelectorAll('.pulsar-merch-full__size-pill');
+        var form = group.closest('.pulsar-merch-full__form');
+        if (!form) return;
+        var variantInput = form.querySelector('.pulsar-merch-full__variant-input');
+        if (!variantInput) return;
+
+        pills.forEach(function(pill) {
+          pill.addEventListener('click', function() {
+            if (pill.disabled) return;
+            pills.forEach(function(p) { p.classList.remove('pulsar-merch-full__size-pill--selected'); });
+            pill.classList.add('pulsar-merch-full__size-pill--selected');
+            variantInput.value = pill.dataset.variantId;
+          });
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.pulsar-merch-full').forEach(function(sectionEl) {
+        initMerchFullPills(sectionEl);
+      });
+    });
+
+    document.addEventListener('shopify:section:load', function(e) {
+      var sectionEl = e.target.querySelector('.pulsar-merch-full');
+      if (sectionEl) initMerchFullPills(sectionEl);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Pulsar Merch Full",
+  "tag": "div",
+  "class": "pulsar-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Products to show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pulsar Merch Full",
+      "category": "Pulsar"
+    }
+  ]
+}
+{% endschema %}

@@ -18,13 +18,13 @@
         "show_scroll_indicator": true
       }
     },
-    "pulsar-featured-merch": {
-      "type": "pulsar-featured-merch",
+    "pulsar-merch-full": {
+      "type": "pulsar-merch-full",
       "settings": {
         "collection": "all",
         "product_limit": 6
       }
     }
   },
-  "order": ["pulsar-shop-hero", "pulsar-featured-merch"]
+  "order": ["pulsar-shop-hero", "pulsar-merch-full"]
 }

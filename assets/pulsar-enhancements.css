@@ -242,7 +242,7 @@ header-component,
 header[role="banner"] {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 9999;
   background-color: transparent !important;
 }
 
@@ -268,7 +268,7 @@ header[role="banner"] {
 header-component a,
 .header-section a,
 #header-component a {
-  font-family: var(--font-secondary);
+  font-family: var(--font-display);
   font-size: 0.875rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -541,10 +541,12 @@ header-component [popover] a:hover,
   .pulsar-reveal {
     opacity: 0;
     transform: translateY(30px);
+    will-change: transform, opacity;
   }
   .pulsar-reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+    will-change: auto;
   }
 
   html.pulsar-native-motion .pulsar-reveal {
@@ -563,10 +565,12 @@ header-component [popover] a:hover,
   .pulsar-heading-reveal {
     opacity: 0;
     transform: translateY(40px);
+    will-change: transform, opacity;
   }
   .pulsar-heading-reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+    will-change: auto;
   }
   html.pulsar-native-motion .pulsar-heading-reveal {
     transition:
@@ -1264,6 +1268,7 @@ product-information [name="add"]:hover::before,
 .pulsar-word-inner {
   display: inline-block;
   /* transform set exclusively by GSAP — no CSS initial state */
+  will-change: transform;
 }
 
 

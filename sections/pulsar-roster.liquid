@@ -1,0 +1,678 @@
+{{ 'roster.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Section: pulsar-roster
+  Template: page.roster.json
+  Spec: 2026-04-10-roster-page-design.md
+{%- endcomment -%}
+
+{%- liquid
+  assign player_blocks   = section.blocks | where: 'type', 'player'
+  assign creator_blocks  = section.blocks | where: 'type', 'creator'
+  assign staff_blocks    = section.blocks | where: 'type', 'staff_member'
+  assign player_count    = player_blocks | size
+-%}
+
+<div class="psr-roster-page" id="psr-roster-page">
+
+  <!-- ══════════════════════════════════════════════
+       1. HERO
+  ══════════════════════════════════════════════ -->
+  <header class="psr-roster-hero" id="psr-roster-hero">
+    <div class="psr-roster-hero__inner">
+      <p class="psr-roster-hero__eyebrow">{{ section.settings.eyebrow | default: 'Team Pulsar' }}</p>
+      <h1 class="psr-roster-hero__title">{{ section.settings.hero_title | default: 'The Roster' }}</h1>
+      <p class="psr-roster-hero__subtitle">{{ section.settings.hero_subtitle | default: 'Every player. Every creator. Every champion.' }}</p>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+       2. FILTER BAR (Sticky)
+  ══════════════════════════════════════════════ -->
+  <nav class="psr-roster-filter" id="psr-roster-filter" aria-label="Filter players by division">
+    <div class="psr-roster-filter__inner">
+      <span class="psr-roster-filter__label" id="psr-filter-label">Division</span>
+      <div class="psr-roster-filter__buttons" role="group" aria-labelledby="psr-filter-label">
+        <button
+          class="psr-roster-filter__btn is-active"
+          id="psr-filter-all"
+          data-filter="all"
+          type="button"
+          aria-pressed="true">
+          All
+        </button>
+        <button
+          class="psr-roster-filter__btn"
+          id="psr-filter-val"
+          data-filter="val"
+          type="button"
+          aria-pressed="false">
+          Valorant
+        </button>
+        <button
+          class="psr-roster-filter__btn"
+          id="psr-filter-fn"
+          data-filter="fn"
+          type="button"
+          aria-pressed="false">
+          Fortnite
+        </button>
+        <button
+          class="psr-roster-filter__btn"
+          id="psr-filter-rl"
+          data-filter="rl"
+          type="button"
+          aria-pressed="false">
+          Rocket League
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════
+       3. COMPETITIVE PLAYERS
+  ══════════════════════════════════════════════ -->
+  <section class="psr-roster-section" id="psr-roster-players" aria-labelledby="psr-section-players-title">
+    <div class="psr-roster-container">
+      <div class="psr-roster-section__header">
+        <span class="psr-roster-section__label">Competitive</span>
+        <h2 class="psr-roster-section__title" id="psr-section-players-title">Players</h2>
+        <span class="psr-roster-section__count" id="psr-player-count" aria-live="polite" aria-atomic="true">
+          {{ player_count }} {{ player_count | pluralize: 'Member', 'Members' }}
+        </span>
+      </div>
+
+      <div class="psr-roster-players__grid" id="psr-players-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'player' -%}
+            {%- assign n = block.settings.name -%}
+            {%- assign initials = n | slice: 0, 2 | upcase -%}
+            {%- assign division_key = block.settings.division -%}
+            {% if division_key == blank %}{% assign division_key = 'all' %}{% endif %}
+
+            <article
+              class="psr-roster-card{% if block.settings.is_featured %} psr-roster-card--featured{% endif %}"
+              id="psr-card-{{ block.id }}"
+              data-division="{{ division_key }}"
+              aria-label="PSR {{ n }}, {{ block.settings.game }}"
+              {{ block.shopify_attributes }}>
+
+              <!-- Image / Initials -->
+              <div class="psr-roster-card__image">
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 600 | image_tag:
+                    class: 'psr-roster-card__img',
+                    alt: block.settings.name,
+                    loading: 'lazy',
+                    widths: '300, 400, 600'
+                  }}
+                {%- else -%}
+                  <span class="psr-roster-card__initials" aria-hidden="true">{{ initials }}</span>
+                {%- endif -%}
+              </div>
+
+              <!-- Content -->
+              <div class="psr-roster-card__content">
+                <div class="psr-roster-card__meta">
+                  <p class="psr-roster-card__game">{{ block.settings.game }}</p>
+                  <p class="psr-roster-card__name">PSR {{ n }}</p>
+                  <p class="psr-roster-card__role">{{ block.settings.role }}</p>
+                </div>
+
+                <!-- Social links (hidden, revealed on hover) -->
+                <div class="psr-roster-card__socials" aria-label="Social links for {{ n }}">
+                  {%- if block.settings.twitter_url != blank -%}
+                    <a
+                      href="{{ block.settings.twitter_url }}"
+                      class="psr-roster-card__social-link"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="{{ n }} on X / Twitter"
+                      tabindex="-1">
+                      X
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.twitch_url != blank -%}
+                    <a
+                      href="{{ block.settings.twitch_url }}"
+                      class="psr-roster-card__social-link"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="{{ n }} on Twitch"
+                      tabindex="-1">
+                      TTV
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.tiktok_url != blank -%}
+                    <a
+                      href="{{ block.settings.tiktok_url }}"
+                      class="psr-roster-card__social-link"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="{{ n }} on TikTok"
+                      tabindex="-1">
+                      TK
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.instagram_url != blank -%}
+                    <a
+                      href="{{ block.settings.instagram_url }}"
+                      class="psr-roster-card__social-link"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="{{ n }} on Instagram"
+                      tabindex="-1">
+                      IG
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.twitter_url == blank
+                      and block.settings.twitch_url == blank
+                      and block.settings.tiktok_url == blank
+                      and block.settings.instagram_url == blank -%}
+                    <a
+                      href="#psr-placeholder"
+                      class="psr-roster-card__social-link"
+                      aria-label="{{ n }} profile"
+                      tabindex="-1">
+                      X
+                    </a>
+                    <a
+                      href="#psr-placeholder"
+                      class="psr-roster-card__social-link"
+                      aria-label="{{ n }} on Twitch"
+                      tabindex="-1">
+                      TTV
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Fallback demo cards if no player blocks {%- endcomment -%}
+        {%- if player_blocks.size == 0 -%}
+          {%- assign demo_players = 'WOLFIE,val,Duelist,WF|BLAZE,fn,Sniper,BL|KODA,rl,Striker,KD|NEON,val,Controller,NN|FRAY,fn,Builder,FY|APEX,rl,Goalkeeper,AP|ECHO,val,Sentinel,EC|VIPER,fn,IGL,VP|SURGE,rl,Midfielder,SG' | split: '|' -%}
+          {%- for demo in demo_players -%}
+            {%- assign d = demo | split: ',' -%}
+            {%- assign game_map = '' -%}
+            {%- if d[1] == 'val' -%}{%- assign game_full = 'Valorant' -%}{%- endif -%}
+            {%- if d[1] == 'fn'  -%}{%- assign game_full = 'Fortnite' -%}{%- endif -%}
+            {%- if d[1] == 'rl'  -%}{%- assign game_full = 'Rocket League' -%}{%- endif -%}
+            {%- assign is_first = forloop.first -%}
+            <article
+              class="psr-roster-card{% if is_first %} psr-roster-card--featured{% endif %}"
+              data-division="{{ d[1] }}"
+              aria-label="PSR {{ d[0] }}, {{ game_full }}">
+              <div class="psr-roster-card__image">
+                <span class="psr-roster-card__initials" aria-hidden="true">{{ d[3] }}</span>
+              </div>
+              <div class="psr-roster-card__content">
+                <div class="psr-roster-card__meta">
+                  <p class="psr-roster-card__game">{{ game_full }}</p>
+                  <p class="psr-roster-card__name">PSR {{ d[0] }}</p>
+                  <p class="psr-roster-card__role">{{ d[2] }}</p>
+                </div>
+                <div class="psr-roster-card__socials">
+                  <a href="#psr-placeholder" class="psr-roster-card__social-link" tabindex="-1" aria-label="{{ d[0] }} on X">X</a>
+                  <a href="#psr-placeholder" class="psr-roster-card__social-link" tabindex="-1" aria-label="{{ d[0] }} on Twitch">TTV</a>
+                </div>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       4. CONTENT CREATORS
+  ══════════════════════════════════════════════ -->
+  {%- unless section.settings.hide_creators -%}
+  <section class="psr-roster-section" id="psr-roster-creators" aria-labelledby="psr-section-creators-title">
+    <div class="psr-roster-container">
+      <div class="psr-roster-section__header">
+        <span class="psr-roster-section__label">Content</span>
+        <h2 class="psr-roster-section__title" id="psr-section-creators-title">Creators</h2>
+        <span class="psr-roster-section__count">
+          {%- assign creator_count = section.blocks | where: 'type', 'creator' | size -%}
+          {{ creator_count }} {{ creator_count | pluralize: 'Creator', 'Creators' }}
+        </span>
+      </div>
+
+      <div class="psr-roster-creators__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'creator' -%}
+            {%- assign cn = block.settings.name -%}
+            {%- assign cinitials = cn | slice: 0, 2 | upcase -%}
+            <article
+              class="psr-roster-creator-card"
+              id="psr-creator-{{ block.id }}"
+              aria-label="{{ cn }}, {{ block.settings.platform }} creator"
+              {{ block.shopify_attributes }}>
+              <div class="psr-roster-creator-card__header">
+                <div class="psr-roster-creator-card__avatar" aria-hidden="true">{{ cinitials }}</div>
+                <div class="psr-roster-creator-card__info">
+                  <p class="psr-roster-creator-card__platform">{{ block.settings.platform | default: 'YouTube' }}</p>
+                  <p class="psr-roster-creator-card__name">{{ cn }}</p>
+                  <p class="psr-roster-creator-card__handle">{{ block.settings.handle | default: '@handle' }}</p>
+                </div>
+              </div>
+              <div class="psr-roster-creator-card__stats">
+                <div class="psr-roster-creator-card__stat">
+                  <span class="psr-roster-creator-card__stat-value">{{ block.settings.stat1_value | default: '—K' }}</span>
+                  <span class="psr-roster-creator-card__stat-label">{{ block.settings.stat1_label | default: 'Followers' }}</span>
+                </div>
+                <div class="psr-roster-creator-card__stat">
+                  <span class="psr-roster-creator-card__stat-value">{{ block.settings.stat2_value | default: '—M' }}</span>
+                  <span class="psr-roster-creator-card__stat-label">{{ block.settings.stat2_label | default: 'Total Views' }}</span>
+                </div>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Fallback demo creators {%- endcomment -%}
+        {%- if creator_blocks.size == 0 -%}
+          {%- assign demo_creators = 'NOVA,YouTube,Fortnite,@psrnova,—K,—M,Subscribers,Total Views|FLUX,Twitch,Valorant,@psrflux,—K,—M,Followers,Live Views|HAZE,TikTok,Rocket League,@psrhaze,—K,—M,Followers,Total Likes' | split: '|' -%}
+          {%- for dc in demo_creators -%}
+            {%- assign dca = dc | split: ',' -%}
+            {%- assign dci = dca[0] | slice: 0, 2 | upcase -%}
+            <article class="psr-roster-creator-card" aria-label="{{ dca[0] }}, {{ dca[1] }} creator">
+              <div class="psr-roster-creator-card__header">
+                <div class="psr-roster-creator-card__avatar" aria-hidden="true">{{ dci }}</div>
+                <div class="psr-roster-creator-card__info">
+                  <p class="psr-roster-creator-card__platform">{{ dca[1] }}</p>
+                  <p class="psr-roster-creator-card__name">PSR {{ dca[0] }}</p>
+                  <p class="psr-roster-creator-card__handle">{{ dca[3] }}</p>
+                </div>
+              </div>
+              <div class="psr-roster-creator-card__stats">
+                <div class="psr-roster-creator-card__stat">
+                  <span class="psr-roster-creator-card__stat-value">{{ dca[4] }}</span>
+                  <span class="psr-roster-creator-card__stat-label">{{ dca[6] }}</span>
+                </div>
+                <div class="psr-roster-creator-card__stat">
+                  <span class="psr-roster-creator-card__stat-value">{{ dca[5] }}</span>
+                  <span class="psr-roster-creator-card__stat-label">{{ dca[7] }}</span>
+                </div>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+  {%- endunless -%}
+
+  <!-- ══════════════════════════════════════════════
+       5. LEADERSHIP / STAFF
+  ══════════════════════════════════════════════ -->
+  {%- unless section.settings.hide_staff -%}
+  <section class="psr-roster-section" id="psr-roster-staff" aria-labelledby="psr-section-staff-title">
+    <div class="psr-roster-container">
+      <div class="psr-roster-section__header">
+        <span class="psr-roster-section__label">Organization</span>
+        <h2 class="psr-roster-section__title" id="psr-section-staff-title">Leadership</h2>
+        <span class="psr-roster-section__count">
+          {%- assign staff_count = section.blocks | where: 'type', 'staff_member' | size -%}
+          {{ staff_count }} {{ staff_count | pluralize: 'Member', 'Members' }}
+        </span>
+      </div>
+
+      <div class="psr-roster-staff__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'staff_member' -%}
+            {%- assign sn = block.settings.name -%}
+            {%- assign sinitials = sn | slice: 0, 2 | upcase -%}
+            <a
+              href="{{ block.settings.link | default: '#psr-placeholder' }}"
+              class="psr-roster-staff-item"
+              id="psr-staff-{{ block.id }}"
+              role="listitem"
+              aria-label="{{ sn }}, {{ block.settings.role }}"
+              {% if block.settings.link != blank and block.settings.link != '#psr-placeholder' %}target="_blank" rel="noopener"{% endif %}
+              {{ block.shopify_attributes }}>
+              <div class="psr-roster-staff-item__avatar" aria-hidden="true">{{ sinitials }}</div>
+              <div class="psr-roster-staff-item__info">
+                <p class="psr-roster-staff-item__name">{{ sn }}</p>
+                <p class="psr-roster-staff-item__role">{{ block.settings.role }}</p>
+              </div>
+              <span class="psr-roster-staff-item__arrow" aria-hidden="true">→</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Fallback demo staff {%- endcomment -%}
+        {%- if staff_blocks.size == 0 -%}
+          {%- assign demo_staff = 'Alan Swann,Chief Executive Officer|Jordan Lee,Director of Operations|Casey Park,Head Coach — Valorant|Morgan Rhys,Head Coach — Fortnite|Sam Wells,Head Coach — Rocket League|Avery Quinn,Content Director|Drew Taylor,Brand Manager|Riley Clarke,Team Manager' | split: '|' -%}
+          {%- for ds in demo_staff -%}
+            {%- assign dsa = ds | split: ',' -%}
+            {%- assign dsi = dsa[0] | split: ' ' | map: 'first' | join: '' | slice: 0, 2 | upcase -%}
+            <a href="#psr-placeholder" class="psr-roster-staff-item" role="listitem" aria-label="{{ dsa[0] }}, {{ dsa[1] }}">
+              <div class="psr-roster-staff-item__avatar" aria-hidden="true">{{ dsi }}</div>
+              <div class="psr-roster-staff-item__info">
+                <p class="psr-roster-staff-item__name">{{ dsa[0] }}</p>
+                <p class="psr-roster-staff-item__role">{{ dsa[1] }}</p>
+              </div>
+              <span class="psr-roster-staff-item__arrow" aria-hidden="true">→</span>
+            </a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+  {%- endunless -%}
+
+</div><!-- /.psr-roster-page -->
+
+<!-- ══════════════════════════════════════════════
+     FILTER JAVASCRIPT (vanilla, no deps)
+     Handles shopify:section:load / unload for Editor safety.
+══════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  function initRosterFilter(scope) {
+    var root     = scope || document;
+    var filterBtns = root.querySelectorAll('#psr-roster-filter .psr-roster-filter__btn');
+    var grid       = root.querySelector('#psr-players-grid') || document.getElementById('psr-players-grid');
+    var countEl    = root.querySelector('#psr-player-count') || document.getElementById('psr-player-count');
+
+    if (!filterBtns.length || !grid) return;
+
+    function filterBy(division) {
+      var cards   = grid.querySelectorAll('.psr-roster-card');
+      var visible = 0;
+
+      cards.forEach(function (card) {
+        var cardDiv = card.getAttribute('data-division');
+        var show    = (division === 'all') || (cardDiv === division);
+
+        if (show) {
+          card.removeAttribute('aria-hidden');
+          card.style.display = '';
+          visible++;
+        } else {
+          card.setAttribute('aria-hidden', 'true');
+          card.style.display = 'none';
+        }
+      });
+
+      if (countEl) {
+        countEl.textContent = visible + ' ' + (visible === 1 ? 'Member' : 'Members');
+      }
+    }
+
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var chosen = this.getAttribute('data-filter');
+
+        filterBtns.forEach(function (b) {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        this.classList.add('is-active');
+        this.setAttribute('aria-pressed', 'true');
+
+        filterBy(chosen);
+      });
+    });
+  }
+
+  /* Initial page load */
+  initRosterFilter(document);
+
+  /* Shopify Editor: re-init when this section reloads */
+  document.addEventListener('shopify:section:load', function (e) {
+    if (e.target.querySelector('#psr-roster-page')) {
+      initRosterFilter(e.target);
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "PSR Roster",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Team Pulsar"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "The Roster"
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": "Hero subtitle",
+      "default": "Every player. Every creator. Every champion."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_creators",
+      "label": "Hide Creators section",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_staff",
+      "label": "Hide Leadership section",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "player",
+      "name": "Player",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Player alias (without PSR prefix)",
+          "placeholder": "WOLFIE"
+        },
+        {
+          "type": "select",
+          "id": "game",
+          "label": "Game",
+          "options": [
+            { "value": "Valorant",      "label": "Valorant" },
+            { "value": "Fortnite",      "label": "Fortnite" },
+            { "value": "Rocket League", "label": "Rocket League" }
+          ],
+          "default": "Valorant"
+        },
+        {
+          "type": "select",
+          "id": "division",
+          "label": "Division key (for filter)",
+          "options": [
+            { "value": "val", "label": "val (Valorant)" },
+            { "value": "fn",  "label": "fn (Fortnite)" },
+            { "value": "rl",  "label": "rl (Rocket League)" }
+          ],
+          "default": "val"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title",
+          "placeholder": "Duelist"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Player photo"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_featured",
+          "label": "Featured card (spans 2 columns)",
+          "default": false
+        },
+        {
+          "type": "url",
+          "id": "twitter_url",
+          "label": "X / Twitter URL"
+        },
+        {
+          "type": "url",
+          "id": "twitch_url",
+          "label": "Twitch URL"
+        },
+        {
+          "type": "url",
+          "id": "tiktok_url",
+          "label": "TikTok URL"
+        },
+        {
+          "type": "url",
+          "id": "instagram_url",
+          "label": "Instagram URL"
+        }
+      ]
+    },
+    {
+      "type": "creator",
+      "name": "Content Creator",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Creator name",
+          "placeholder": "NOVA"
+        },
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Primary platform",
+          "options": [
+            { "value": "YouTube", "label": "YouTube" },
+            { "value": "Twitch",  "label": "Twitch" },
+            { "value": "TikTok",  "label": "TikTok" },
+            { "value": "Instagram", "label": "Instagram" }
+          ],
+          "default": "YouTube"
+        },
+        {
+          "type": "text",
+          "id": "handle",
+          "label": "Social handle",
+          "placeholder": "@psrnova"
+        },
+        {
+          "type": "text",
+          "id": "stat1_value",
+          "label": "Stat 1 value",
+          "placeholder": "—K",
+          "info": "e.g. 42K, 1.2M"
+        },
+        {
+          "type": "text",
+          "id": "stat1_label",
+          "label": "Stat 1 label",
+          "default": "Subscribers"
+        },
+        {
+          "type": "text",
+          "id": "stat2_value",
+          "label": "Stat 2 value",
+          "placeholder": "—M"
+        },
+        {
+          "type": "text",
+          "id": "stat2_label",
+          "label": "Stat 2 label",
+          "default": "Total Views"
+        }
+      ]
+    },
+    {
+      "type": "staff_member",
+      "name": "Staff / Leadership",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Full name",
+          "placeholder": "Alan Swann"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title",
+          "placeholder": "Chief Executive Officer"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Profile / social link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PSR Roster",
+      "blocks": [
+        {
+          "type": "player",
+          "settings": {
+            "name": "WOLFIE",
+            "game": "Valorant",
+            "division": "val",
+            "role": "Duelist",
+            "is_featured": true
+          }
+        },
+        {
+          "type": "player",
+          "settings": {
+            "name": "BLAZE",
+            "game": "Fortnite",
+            "division": "fn",
+            "role": "Sniper"
+          }
+        },
+        {
+          "type": "player",
+          "settings": {
+            "name": "KODA",
+            "game": "Rocket League",
+            "division": "rl",
+            "role": "Striker"
+          }
+        },
+        {
+          "type": "creator",
+          "settings": {
+            "name": "NOVA",
+            "platform": "YouTube",
+            "handle": "@psrnova",
+            "stat1_value": "—K",
+            "stat1_label": "Subscribers",
+            "stat2_value": "—M",
+            "stat2_label": "Total Views"
+          }
+        },
+        {
+          "type": "staff_member",
+          "settings": {
+            "name": "Alan Swann",
+            "role": "Chief Executive Officer"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

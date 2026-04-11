@@ -67,16 +67,18 @@ export class AnchoredPopoverComponent extends Component {
    * Updates the popover position by calculating trigger element bounds
    * and setting CSS custom properties on the popover element.
    */
-  #updatePosition = async () => {
+  #updatePosition = () => {
     const { popover, trigger } = this.refs;
     if (!popover || !trigger) return;
-    const positions = trigger.getBoundingClientRect();
-    popover.style.setProperty('--anchor-top', `${positions.top}`);
-    popover.style.setProperty('--anchor-right', `${window.innerWidth - positions.right}`);
-    popover.style.setProperty('--anchor-bottom', `${window.innerHeight - positions.bottom}`);
-    popover.style.setProperty('--anchor-left', `${positions.left}`);
-    popover.style.setProperty('--anchor-height', `${positions.height}`);
-    popover.style.setProperty('--anchor-width', `${positions.width}`);
+    requestAnimationFrame(() => {
+      const positions = trigger.getBoundingClientRect();
+      popover.style.setProperty('--anchor-top', `${positions.top}`);
+      popover.style.setProperty('--anchor-right', `${window.innerWidth - positions.right}`);
+      popover.style.setProperty('--anchor-bottom', `${window.innerHeight - positions.bottom}`);
+      popover.style.setProperty('--anchor-left', `${positions.left}`);
+      popover.style.setProperty('--anchor-height', `${positions.height}`);
+      popover.style.setProperty('--anchor-width', `${positions.width}`);
+    });
   };
 
   /**

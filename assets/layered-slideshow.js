@@ -43,6 +43,7 @@ export class LayeredSlideshowComponent extends Component {
   #contentObserver = null;
   /** @type {ResizeObserver | null} */
   #containerObserver = null;
+  #cssMinHeight = undefined;
 
   /** @returns {number} The inactive tab size in pixels based on current viewport */
   get #inactiveSize() {
@@ -225,6 +226,7 @@ export class LayeredSlideshowComponent extends Component {
   }
 
   #handleMediaQueryChange = () => {
+    this.#cssMinHeight = undefined;
     const wasMobile = this.#isMobile;
     this.#isMobile = isMobileBreakpoint();
 
@@ -515,14 +517,15 @@ export class LayeredSlideshowComponent extends Component {
       container.style.height = `${minHeightTemp}px`;
       this.style.minHeight = `${minHeightTemp}px`;
     } else {
-      // Temporarily clear inline style to measure CSS-defined min-height
-      const savedMinHeight = this.style.minHeight;
-      this.style.minHeight = '';
-      const cssMinHeight = parseFloat(getComputedStyle(this).minHeight) || 0;
-      this.style.minHeight = savedMinHeight;
+      // Cache CSS-defined min-height to avoid repeated getComputedStyle on every resize
+      if (this.#cssMinHeight === undefined) {
+        const saved = this.style.minHeight;
+        this.style.minHeight = '';
+        this.#cssMinHeight = parseFloat(getComputedStyle(this).minHeight) || 0;
+        this.style.minHeight = saved;
+      }
 
-      // Only set inline heights when content exceeds CSS min-height
-      if (contentHeight > cssMinHeight) {
+      if (contentHeight > this.#cssMinHeight) {
         this.style.minHeight = `${contentHeight}px`;
         container.style.height = `${contentHeight}px`;
       } else {
@@ -571,28 +574,35 @@ export class LayeredSlideshowComponent extends Component {
 
   #getMaxContentHeight() {
     const { panels } = this.refs;
-    let max = 0;
+    if (!panels?.length) return 0;
 
-    for (const panel of panels ?? []) {
+    // Phase 1: batch all reads BEFORE touching any styles (zero extra reflows)
+    const measurements = [];
+    for (const panel of panels) {
       const content = panel.querySelector('.layered-slideshow__content');
-      if (!content) continue;
-
+      if (!content) { measurements.push(null); continue; }
       const inner = /** @type {HTMLElement} */ (content.querySelector('.group-block-content') ?? content);
-
-      // Temporarily set height to auto for accurate measurement
-      // This is needed because height: 100% collapses when parent has no height
-      const savedHeight = inner.style.height;
-      inner.style.height = 'auto';
-
       const styles = getComputedStyle(content);
-      const paddingTop = parseFloat(styles.paddingBlockStart || styles.paddingTop) || 0;
-      const paddingBottom = parseFloat(styles.paddingBlockEnd || styles.paddingBottom) || 0;
+      measurements.push({
+        inner,
+        savedHeight: inner.style.height,
+        paddingTop: parseFloat(styles.paddingBlockStart || styles.paddingTop) || 0,
+        paddingBottom: parseFloat(styles.paddingBlockEnd || styles.paddingBottom) || 0,
+      });
+    }
 
-      const height = (inner.scrollHeight || 0) + paddingTop + paddingBottom;
+    // Phase 2: set all to 'auto' at once (single layout invalidation for all panels)
+    for (const m of measurements) {
+      if (m) m.inner.style.height = 'auto';
+    }
+
+    // Phase 3: read all scrollHeights in one flush, then restore
+    let max = 0;
+    for (const m of measurements) {
+      if (!m) continue;
+      const height = (m.inner.scrollHeight || 0) + m.paddingTop + m.paddingBottom;
       if (height > max) max = height;
-
-      // Restore original height
-      inner.style.height = savedHeight;
+      m.inner.style.height = m.savedHeight;
     }
 
     return max;

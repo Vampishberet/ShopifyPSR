@@ -41,8 +41,26 @@
     {%- render 'pulsar-fonts' -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"></noscript>
+    <link
+      rel="preload"
+      href="{{ 'MonumentExtended-Regular.woff2' | asset_url }}"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    >
+    <link
+      rel="preload"
+      href="{{ 'NeueHaasDisplayBold.woff2' | asset_url }}"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    >
     {{ 'pulsar-preloader.css' | asset_url | stylesheet_tag }}
     {{ 'pulsar-enhancements.css' | asset_url | stylesheet_tag }}
     {%- render 'pulsar-og-meta' -%}
@@ -154,9 +172,9 @@
       - pulsar-enhancements.js: Lenis init, GSAP defaults, header scroll class.
       - pulsar-animations.js: single owner of all reveals, stat counters, section lifecycle.
     {% endcomment %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
-    <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer="defer"></script>
+    <script id="gsap-core" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
+    <script id="gsap-st" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
+    <script id="lenis-cdn" src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer="defer"></script>
     <script src="{{ 'pulsar-enhancements.js' | asset_url }}" defer></script>
     <script src="{{ 'pulsar-animations.js' | asset_url }}" defer></script>
     <script src="{{ 'pulsar-spotlight.js' | asset_url }}" defer></script>

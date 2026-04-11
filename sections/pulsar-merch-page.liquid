@@ -47,6 +47,7 @@
                         alt="{{ product.featured_image.alt }}"
                         class="pulsar-merch-page__card-image pulsar-merch-page__card-image--primary"
                         loading="lazy"
+                        decoding="async"
                       >
                       {%- if product.images.size > 1 -%}
                         <img
@@ -54,6 +55,7 @@
                           alt="{{ product.images[1].alt }}"
                           class="pulsar-merch-page__card-image pulsar-merch-page__card-image--secondary"
                           loading="lazy"
+                          decoding="async"
                         >
                       {%- endif -%}
                     {%- else -%}
