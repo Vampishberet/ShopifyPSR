@@ -1,0 +1,644 @@
+/* ============================================================
+   TEAM PULSAR — ROSTER PAGE
+   File: assets/roster.css
+   Spec: 2026-04-10-roster-page-design.md
+   Updated: 2026-04-11 — Removed RL, removed staff, improved cards
+   ============================================================ */
+
+/* Fonts loaded via theme.liquid <head> — no @import needed */
+
+/* ── Design Tokens ────────────────────────────────────────── */
+:root {
+  --roster-bg-dark:        #0a0a0c;
+  --roster-bg-darker:      #050506;
+  --roster-text-primary:   #ffffff;
+  --roster-text-secondary: #a0a0a0;
+  --roster-text-tertiary:  #707070;
+  --roster-border:         #1a1a1f;
+  --roster-accent:         #bba8ff;
+  --roster-accent-subtle:  rgba(187, 168, 255, 0.1);
+
+  --roster-font-display: 'Bebas Neue', sans-serif;
+  --roster-font-body:    'Inter', system-ui, sans-serif;
+
+  --roster-space-xs:   0.5rem;
+  --roster-space-sm:   1rem;
+  --roster-space-md:   1.5rem;
+  --roster-space-lg:   2rem;
+  --roster-space-xl:   2.5rem;
+  --roster-space-xxl:  4rem;
+  --roster-space-xxxl: 6rem;
+
+  --roster-radius:      4px;
+  --roster-border-w:    1px;
+  --roster-transition:  200ms ease;
+}
+
+/* ── Page wrapper ─────────────────────────────────────────── */
+.psr-roster-page {
+  background-color: var(--roster-bg-dark);
+  color: var(--roster-text-primary);
+  font-family: var(--roster-font-body);
+  min-height: 100vh;
+}
+
+.psr-roster-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--roster-space-lg);
+}
+
+/* ============================================================
+   1. HERO SECTION
+   ============================================================ */
+.psr-roster-hero {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--roster-space-xxxl) var(--roster-space-lg);
+  border-bottom: var(--roster-border-w) solid var(--roster-border);
+  text-align: center;
+}
+
+.psr-roster-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--roster-space-sm);
+}
+
+.psr-roster-hero__eyebrow {
+  font-family: var(--roster-font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--roster-accent);
+  margin: 0;
+}
+
+.psr-roster-hero__title {
+  font-family: var(--roster-font-display);
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--roster-text-primary);
+  line-height: 0.9;
+  margin: 0;
+}
+
+.psr-roster-hero__subtitle {
+  font-family: var(--roster-font-body);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--roster-text-secondary);
+  margin: 0;
+  max-width: 40ch;
+}
+
+/* ============================================================
+   2. FILTER BAR (Sticky)
+   ============================================================ */
+.psr-roster-filter {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 10, 12, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: var(--roster-border-w) solid var(--roster-border);
+}
+
+.psr-roster-filter__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--roster-space-md) var(--roster-space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--roster-space-md);
+  flex-wrap: wrap;
+}
+
+.psr-roster-filter__buttons {
+  display: flex;
+  gap: var(--roster-space-xs);
+  flex-wrap: wrap;
+}
+
+.psr-roster-filter__btn {
+  font-family: var(--roster-font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: var(--roster-border-w) solid transparent;
+  border-radius: var(--roster-radius);
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  color: var(--roster-text-secondary);
+  transition: color var(--roster-transition),
+              border-color var(--roster-transition),
+              background-color var(--roster-transition);
+  line-height: 1;
+}
+
+.psr-roster-filter__btn:hover {
+  color: var(--roster-text-primary);
+}
+
+.psr-roster-filter__btn.is-active {
+  color: var(--roster-text-primary);
+  border-color: var(--roster-accent);
+  background: var(--roster-accent-subtle);
+}
+
+.psr-roster-filter__btn:focus-visible {
+  outline: 2px solid var(--roster-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   3. SECTION WRAPPER (shared)
+   ============================================================ */
+.psr-roster-section {
+  padding: 4rem 0;
+  border-bottom: var(--roster-border-w) solid var(--roster-border);
+}
+
+.psr-roster-section__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--roster-space-sm);
+  margin-bottom: var(--roster-space-xl);
+}
+
+.psr-roster-section__label {
+  font-family: var(--roster-font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--roster-accent);
+  flex-shrink: 0;
+}
+
+.psr-roster-section__title {
+  font-family: var(--roster-font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--roster-text-primary);
+  margin: 0;
+  line-height: 1;
+}
+
+.psr-roster-section__count {
+  font-family: var(--roster-font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--roster-text-tertiary);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   3. PLAYER CARDS GRID — IMPROVED DESIGN
+   ============================================================ */
+.psr-roster-players__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--roster-space-lg);
+}
+
+/* Individual player card — improved with accent bar and depth */
+.psr-roster-card {
+  background: var(--roster-bg-darker);
+  border: var(--roster-border-w) solid var(--roster-border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: border-color var(--roster-transition),
+              background-color var(--roster-transition),
+              transform var(--roster-transition),
+              box-shadow 300ms ease;
+}
+
+.psr-roster-card:hover {
+  border-color: var(--roster-accent);
+  background: #0f0f14;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(187, 168, 255, 0.08),
+              0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Accent bar — top edge gradient */
+.psr-roster-card__accent {
+  height: 3px;
+  background: linear-gradient(90deg, var(--roster-accent) 0%, rgba(187, 168, 255, 0.3) 100%);
+  opacity: 0;
+  transition: opacity var(--roster-transition);
+}
+
+.psr-roster-card:hover .psr-roster-card__accent {
+  opacity: 1;
+}
+
+/* Featured / Captain */
+.psr-roster-card--featured {
+  grid-column: span 2;
+}
+
+.psr-roster-card--featured .psr-roster-card__accent {
+  opacity: 1;
+  background: linear-gradient(90deg, var(--roster-accent) 0%, rgba(187, 168, 255, 0.5) 50%, var(--roster-accent) 100%);
+  height: 3px;
+}
+
+/* Image area */
+.psr-roster-card__image {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(145deg, #111118 0%, #0a0a0c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.psr-roster-card--featured .psr-roster-card__image {
+  aspect-ratio: 2 / 1;
+}
+
+.psr-roster-card__initials {
+  font-family: var(--roster-font-display);
+  font-size: 4rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--roster-border);
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+  transition: color var(--roster-transition);
+}
+
+.psr-roster-card:hover .psr-roster-card__initials {
+  color: rgba(187, 168, 255, 0.15);
+}
+
+.psr-roster-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms ease;
+}
+
+.psr-roster-card:hover .psr-roster-card__img {
+  transform: scale(1.03);
+}
+
+/* Content area — improved spacing and layout */
+.psr-roster-card__content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.psr-roster-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Tag row: game label + captain badge */
+.psr-roster-card__tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.psr-roster-card__game {
+  font-family: var(--roster-font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--roster-accent);
+  margin: 0;
+}
+
+/* Captain badge */
+.psr-roster-card__badge {
+  font-family: var(--roster-font-body);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--roster-bg-dark);
+  background: var(--roster-accent);
+  padding: 0.15em 0.5em;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+
+.psr-roster-card__name {
+  font-family: var(--roster-font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--roster-text-primary);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.psr-roster-card--featured .psr-roster-card__name {
+  font-size: 2.2rem;
+}
+
+.psr-roster-card__role {
+  font-family: var(--roster-font-body);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--roster-text-tertiary);
+  margin: 0;
+}
+
+/* Social links — hidden by default, visible on card hover */
+.psr-roster-card__socials {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--roster-transition),
+              transform var(--roster-transition);
+  pointer-events: none;
+  padding-top: 0.5rem;
+  border-top: var(--roster-border-w) solid transparent;
+}
+
+.psr-roster-card:hover .psr-roster-card__socials {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-top-color: var(--roster-border);
+}
+
+.psr-roster-card__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: var(--roster-border-w) solid var(--roster-border);
+  border-radius: 3px;
+  font-family: var(--roster-font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  color: var(--roster-text-secondary);
+  transition: border-color var(--roster-transition),
+              background-color var(--roster-transition),
+              color var(--roster-transition);
+  text-transform: uppercase;
+}
+
+.psr-roster-card__social-link:hover,
+.psr-roster-card__social-link:focus-visible {
+  border-color: var(--roster-accent);
+  background: var(--roster-accent-subtle);
+  color: var(--roster-accent);
+}
+
+.psr-roster-card__social-link:focus-visible {
+  outline: 2px solid var(--roster-accent);
+  outline-offset: 2px;
+}
+
+/* Hidden / shown by filter */
+.psr-roster-card[aria-hidden="true"] {
+  display: none;
+}
+
+/* ============================================================
+   4. CONTENT CREATORS SECTION
+   ============================================================ */
+.psr-roster-creators__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--roster-space-lg);
+}
+
+.psr-roster-creator-card {
+  background: var(--roster-bg-darker);
+  border: var(--roster-border-w) solid var(--roster-border);
+  border-radius: 6px;
+  padding: var(--roster-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--roster-space-sm);
+  transition: border-color var(--roster-transition),
+              background-color var(--roster-transition),
+              transform var(--roster-transition),
+              box-shadow 300ms ease;
+}
+
+.psr-roster-creator-card:hover {
+  border-color: var(--roster-accent);
+  background: #0f0f14;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(187, 168, 255, 0.06),
+              0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.psr-roster-creator-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--roster-space-sm);
+}
+
+.psr-roster-creator-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--roster-radius);
+  background: var(--roster-accent-subtle);
+  border: var(--roster-border-w) solid var(--roster-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--roster-font-display);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: var(--roster-accent);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.psr-roster-creator-card__avatar-img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--roster-radius);
+  object-fit: cover;
+  border: var(--roster-border-w) solid var(--roster-border);
+  flex-shrink: 0;
+}
+
+.psr-roster-creator-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.psr-roster-creator-card__platform {
+  font-family: var(--roster-font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--roster-accent);
+  margin: 0;
+}
+
+.psr-roster-creator-card__name {
+  font-family: var(--roster-font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--roster-text-primary);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.psr-roster-creator-card__handle {
+  font-family: var(--roster-font-body);
+  font-size: 0.7rem;
+  color: var(--roster-text-tertiary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats grid */
+.psr-roster-creator-card__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--roster-space-sm);
+  padding-top: var(--roster-space-sm);
+  border-top: var(--roster-border-w) solid var(--roster-border);
+}
+
+.psr-roster-creator-card__stat {}
+
+.psr-roster-creator-card__stat-value {
+  font-family: var(--roster-font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--roster-text-primary);
+  display: block;
+  line-height: 1.2;
+}
+
+.psr-roster-creator-card__stat-label {
+  font-family: var(--roster-font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--roster-text-tertiary);
+  display: block;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .psr-roster-container {
+    padding: 0 var(--roster-space-md);
+  }
+  .psr-roster-hero {
+    padding: 4rem var(--roster-space-md);
+  }
+  .psr-roster-filter__inner {
+    padding: var(--roster-space-sm) var(--roster-space-md);
+  }
+  .psr-roster-players__grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  .psr-roster-creators__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .psr-roster-section {
+    padding: 3rem 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .psr-roster-hero {
+    padding: 4rem var(--roster-space-md);
+  }
+  .psr-roster-hero__title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+  .psr-roster-filter__inner {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .psr-roster-filter__inner::-webkit-scrollbar { display: none; }
+  .psr-roster-filter__buttons {
+    flex-wrap: nowrap;
+  }
+  .psr-roster-filter__btn {
+    font-size: 0.85rem;
+    padding: 0.45em 1em;
+  }
+  .psr-roster-players__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .psr-roster-card--featured {
+    grid-column: span 1;
+  }
+  .psr-roster-card--featured .psr-roster-card__image {
+    aspect-ratio: 3 / 4;
+  }
+  .psr-roster-card--featured .psr-roster-card__name {
+    font-size: 1.4rem;
+  }
+  .psr-roster-creators__grid {
+    grid-template-columns: 1fr;
+  }
+  .psr-roster-section__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .psr-roster-section__count {
+    margin-left: 0;
+  }
+}

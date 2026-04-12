@@ -15,8 +15,7 @@
         "eyebrow": "Team Pulsar",
         "hero_title": "The Roster",
         "hero_subtitle": "Every player. Every creator. Every champion.",
-        "hide_creators": false,
-        "hide_staff": false
+        "hide_creators": false
       }
     }
   },
