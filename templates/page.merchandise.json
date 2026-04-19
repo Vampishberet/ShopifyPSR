@@ -15,7 +15,7 @@
         "overline": "Official Merch",
         "heading": "THE DROP",
         "subtext": "Premium esports apparel. Limited runs. Wear the name.",
-        "show_scroll_indicator": true
+        "show_scroll_indicator": false
       }
     },
     "pulsar-merch-full": {
