@@ -17,8 +17,10 @@
         class="pulsar-btn pulsar-btn--primary"
       >{{ section.settings.primary_label | default: 'Shop Now' }}</a>
       <a
-        href="{{ section.settings.secondary_url | default: '/pages/careers' }}"
+        href="{{ section.settings.secondary_url | default: 'https://discord.gg/TeamPulsar' }}"
         class="pulsar-btn pulsar-btn--ghost"
+        target="_blank"
+        rel="noopener noreferrer"
       >{{ section.settings.secondary_label | default: 'Join Us' }}</a>
     </div>
     <p class="pulsar-cta__tagline">Excellence. Community. Intent.</p>

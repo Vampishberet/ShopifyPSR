@@ -833,7 +833,6 @@ header-component [popover] a:hover,
 }
 
 .pulsar-footer-bar__partner-logo--invert { filter: invert(1); }
-.pulsar-footer-bar__partner-logo--repulse { height: 32px; }
 
 /* Social links — horizontal list with icon + label */
 .pulsar-footer-bar__socials {
