@@ -79,9 +79,9 @@
     "pulsar-cta": {
       "type": "pulsar-cta",
       "settings": {
-        "overline": "Ready?",
+        "overline": "",
         "heading": "Join the Community",
-        "body": "Join the movement. Wear the name. Compete at the highest level.",
+        "body": "Join the movement.",
         "primary_label": "Shop Now",
         "primary_url": "/collections/all",
         "secondary_label": "Join Us",
