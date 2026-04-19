@@ -80,6 +80,7 @@
     background: #000000;
     padding: var(--pulsar-space-xxl) 0;
     border-top: 1px solid var(--pulsar-dark3);
+    overflow: hidden;
   }
 
   .twitter-collage__wrapper {
@@ -135,44 +136,45 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 13px 28px;
-    background: var(--pulsar-accent-purple2);
-    color: #000000;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    color: var(--pulsar-white);
     font-family: var(--font-secondary);
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 400;
     text-decoration: none;
-    border-radius: 3px;
-    transition: box-shadow 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid var(--pulsar-accent-purple2);
     width: fit-content;
     position: relative;
     overflow: hidden;
+    transition: transform 0.2s var(--pulsar-ease-out);
   }
 
   .twitter-collage__cta::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--pulsar-white);
-    transform: translateX(-100%);
-    transition: transform 0.35s ease;
+    background: rgba(187, 168, 255, 0.07);
+    box-shadow: 0 0 24px rgba(187, 168, 255, 0.22), 0 0 6px rgba(187, 168, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.2s var(--pulsar-ease-std);
+    pointer-events: none;
     z-index: 0;
   }
 
   .twitter-collage__cta:hover {
-    box-shadow: 0 16px 48px rgba(187, 168, 255, 0.35);
-    transform: translateY(-3px);
+    transform: scale(1.02);
   }
 
   .twitter-collage__cta:hover::before {
-    transform: translateX(0);
+    opacity: 1;
   }
 
-  .twitter-collage__cta span {
-    position: relative;
-    z-index: 1;
+  .twitter-collage__cta:focus-visible {
+    outline: 2px solid var(--pulsar-accent-purple2);
+    outline-offset: 4px;
   }
 
   .twitter-collage__masonry {

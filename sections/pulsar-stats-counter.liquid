@@ -7,10 +7,6 @@
     {%- if section.blocks.size > 0 -%}
       <div class="pulsar-stats__grid pulsar-stats__grid--{{ section.blocks.size }}">
         {%- for block in section.blocks -%}
-          {%- if forloop.first == false -%}
-            <div class="pulsar-stats__divider" aria-hidden="true"></div>
-          {%- endif -%}
-
           <div class="pulsar-stats__item pulsar-reveal" {{ block.shopify_attributes }}>
             <div class="pulsar-stats__number">
               <span

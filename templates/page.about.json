@@ -66,7 +66,9 @@
         "stat-earnings",
         "stat-members"
       ],
-      "settings": {}
+      "settings": {
+        "label": ""
+      }
     },
     "pulsar-about-values": {
       "type": "pulsar-about-values",
@@ -76,14 +78,6 @@
         "value_2_desc": "Pulsar is more than an org — it's a family. We foster a space where people connect, grow, and share in the wins and losses together. Everyone matters. Everyone is seen.",
         "value_3_desc": "We don't operate on emotion — we move with purpose. Every action, from recruitment to competition, is deliberate, calculated, and aligned with our mission. Intent separates us from the noise.",
         "tagline": "\"EXCELLENCE IS INTENTIONAL.\""
-      }
-    },
-    "pulsar-about-founders": {
-      "type": "pulsar-about-founders",
-      "settings": {
-        "heading": "FROM THE OWNERS",
-        "intro": "The people behind Team Pulsar. Known throughout the competitive scene, respected for their integrity, and personally invested in every member who carries the Pulsar name.",
-        "placeholder_text": "Leadership profiles coming soon."
       }
     },
     "pulsar-cta": {
@@ -98,7 +92,6 @@
     "pulsar-about-story",
     "pulsar-stats",
     "pulsar-about-values",
-    "pulsar-about-founders",
     "pulsar-cta"
   ]
 }

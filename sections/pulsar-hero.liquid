@@ -85,20 +85,6 @@
       {%- endif -%}
     </div>
 
-    <div class="pulsar-hero__actions" data-pulsar-hero-element>
-      <a
-        href="{{ section.settings.primary_cta_url | default: '/collections/all' }}"
-        class="pulsar-btn pulsar-btn--primary"
-      >
-        {{- section.settings.primary_cta_label | default: 'Shop Now' -}}
-      </a>
-      <a
-        href="{{ section.settings.secondary_cta_url | default: '/pages/esports' }}"
-        class="pulsar-btn pulsar-btn--ghost"
-      >
-        {{- section.settings.secondary_cta_label | default: 'Our Rosters' -}}
-      </a>
-    </div>
   </div>
 
 </section>
@@ -231,16 +217,7 @@
   /* Responsive */
   @media (max-width: 767px) {
     .pulsar-hero__heading {
-      font-size: clamp(4rem, 20vw, 6rem);
-    }
-    .pulsar-hero__actions {
-      flex-direction: column;
-      width: 100%;
-      max-width: 300px;
-    }
-    .pulsar-hero__actions .pulsar-btn {
-      text-align: center;
-      justify-content: center;
+      font-size: clamp(2.5rem, 10vw, 6rem);
     }
   }
 {% endstylesheet %}

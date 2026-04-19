@@ -16,10 +16,6 @@
     </p>
   </div>
 
-  <div class="pulsar-about-hero__scroll" aria-hidden="true">
-    <span class="pulsar-about-hero__scroll-label">SCROLL</span>
-    <div class="pulsar-about-hero__scroll-line"></div>
-  </div>
 </section>
 
 <style>
@@ -94,37 +90,6 @@
   opacity: 0;
 }
 
-.pulsar-about-hero__scroll {
-  position: absolute;
-  bottom: var(--pulsar-space-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  z-index: 1;
-}
-
-.pulsar-about-hero__scroll-label {
-  font: 500 0.625rem/1 var(--font-body);
-  letter-spacing: 0.2em;
-  color: var(--pulsar-gray1);
-}
-
-.pulsar-about-hero__scroll-line {
-  width: 1px;
-  height: 48px;
-  background: linear-gradient(to bottom, var(--pulsar-gray1), transparent);
-  animation: pulsar-about-scroll 1.8s ease-in-out infinite;
-}
-
-@keyframes pulsar-about-scroll {
-  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
-  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
-  51%  { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .pulsar-about-hero__scroll-line { animation: none; opacity: 0.4; }

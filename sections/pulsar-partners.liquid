@@ -51,11 +51,11 @@
         aria-label="Repulse — Pulsar merch partner"
       >
         <picture>
-          <source srcset="{{ 'repulse.webp' | asset_url }}" type="image/webp">
+          <source srcset="{{ 'repulsefinally.webp' | asset_url }}" type="image/webp">
           <img
-            src="{{ 'repulse.jpg' | asset_url }}"
+            src="{{ 'repulsefinally.png' | asset_url }}"
             alt="Repulse"
-            class="pulsar-partners__logo"
+            class="pulsar-partners__logo pulsar-partners__logo--repulse"
             width="200"
             height="60"
             loading="lazy"
@@ -145,6 +145,7 @@
     height: 60px;
   }
   .pulsar-partners__logo--invert { filter: invert(1); }
+  .pulsar-partners__logo--repulse { height: 52px; }
 
   /* CTA */
   .pulsar-partners__cta {
