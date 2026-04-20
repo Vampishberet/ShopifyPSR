@@ -67,9 +67,9 @@
       "settings": {
         "overline": "Supported by",
         "heading": "Our Partners",
-        "partner_1_url": "",
-        "partner_2_url": "",
-        "partner_3_url": "",
+        "partner_1_url": "https://tipsyaudio.com/",
+        "partner_2_url": "https://www.obsbot.com/",
+        "partner_3_url": "https://www.repulseco.com/",
         "show_cta": true,
         "cta_text": "Interested in partnering with Team Pulsar?",
         "cta_label": "Become a Partner",
