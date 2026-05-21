@@ -408,6 +408,7 @@ header-component [popover] a:hover,
 .btn:hover,
 .product-form__submit:hover {
   transform: scale(1.04);
+  color: var(--pulsar-black);
 }
 .pulsar-btn:hover::before,
 .pulsar-btn--primary:hover::before,
@@ -827,7 +828,7 @@ header-component [popover] a:hover,
 .pulsar-footer-bar__partner-wrap:hover { opacity: 1; }
 
 .pulsar-footer-bar__partner-logo {
-  height: 26px;
+  height: 36px;
   width: auto;
   object-fit: contain;
 }
@@ -1211,6 +1212,7 @@ product-information [name="add"]::before,
 product-information .button--primary:hover,
 .product-form__submit:hover {
   transform: scale(1.02) !important;
+  color: var(--pulsar-black) !important;
 }
 product-information .button--primary:hover::before,
 product-information [name="add"]:hover::before,
